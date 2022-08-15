@@ -7,6 +7,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+"""
+Archivo en comun para los archivos setting de desarrollo y produccion
+"""
+
 import os.path
 
 from pathlib import Path

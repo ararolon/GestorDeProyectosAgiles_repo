@@ -1,6 +1,10 @@
-import imp
+
 import os
 from GestorDeProyectosAgiles.settings import *
+
+"""
+Archivo setting para el ambiente de produccion
+"""
 
 DEBUG = False
 ALLOWED_HOSTS = ['127.0.0.1','localhost']

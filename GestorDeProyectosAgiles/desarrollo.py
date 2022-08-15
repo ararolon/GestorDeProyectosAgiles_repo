@@ -1,6 +1,11 @@
 from decouple import config
 from GestorDeProyectosAgiles.settings import *
 
+"""
+Archivo setting del ambiente de desarrollo
+"""
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -15,6 +20,10 @@ ALLOWED_HOSTS = []
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
+"""
+Base de datos configurada con POSTGRESQL
+"""
 
 DATABASES = {
     'default': {
