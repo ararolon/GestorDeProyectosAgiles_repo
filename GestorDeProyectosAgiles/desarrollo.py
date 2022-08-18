@@ -27,12 +27,11 @@ Base de datos configurada con POSTGRESQL
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'GestorDeProyectosAgiles',
-        'USER': 'admin',
-        'PASSWORD': config('PASSWORD'),
-        'HOST': '127.0.0.1',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dbdesarrollo',
+        'USER': 'postgres',
+        'PASSWORD': 'PASSWORD',
+        'HOST': 'localhost',
         'PORT': '5432',
-
     }
 }
