@@ -1,0 +1,19 @@
+
+<!--Acomprueba si el usuario está autenticado. Si es verdadero, se muestra el nombre de usuario. 
+De lo contrario, se muestra el enlace "Iniciar sesión con Google". -->
+<!--Al hacer clic en el enlace, el usuario será dirigido al cuadro de diálogo Google OAuth.-->
+
+{% load socialaccount %}
+<html>
+<body>
+<h1> Gestor de proyectos Agiles </h1>
+{% if user.is_authenticated %}
+  <p>Welcome, You are logged in as {{ user.username }}</p>
+  <a href="logout">cerrar sesion</a>
+{% else %}
+
+  <a href="{% provider_login_url 'google' %}">Login With Google</a>
+{% endif %}
+
+</body>
+</html>
