@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'SSO/base.html' %}
 {% load socialaccount %}
 
 {% block title %}Index {% endblock title %}
@@ -8,6 +8,8 @@
 <div>
     <h2>
         Bienvenido {{ user.username }}
+
+        {{mensaje}}
     </h2>
 
  </div>
