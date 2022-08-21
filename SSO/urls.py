@@ -3,7 +3,7 @@
     login y logout del proyecto
 """
 
-import imp
+
 from django.urls import path, include
 
 from SSO import views
