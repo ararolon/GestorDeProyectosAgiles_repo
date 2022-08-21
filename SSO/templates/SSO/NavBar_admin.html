@@ -45,13 +45,17 @@
           </ul>
       </ul>
     </div>
-    {# Boton para cerrar sesion #}
-    <!--<form method="post" action="{% url 'account_logout' %}">-->
-      {% csrf_token %}
-      {% if redirect_field_value %}
-      <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
-      {% endif %}
-      <button type="submit" class="btn btn-outline-danger">Cerrar Sesion</button>
-    </form> 
+    <div>
+        {# Boton para cerrar sesion #}
+        <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
+        {% endif %}
+          <button type="submit" class="btn btn-outline-danger">Cerrar Sesion</button>
+        </form>
+    </div>
+    
+     
   </div>  
 </nav>

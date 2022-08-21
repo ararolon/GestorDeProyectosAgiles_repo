@@ -31,7 +31,7 @@ def configurar_sso(request):
     """
    
     if  SocialApp.objects.filter(provider='google').exists():  
-        return redirect('index')
+        return redirect('home')
     
     if not Group.objects.filter(name='administrador').exists():
        grupo = Group.objects.create(name='administrador')
@@ -51,7 +51,7 @@ def configurar_sso(request):
        if form.is_valid():
             form.save()
             
-            return redirect('index')    
+            return redirect('home')    
         
     contexto = {'form':form}
     return render(request,'SSO/configurar.html',context=contexto)    
@@ -79,7 +79,7 @@ def logout(request):
 
 @login_required(login_url='login')
 @decoradores.agregar_usuarios
-def index(request):
+def home(request):
     """
      Vista de prueba para ver el indice de la pagina luego del login de un usuario
     
@@ -90,14 +90,14 @@ def index(request):
     #Pregunta si es el administrador del sistema o si es un usuario comun. 
     #Redirecciona a diferentes interfaces
 
-    #if request.user.groups.filter(name='administrador'):
-    #    return render(request, 'SSO/Home.html', context=None)
-    #elif request.user.groups.filter(name='usuarios'):
-    #    return render(request,'SSO/Home_usuario.html',context=None)
-    #else:
-    #    return redirect('login')
+    if request.user.groups.filter(name='administrador'):
+        return render(request, 'SSO/home.html', context=None)
+    elif request.user.groups.filter(name='usuarios'):
+        return render(request,'SSO/sinpermiso.html',context=None)
+    else:
+        return redirect('login')
 
-    return render(request,'SSO/index.html',context=None)
+    return render(request,'SSO/home.html',context=None)
     
 
 

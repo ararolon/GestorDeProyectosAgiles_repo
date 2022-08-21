@@ -9,7 +9,7 @@ from django.urls import path, include
 from SSO import views
 
 urlpatterns = [
-    path('index/', views.index, name='index'), 
+    path('home/', views.home, name='home'), 
     path('',views.configurar_sso,name='configurar_sso'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
