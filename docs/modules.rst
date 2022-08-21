@@ -6,4 +6,4 @@ GestorDeProyectosAgiles_repo
 
    core
    manage
-   vistasSSO
+   SSO
