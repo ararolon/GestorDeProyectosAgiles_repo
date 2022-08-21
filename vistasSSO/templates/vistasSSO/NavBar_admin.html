@@ -45,9 +45,13 @@
           </ul>
       </ul>
     </div>
-    
-      <!-- agregar el log out para poder cerrar sesion (ara tenes en notas 22-8-22.txt)-->    
-      <button type="submit" class="btn btn-outline-danger">Cerrar Sesión</button>
-    
-  </div>
-  </nav>
+    {# Boton para cerrar sesion #}
+    <!--<form method="post" action="{% url 'account_logout' %}">-->
+      {% csrf_token %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
+      {% endif %}
+      <button type="submit" class="btn btn-outline-danger">Cerrar Sesion</button>
+    </form> 
+  </div>  
+</nav>

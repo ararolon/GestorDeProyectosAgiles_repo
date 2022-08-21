@@ -40,7 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vistasSSO',
+     #'django.contrib.sites',
+     #sso 
+    'allauth.socialaccount.providers.google', #provider de google
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    #apps del proyecto 
+    'SSO',
+    'crispy_forms', #para usar crispy forms para formularios
+    "bootstrap4", #para usar bootstrap
+
+
 ]
 
 #configuracion para poder usar el crispy forms con bootstrap4
