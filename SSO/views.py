@@ -91,9 +91,9 @@ def home(request):
     #Redirecciona a diferentes interfaces
 
     if request.user.groups.filter(name='administrador'):
-        return render(request, 'SSO/home.html', context=None)
+        return render(request, 'SSO/home_admin.html', context=None)
     elif request.user.groups.filter(name='usuarios'):
-        return render(request,'SSO/sinpermiso.html',context=None)
+        return render(request,'SSO/home_usuarios.html',context=None)
     else:
         return redirect('login')
 

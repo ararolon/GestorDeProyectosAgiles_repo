@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}" >
+        Gestor de Proyectos
+      </a> 
+      {# referencia a home en views.py#}
+      
+      <div class="collapse navbar-collapse" id="navbarNavDropdown" style= "position:absolute; left:500px;">
+        
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Proyecto
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="#">Proyecto 1</a></li>
+              <li><a class="dropdown-item" href="#">Proyecto 2</a></li>
+              <li><a class="dropdown-item" href="#">Proyecto 3</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div>
+          {# Boton para cerrar sesion #}
+          <form method="post" action="{% url 'account_logout' %}">
+          {% csrf_token %}
+          {% if redirect_field_value %}
+            <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
+          {% endif %}
+            <button type="submit" class="btn btn-outline-danger">Cerrar Sesión</button>
+          </form>
+      </div>
+    </div>  
+  </nav>
