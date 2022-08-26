@@ -1,0 +1,22 @@
+{% extends 'SSO/base_admin.html' %}
+
+{# se carga head #}
+{% block title %}
+     Usuarios
+{% endblock %}
+
+{# body #}
+{% block content %}
+
+     <div>
+        <h3>¿Esta seguro que desea eliminar al usuario {{ usuario.username }} ?</h3>
+     </div>
+    <form action="{% url 'eliminar_user' usuario.id %}" method="POST">
+      {% csrf_token %}
+      <a class="btn btn-outline-danger" href="{% url 'index_eliminar' %}" role="button">Cancelar</a>
+      <button type="submit" class="btn btn-outline-success">Eliminar</button>
+
+    </form>
+
+
+{% endblock %}

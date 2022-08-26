@@ -97,7 +97,7 @@ def home(request):
     else:
         return redirect('login')
 
-    return render(request,'SSO/home.html',context=None)
+
     
 
 

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     #apps del proyecto 
     'SSO',
+    'Usuarios',
     'crispy_forms', #para usar crispy forms para formularios
     "bootstrap4", #para usar bootstrap
 ]
