@@ -1,0 +1,40 @@
+{% extends 'SSO/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Editar Rol de Sistema {% endblock %}
+{% block content %}
+<div class="container mt-3">
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+    <div class="alert alert-danger">
+        <strong>{{ message }}</strong>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <h3>Editar Rol de Sistema</h3>
+    <hr>
+    <form method="POST" class="col-12 col-md-8 mx-auto">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Editar Rol" class="btn btn-primary bg-color-accent col-12">
+    </form>
+
+</div>
+
+
+{% endblock %}

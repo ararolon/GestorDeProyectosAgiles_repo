@@ -1,0 +1,16 @@
+{% extends 'SSO/base.html' %}
+{% load crispy_forms_tags %}
+{%  load static %}
+{% block title %}Nuevo Rol de Sistema{% endblock %}
+{% block content %}
+    <div class="container mt-3">
+        <h3>Crear Nuevo Rol de Sistema</h3><hr>
+        <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-primary bg-color-accent col-5" type="submit">Crear</button>
+            <button class="btn btn-secondary bg-color-accent col-5" type="submit">Cancelar</button>
+        </form>
+
+    </div>
+{% endblock %}
