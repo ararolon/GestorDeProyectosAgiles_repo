@@ -71,3 +71,12 @@ class Usuario(User):
             flag = False    
 
         return flag
+
+   
+          
+
+
+
+
+
+

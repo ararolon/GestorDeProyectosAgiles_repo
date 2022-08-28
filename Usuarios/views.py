@@ -1,8 +1,10 @@
+from email.headerregistry import Group
 from sre_constants import GROUPREF_EXISTS
 from tokenize import group
+from unicodedata import name
 from django.shortcuts import render,redirect,get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Permission#importa el modelo de usuarios de Django para obtener todos los usuarios regigistrados en el sistema hasta ahora
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User,Group, Permission#importa el modelo de usuarios de Django para obtener todos los usuarios regigistrados en el sistema hasta ahora
 from Usuarios.models import Usuario
 """
 Vistas exclusivas del administrador del sistema sobre los usuarios
@@ -57,17 +59,18 @@ def listar_usuarios(request):
     :return: HttpResponse o HttpRedirect
   """
   
-  usuarios = list(User.objects.filter(groups__name='usuarios'))
+  usuarios = list(User.objects.filter(groups__name='sin_acceso'))
+  usuarios = usuarios + list(User.objects.filter(groups__name='usuarios'))
 
   return render(request,'Usuarios/listar_usuarios.html',{'usuarios':usuarios})
    
-
 @login_required(login_url='login')
 def crear_usuario(request,id):
 
   """
   Vista que permite al administrador del sistema dar permiso de acceder al sistema a otro usuario
- 
+  Le asigna al grupo 'rol' que tienen el permiso de acceder al sistema (usuarios)
+
   :param request: HttpRequest object
   :param id : id del usuario a eliminar
 
@@ -76,12 +79,15 @@ def crear_usuario(request,id):
   usuario =  get_object_or_404(User,pk=id)
 
   if request.method == 'POST':
-    perm= Permission.objects.get(codename='acceder_al_sistema') 
-    usuario.user_permissions.add(perm)
+    #elimina el rol de 'sin acceso'
+    usuario.groups.clear()
+    acceso =  Group.objects.get(name='usuarios')
+    usuario.groups.add(acceso)
+
     return redirect('lista_users')
 
   else:
-      return render(request,'Usuarios/Daracceso.html',{'usuario':usuario})    
+    return render(request,'Usuarios/Daracceso.html',{'usuario':usuario})    
 
 
 

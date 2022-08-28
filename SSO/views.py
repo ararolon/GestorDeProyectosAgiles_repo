@@ -38,11 +38,21 @@ def configurar_sso(request):
        grupo = Group.objects.create(name='administrador')
        grupo.save()
 
-   #pregunta por el grupo usuarios
+   #pregunta por el grupo usuarios 
 
     if not Group.objects.filter(name='usuarios'):
        grupo = Group.objects.create(name='usuarios')
        grupo.save()
+       perm= Permission.objects.get(codename='acceder_al_sistema') 
+       grupo.permissions.add(perm) # ya le asigna el permiso de acceder al sistema
+
+   #pregunta por el grupo sin acceso
+
+    if not Group.objects.filter(name='sin_acceso'):
+        grupo = Group.objects.create(name='sin_acceso')
+        grupo.save()
+
+
 
     sa = SocialApp.objects.create(name="sso")
     sa.save()
@@ -92,9 +102,9 @@ def home(request):
     #Redirecciona a diferentes interfaces
     if request.user.groups.filter(name='administrador'):
         return render(request, 'SSO/home_admin.html', context=None)
-    elif request.user.has_perm('acceder_al_sistema'):
+    elif request.user.groups.filter(name='usuarios'):
         return render(request,'SSO/home_usuarios.html',context=None)
-    else:
+    else:   #los usuarios en el grupo 'sin acceso'
         return render(request,'SSO/sinpermiso.html',context=None)
 
 @login_required(login_url='login')

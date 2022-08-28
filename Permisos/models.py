@@ -69,10 +69,5 @@ class RolesdeSistema(models.Model):
         """
         return [p for p in self.permisos.all()]
 
-    def asignar_permisos(self):
 
-        per1 = Permission.objects.get(codename='crear_proyecto')
-
-        Rol = RolesdeSistema.objects.create()
-
-        rol.
+    
