@@ -1,6 +1,7 @@
 
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import Group, User
+from Usuarios.models import Usuario
 
 
 def agregar_usuarios(view_func):
@@ -12,8 +13,8 @@ def agregar_usuarios(view_func):
     def wrappper_func(request, *args, **kwargs):
         # si no hay todavia un administrador , toma el primer usuario que se registre en el sistema
         if User.objects.filter(groups__name = 'administrador').count() == 0:
-            grupo = Group.objects.get(name='administrador')
-            request.user.groups.add(grupo)
+            admin = Usuario.objects.get(id = request.user.id)
+            admin.dar_permisos_administrador()
 
         # no esta en grupo administrador ni en grupo usuarios, entonces agregar a grupo usuario
         # siguientes usuarios que ingresan al sistema

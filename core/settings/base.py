@@ -49,8 +49,9 @@ INSTALLED_APPS = [
     #apps del proyecto 
     'SSO',
     'Usuarios',
+    'Permisos',
     'crispy_forms', #para usar crispy forms para formularios
-    "bootstrap4", #para usar bootstrap
+    'bootstrap4', #para usar bootstrap
 ]
 
 #configuracion para poder usar el crispy forms con bootstrap4

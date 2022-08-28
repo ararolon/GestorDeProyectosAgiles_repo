@@ -1,4 +1,5 @@
 
+from multiprocessing import context
 from unicodedata import name
 from urllib import request
 from django.shortcuts import render,redirect
@@ -7,7 +8,7 @@ from allauth.socialaccount.models import SocialApp
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.urls import reverse
 
 from . import decoradores
@@ -81,26 +82,32 @@ def logout(request):
 @decoradores.agregar_usuarios
 def home(request):
     """
-     Vista de prueba para ver el indice de la pagina luego del login de un usuario
-    
+    Vista que reidrecciona a la pagina principal del sistema dependiendo si el usuario es administrador del sistema o no
+
     :param request: HttpRequest object
     :return: HttpRedirect
     
     """
     #Pregunta si es el administrador del sistema o si es un usuario comun. 
     #Redirecciona a diferentes interfaces
-
     if request.user.groups.filter(name='administrador'):
         return render(request, 'SSO/home_admin.html', context=None)
-    elif request.user.groups.filter(name='usuarios'):
+    elif request.user.has_perm('acceder_al_sistema'):
         return render(request,'SSO/home_usuarios.html',context=None)
     else:
-        return redirect('login')
+        return render(request,'SSO/sinpermiso.html',context=None)
 
+@login_required(login_url='login')
+def sin_permiso(request):
+    """
+    Vista para usuarios que no tienen permisos necesarios para visualizar una pantalla
 
-    
+    :param request: HttpRequest object
+    :return: HttpRedirect
 
+    """
 
+    return render(request,'SSO/sinpermiso.html',context=None)
    
 
 

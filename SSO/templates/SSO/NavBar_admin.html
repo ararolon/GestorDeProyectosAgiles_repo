@@ -1,5 +1,3 @@
-
-
 <nav class="navbar navbar-expand-lg" style="background-color:#196d46 ">
   <div class="container-fluid">
     <a class="navbar-brand" href="{% url 'home' %}" style="color: white;">
@@ -38,7 +36,7 @@
              Usuarios
             </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Lista de Usuarios</a></li>
+            <li><a class="dropdown-item" href="{% url 'lista_users' %}">Lista de Usuarios</a></li>
             <li><a class="dropdown-item" href="{% url 'index_eliminar'  %}"">Eliminar Usuario</a></li>
           </ul>
       </ul>
