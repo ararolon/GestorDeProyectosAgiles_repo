@@ -1,0 +1,23 @@
+{% extends 'SSO/base.html' %}
+{% block title %}Eliminar Rol de Sistema{% endblock %}
+{% block content %}
+    <div class="container mt-3">
+        <h3 class="col-12">Esta seguro que desea eliminar el Rol de Sistema "{{ rol.nombre }}"</h3>
+        <div class="row border rounded bg-white p-3">
+            <div class="col-12 mx-auto text-center mt-3">
+                Al eliminar este Rol de Sistema los usuarios no podrán utilizar este rol para asignar permisos
+                a los participantes dentro de un proyecto.
+            </div>
+            <hr class="col-10">
+            <h5 class="col-12 my-3">El Rol a eliminar cuenta con los siguientes permisos:</h5>
+            {% for pp in rol.permisos.all %}
+                <p class="col-10 mx-auto">{{ pp.name }}</p>
+            {% endfor %}
+            <form method="POST" class="col-auto mx-auto">
+                {% csrf_token %}
+                <input  type="submit" class="btn btn-primary mr-3 border-0 bg-color-accent" value="Eliminar Rol">
+                <a href="../" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar Eliminacion</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
