@@ -7,3 +7,6 @@ GestorDeProyectosAgiles_repo
    core
    manage
    SSO
+   Usuarios
+   tests
+   
