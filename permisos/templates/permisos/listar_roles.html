@@ -1,7 +1,8 @@
-{% extends 'SSO/base.html' %}
+{% extends 'SSO/base_admin.html' %}
 {% load crispy_forms_tags %}
 {% block title %}Roles de Sistema {% endblock %}
 {% block content %}
+   <!-- {% include 'SSO/NavBar_admin.html' %} -->  
 
     <style>
         [data-toggle="collapse"] .fa:before {
@@ -57,12 +58,18 @@
                     </div>
                     <div id="collapse_rol_{{ rol.id }}" class="" aria-labelledby="header_rol_{{ rol.id }}" data-parent="#lista_roles">
                         <div class="card-body row">
-                            <div class="col-12 "><u>Descripción: </u><a>{{ rol.descripcion }}</a>
-                                <br><br><u class="">Permisos:</u>
-                                <div class="col-11 mx-auto row">
+                            <div class="col-12 "><u>Descripción: </u><p>{{ rol.descripcion }}</p>
+                                <u class="">Permisos:</u>
+                                <div class="col-11 row">
                                     {% for permiso in rol.permisos %}
-                                        <h5 class="mx-1"><span class="">{{ permiso }}</span></h5>
+                                        <p class="mx-1"><span class="">{{ permiso }}</span></p>
                                     {% endfor %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="d-flex flex-row-reverse">
+                                    <a href="{% url 'eliminar_rol' rol.id %}" class="btn btn-outline-danger m-2">Eliminar Rol<a>
+                                    <a href="{% url 'modificar_rol' rol.id %}" class="btn btn-outline-primary m-2">Modificar Rol<a>
                                 </div>
                             </div>
                         </div>

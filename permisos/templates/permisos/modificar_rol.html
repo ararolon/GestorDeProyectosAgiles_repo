@@ -1,7 +1,9 @@
-{% extends 'SSO/base.html' %}
+{% extends 'SSO/base_admin.html' %}
 {% load crispy_forms_tags %}
 {% block title %} Editar Rol de Sistema {% endblock %}
 {% block content %}
+   <!-- {% include 'SSO/NavBar_admin.html' %} -->  
+
 <div class="container mt-3">
     {% if form.errors %}
         {% for field in form %}
@@ -31,7 +33,8 @@
     <form method="POST" class="col-12 col-md-8 mx-auto">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" value="Editar Rol" class="btn btn-primary bg-color-accent col-12">
+        <input type="submit" class="btn btn-primary mr-3 border-0 bg-color-accent" value="Editar Rol" >
+        <a href="../" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar Modificacion</a>
     </form>
 
 </div>
