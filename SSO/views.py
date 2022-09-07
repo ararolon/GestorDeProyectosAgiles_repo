@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group, Permission
 from django.urls import reverse
 
+from permisos.models import RolesdeSistema 
+
 from . import decoradores
 
 from .forms import SocialAppForm
@@ -35,20 +37,27 @@ def configurar_sso(request):
         return redirect('home')
     
     if not Group.objects.filter(name='administrador').exists():
-       grupo = Group.objects.create(name='administrador')
+       rol = RolesdeSistema.objects.create(nombre='administrador')
+       rol.permisos.clear()
+       grupo = Group.objects.create(name=rol.get_nombre())
        grupo.save()
 
    #pregunta por el grupo usuarios 
 
     if not Group.objects.filter(name='usuarios'):
+       rol = RolesdeSistema.objects.create(nombre='usuarios')
+       rol.permisos.clear()
        grupo = Group.objects.create(name='usuarios')
        grupo.save()
        perm= Permission.objects.get(codename='acceder_al_sistema') 
+       rol.permisos.add(perm)
        grupo.permissions.add(perm) # ya le asigna el permiso de acceder al sistema
 
    #pregunta por el grupo sin acceso
 
     if not Group.objects.filter(name='sin_acceso'):
+        rol = RolesdeSistema.objects.create(nombre='sin_acceso')
+
         grupo = Group.objects.create(name='sin_acceso')
         grupo.save()
 

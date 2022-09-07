@@ -1,3 +1,6 @@
+from email.headerregistry import Group
+from tokenize import group
+from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from .form import NewRolForm 
 from .models import RolesdeSistema
@@ -14,6 +17,9 @@ def crear_rol (request):
         if form.is_valid():
             rol = form.save()
             rol.save()
+            group = Group.objects.create(name=rol.nombre)
+            group.save()
+            rol.darpermisos_a_grupo(group)
 
         return redirect('/')
     else:
@@ -87,6 +93,7 @@ def eliminar_rol(request, id_rol):
     contexto = {'user': request.user, 'rol': rol}
 
     if request.method == 'POST':
+          #agregar opcion de si el rol es utilizado , no se puede eliminar
             rol.delete()
             return redirect('listar_roles')
 

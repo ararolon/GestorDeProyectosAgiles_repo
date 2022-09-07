@@ -32,18 +32,33 @@
                               <td>{{ u.last_name }}</td>
                               <td>{{ u.email }}</td>
                              
-                               <!---Pregunta si es que ya tiene el permisod de acceso al sistema, y si ya tiene , deshabilita el boton-->
+                               <!---Pregunta si es que ya tiene el permisod de acceso al sistema, y si ya tiene , deshabilita el boton--> 
                               <td>
+                                   
                                    {% if  u|has_group:'usuarios' %}
                                      <div class="fa-align-center">
                                           <a href="#" class="btn btn-primary disabled" tabindex="-1" role="button" aria-disabled="true">Dar acceso</a>
-                                     </div>
+                                     
+                                        </div>
                                    {% else %}
                                       <div class="fa-align-center">
                                              <a class="btn btn-primary" href="{% url 'dar_acceso' u.id %}" role="button">Dar acceso</a>
                                       </div>
                                    {% endif %} 
                               </td>
+                    
+                               <td>
+                                    {% if u|has_group:'usuarios' %}
+                                    <div class="fa-align-center"></div>
+                                     <a  href="{% url 'asignar_rol' u.id %}" role="button" class="btn btn-info">Asignar Rol</a>
+                                    </div>
+                                    
+                                    {% else %}
+                                     <div class="fa-align-center">
+                                        <a href="#" class="btn btn-info disabled" tabindex="-1" role="button" aria-disabled="True">Asignar Rol</a>
+                                     </div>
+                                    {% endif %}
+                                </td>
                           </tr>
                       {% endfor %}
                  </tbody>

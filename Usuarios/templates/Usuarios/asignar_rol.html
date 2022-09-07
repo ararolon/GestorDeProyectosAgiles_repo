@@ -1,0 +1,36 @@
+{% extends 'SSO/base_admin.html' %}
+{% load crispy_forms_tags %}
+
+{# se carga head #}
+{% block title %}
+     Asignar Rol
+{% endblock %}
+
+{# body #}
+{% block content %}
+
+<div class="container mt-3">
+    <h3 class="mx-auto"> Asignar Rol a {{form.usuario.get_full_name}}</h3>
+    <hr class="col-12 col-md-12 mx-auto">
+    <div class="col col-sm-12">
+        <form method="POST" class="col-auto mx-auto">
+            {% csrf_token %}
+            <div class="col col-sm-12">
+                {{ form|crispy }}
+            </div>
+        </br>
+            <div class="col-sm-12 text-center">
+                <a href="../" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar</a>
+                <button type="submit" class="btn btn-success bg-color-accent col-2 ml-5">
+                    <i class="fas fa-check"></i>
+                    Asignar Rol
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
+

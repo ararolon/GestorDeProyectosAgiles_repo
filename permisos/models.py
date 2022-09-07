@@ -1,5 +1,7 @@
+from nntplib import GroupInfo
+from unicodedata import name
 from django.db import models
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 """
 RF100: EL sistema cuenta con una lista de roles por defecto iniciales:
 - Superusuario/administrador del sistema.
@@ -68,46 +70,39 @@ class RolesdeSistema(models.Model):
         """
         return [p for p in self.permisos.all()]
 
-"""
-class Permiso(models.Model):
-    
-    def get_permisos_clean(self):
-        
-        #Metodo que colecta los permisos activos
-        #:return: una lista de permisos activos
-        
-        permisos = []
-        permisos = permisos + (['Crear usuario'] if self.crear_usuario else [])
-        permisos = permisos + (['Eliminar usuario'] if self.eliminar_usuario else [])
-        permisos = permisos + (['Crear roles'] if self.crear_roles else [])
-        permisos = permisos + (['Asignar roles a usuario'] if self.asignar_roles else [])
-        permisos = permisos + (['Visualizar usuario del Sistema'] if self.visualizar_usuario else [])
-        permisos = permisos + (['Crear Proyecto'] if self.crear_proyecto else [])
-        permisos = permisos + (['Editar Proyecto'] if self.editar_proyecto else [])
-        permisos = permisos + (['Visualizar Proyecto'] if self.visualizar_proyecto else [])
-        permisos = permisos + (['Cancelar Proyecto'] if self.cancelar_proyecto else [])
-        permisos = permisos + (['Eliminar miembros de un proyecto'] if self.eliminar_miembros else [])
-        permisos = permisos + (['Visualizar historial del proyecto'] if self.visualizar_historial_proyecto else [])
-        permisos = permisos + (['Modificar fecha de inicio del proyecto'] if self.modificar_fecha_ini else [])
-        permisos = permisos + (['Modificar fecha de finalizacion del proyecto'] if self.modificar_fecha_fin else [])
-        permisos = permisos + (['Modificar estado del proyecto'] if self.modificar_estado_proyecto else [])
-        permisos = permisos + (['Crear sprint'] if self.crear_sprint else [])
-        permisos = permisos + (['Modificar sprint'] if self.modificar_sprint else [])
-        permisos = permisos + (['Modificar estado de un sprint'] if self.modificar_estado_sprint else [])
-        permisos = permisos + (['Crear US'] if self.crear_us else [])
-        permisos = permisos + (['Modificar US'] if self.modificar_us else [])
-        permisos = permisos + (['Modificar estado de US'] if self.modificar_estado_us else [])
-        permisos = permisos + (['Cancelar us'] if self.cancelar_us else [])
-        permisos = permisos + (['Consultar historial de un US'] if self.cosultar_historial_us else [])
-        permisos = permisos + (['Modificar Product Backlog'] if self.modificar_backlog else [])
-        permisos = permisos + (['Modificar Sprint Backlog'] if self.modificar_sprint_backlog else [])
-        permisos = permisos + (['Crear tipos de US'] if self.crear_tipos_us else [])
-        permisos = permisos + (['Modificar tipos de US'] if self.modificar_tipos_us else [])
-        permisos = permisos + (['Visualizar Burndown Chart'] if self.visualizar_burndown_chart else [])
-        permisos = permisos + (['Visualizar Visualizar Tabla Kanban'] if self.visualizar_kanban else [])
+    def get_nombre(self):
+        return self.nombre    
 
-        return permisos
+    
+    def darpermisos_a_grupo(self,grupo):
+
+        """
+        Funcion que asigna todos los permisos dados a un rol a un grupo relacionado a rol
+        param: el rol con los permisos
+        param: el grupo al que se le quiere dar los permisos
+        """
+
+        permisos = self.get_permisos()
         
-    def _str_(self):
-        return self.nombre
-"""
+        for p in permisos:
+           grupo.permissions.add(p)
+
+
+
+    def es_utilizado(self):
+
+      """
+      Funcion que verifica si un rol esta siendo utilizado
+
+      :return: Booleano ,True si esta siendo utilizado, False caso contrario
+      """
+      #Busca el grupo por nombre de rol
+      if not Group.objects.exists():
+        grupo = Group.objects.create(name = self.nombre)
+
+      else:                
+        grupo = Group.objects.get(name= self.nombre)
+    
+      return grupo.user__set.all().exists() if grupo is not None else False
+   
+     

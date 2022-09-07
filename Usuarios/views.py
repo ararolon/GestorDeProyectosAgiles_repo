@@ -4,7 +4,8 @@ from tokenize import group
 from unicodedata import name
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User,Group, Permission#importa el modelo de usuarios de Django para obtener todos los usuarios regigistrados en el sistema hasta ahora
+from django.contrib.auth.models import User,Group, Permission
+from Usuarios.forms import AsignarRolForm
 from Usuarios.models import Usuario
 """
 Vistas exclusivas del administrador del sistema sobre los usuarios
@@ -15,12 +16,14 @@ administrar usuarios del sistema
 def lista_eliminar(request):
     """
     Vista que permite ver todos los usuarios del sistema para luego borrarlos.
+    Lista de usuarios con acceso y sin acceso al sistema.
     :param request: Httprequest object
     :return: HttpResponse
     
     """
 
     lista = list(User.objects.filter(groups__name= 'usuarios'))
+    lista = lista + list(User.objects.filter(groups__name='sin_acceso'))
     return render(request,'Usuarios/index_eliminar.html',{'lista':lista})
 
 
@@ -90,7 +93,28 @@ def crear_usuario(request,id):
     return render(request,'Usuarios/Daracceso.html',{'usuario':usuario})    
 
 
+def asignar_rol_usuario(request,id):
+ 
+  """
+  Vista que permite asignar un rol a un usuario
+  :param request: HttpRequest object
+  :param id : id del usuario al que se le quiere aignar un rol.
+  """
 
+  usuario = get_object_or_404(Usuario,pk=id) #se busca el usuario por id
+ 
+  if request.method == 'POST':
+    form = AsignarRolForm (request.POST, usuario=usuario)
+    if form.is_valid():
+      usuario.asignar_roles_usuarios(form.cleaned_data.get('Roles')) #obtiene los roles seleccionado
+      return redirect('lista_users')  
+    
+  else:
+    form = AsignarRolForm(usuario=usuario)
+
+  contexto = {'usuario':usuario, 'user':request.user, 'form':form}
+
+  return render(request,'Usuarios/asignar_rol.html',contexto)
 
 
 
