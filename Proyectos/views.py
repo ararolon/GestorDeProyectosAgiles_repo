@@ -1,5 +1,5 @@
 from urllib import request
-from django.shortcuts import render, redirect,reverse
+from django.shortcuts import render, redirect,reverse, get_object_or_404
 from Proyectos.forms import crearproyectoForm
 from Proyectos.models import Proyecto
 from django.utils import timezone
@@ -38,30 +38,24 @@ def listarProyectos(request):
     """
     contexto = {
                 'proyectos': [
-                    {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion,
+                    {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion, 
+                  #  'url': reverse('mostrarUnProyecto', args=(Proyecto.id_proyecto))
                      }
                     for Proyecto in Proyecto.objects.all()
                 ],
                 
                 }
-
+    mostrarUnProyecto(id)
     return render(request, 'proyectos/listarProyectos.html', contexto)
 
+id_proyecto=Proyecto.id_proyecto
 
-def mostrarProyectos(request):
-    """
-    Vista que muestra al usuario el Proyecto actual en el que es participante.
-    Argumentos:request: HttpRequest
-    Return: HttpResponse
-    """
-    contexto = {
-                'proyectoActual': [
-                    {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion,
-                    
-                     }
-                    for Proyecto in Proyecto.objects.all()
-                ],
-                
+def mostrarUnProyecto(request, id_proyecto):
+   
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    
+    contexto = {'user': request.user,
+                #'id': Proyecto.id_proyecto,
+                'proyecto': proyecto,
                 }
-
-    return render(request, 'proyectos/listarProyectos.html', contexto)
+    return render(request, 'proyectos/mostrarUnProyecto.html', contexto)
