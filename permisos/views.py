@@ -11,17 +11,16 @@ def crear_rol (request):
 
 
     contexto = {'user': request.user}
+    contexto['form'] = NewRolForm()
 
     if request.method == 'POST':
         form = NewRolForm(request.POST)
         if form.is_valid():
             rol = form.save()
             rol.save()
-            group = Group.objects.create(name=rol.nombre)
-            group.save()
-            rol.darpermisos_a_grupo(group)
-
-        return redirect('/')
+            return redirect('listar_roles')
+        else:
+            contexto['mensajeError'] = 'El nombre del rol ya existe'
     else:
         contexto['form'] = NewRolForm()
 
@@ -69,8 +68,7 @@ def modificar_rol(request, id_rol):
         if form.is_valid():
             rs = form.save()
             rs.save()
-            return redirect('/')
-        
+            return redirect('listar_roles')
 
         contexto = {'user': request.user, 'form': form}
     else:
@@ -98,3 +96,4 @@ def eliminar_rol(request, id_rol):
             return redirect('listar_roles')
 
     return render(request, 'permisos/eliminar_rol.html', contexto)
+

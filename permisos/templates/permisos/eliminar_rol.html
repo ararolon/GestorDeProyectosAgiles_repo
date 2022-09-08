@@ -1,8 +1,9 @@
-{% extends 'SSO/base.html' %}
+{% extends 'SSO/base_admin.html' %}
 {% block title %}Eliminar Rol de Sistema{% endblock %}
 {% block content %}
+<!-- {% include 'SSO/NavBar_admin.html' %} -->  
     <div class="container mt-3">
-        <h3 class="col-12">Esta seguro que desea eliminar el Rol de Sistema "{{ rol.nombre }}"</h3>
+        <h3 class="col-12">Esta seguro que desea eliminar el Rol "{{ rol.nombre }}"</h3>
         <div class="row border rounded bg-white p-3">
             <div class="col-12 mx-auto text-center mt-3">
                 Al eliminar este Rol de Sistema los usuarios no podrán utilizar este rol para asignar permisos
