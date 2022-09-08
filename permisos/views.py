@@ -18,6 +18,9 @@ def crear_rol (request):
         if form.is_valid():
             rol = form.save()
             rol.save()
+            group = Group.objects.create(name=rol.nombre)
+            group.save()
+            rol.darpermisos_a_grupo(group)
             return redirect('listar_roles')
         else:
             contexto['mensajeError'] = 'El nombre del rol ya existe'
