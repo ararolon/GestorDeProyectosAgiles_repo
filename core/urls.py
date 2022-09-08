@@ -11,4 +11,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('SSO.urls')),
     path('accounts/',include('allauth.urls')), #path del sso
+    path('',include('Proyectos.urls')),
 ]
