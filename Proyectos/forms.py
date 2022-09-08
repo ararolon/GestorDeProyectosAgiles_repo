@@ -24,7 +24,8 @@ class crearproyectoForm(forms.Form):
 
     descripcion = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
 
-    scrumMaster = forms.CharField(widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
+    scrumMaster = forms.ModelChoiceField(queryset=Usuario.objects.filter(groups__isnull=False), empty_label='Seleccionar Scrum Master para el proyecto')
+
 
     class Meta:
         model = Proyecto
