@@ -10,9 +10,9 @@ from django.forms import model_to_dict
 
 def crearProyecto (request):
     """
-    Metodo que se ejecuta para visualizar los datos de un nuevo proyecto creado
-    :param datos: informaciones referentes a los campos de datos de un proyecto
-    :return: info del nuevo proyecto
+    Metodo para proyecto nuevo a crear
+    param request: request para datos nuevos de un proyecto
+    return: contexto para proyecto nuevo
     """
 
 

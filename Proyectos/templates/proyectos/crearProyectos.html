@@ -13,9 +13,9 @@
         {% endif %}
         <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
             {% csrf_token %}
-            {{ form|crispy }}
-            <button class="btn btn-primary bg-color-accent col-5" type="submit">Crear</button>
-            <a class="btn btn-danger col-5">Cancelar</a>
+            <div class=" col-12 text-muted mb-4 font-italic">Ingrese un nombre, una descipción y un usuario Scrum Master para el proyecto.</div>
+            <div class="col-12 col-md-10 mx-auto">{{ form|crispy }}</div>
+            <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Crear Proyecto</button>
         </form>
     </div>
 {% endblock %}

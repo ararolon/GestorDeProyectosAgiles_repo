@@ -23,7 +23,9 @@ class crearproyectoForm(forms.Form):
     nombre = forms.CharField(widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
 
     descripcion = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
-    
+
+    scrumMaster = forms.CharField(widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
+
     class Meta:
         model = Proyecto
         fields = ('nombre', 'descripcion', 'scrumMaster')

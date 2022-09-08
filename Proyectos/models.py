@@ -39,9 +39,6 @@ class Proyecto(models.Model):
 
 
     def cancelar(self):
-        
-        #para cancelar el proyecto de forma manual
-       
         if self.estado == estadoProyecto.FINALIZADO:
             return False
         else:
