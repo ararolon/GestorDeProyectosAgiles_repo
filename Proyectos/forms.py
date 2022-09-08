@@ -10,7 +10,7 @@ from Usuarios.models import *
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 
-class crearproyectoForm(forms.Form):
+class crearproyectoForm(forms.ModelForm):
     """
     Form que permite la creacion de un nuevo proyecto.
     Es necesario especificar el scrumMaster del proyecto.
