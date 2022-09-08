@@ -1,4 +1,5 @@
 
+from multiprocessing import context
 from unicodedata import name
 from urllib import request
 from django.shortcuts import render,redirect
@@ -7,8 +8,10 @@ from allauth.socialaccount.models import SocialApp
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.urls import reverse
+
+from permisos.models import RolesdeSistema 
 
 from . import decoradores
 
@@ -34,14 +37,31 @@ def configurar_sso(request):
         return redirect('home')
     
     if not Group.objects.filter(name='administrador').exists():
-       grupo = Group.objects.create(name='administrador')
+       rol = RolesdeSistema.objects.create(nombre='administrador',defecto =True)
+       rol.permisos.clear()
+       grupo = Group.objects.create(name=rol.get_nombre())
        grupo.save()
 
-   #pregunta por el grupo usuarios
+   #pregunta por el grupo usuarios 
 
     if not Group.objects.filter(name='usuarios'):
+       rol = RolesdeSistema.objects.create(nombre='usuarios',defecto=True)
+       rol.permisos.clear()
        grupo = Group.objects.create(name='usuarios')
        grupo.save()
+       perm= Permission.objects.get(codename='acceder_al_sistema') 
+       rol.permisos.add(perm)
+       grupo.permissions.add(perm) # ya le asigna el permiso de acceder al sistema
+
+   #pregunta por el grupo sin acceso
+
+    if not Group.objects.filter(name='sin_acceso'):
+        rol = RolesdeSistema.objects.create(nombre='sin_acceso',defecto=True)
+
+        grupo = Group.objects.create(name='sin_acceso')
+        grupo.save()
+
+
 
     sa = SocialApp.objects.create(name="sso")
     sa.save()
@@ -81,26 +101,32 @@ def logout(request):
 @decoradores.agregar_usuarios
 def home(request):
     """
-     Vista de prueba para ver el indice de la pagina luego del login de un usuario
-    
+    Vista que reidrecciona a la pagina principal del sistema dependiendo si el usuario es administrador del sistema o no
+
     :param request: HttpRequest object
     :return: HttpRedirect
     
     """
     #Pregunta si es el administrador del sistema o si es un usuario comun. 
     #Redirecciona a diferentes interfaces
-
     if request.user.groups.filter(name='administrador'):
         return render(request, 'SSO/home_admin.html', context=None)
     elif request.user.groups.filter(name='usuarios'):
         return render(request,'SSO/home_usuarios.html',context=None)
-    else:
-        return redirect('login')
+    else:   #los usuarios en el grupo 'sin acceso'
+        return render(request,'SSO/sinpermiso.html',context=None)
 
-    return render(request,'SSO/home.html',context=None)
-    
+@login_required(login_url='login')
+def sin_permiso(request):
+    """
+    Vista para usuarios que no tienen permisos necesarios para visualizar una pantalla
 
+    :param request: HttpRequest object
+    :return: HttpRedirect
 
+    """
+
+    return render(request,'SSO/sinpermiso.html',context=None)
    
 
 

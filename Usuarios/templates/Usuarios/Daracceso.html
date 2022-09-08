@@ -1,0 +1,22 @@
+{% extends 'SSO/base_admin.html' %}
+
+{# se carga head #}
+{% block title %}
+     Usuarios
+{% endblock %}
+
+{# body #}
+{% block content %}
+
+     <div>
+        <h3>¿Esta seguro que desea dar permiso de acceso  al usuario {{ usuario.username }} ?</h3>
+     </div>
+    <form action="{% url 'dar_acceso' usuario.id %}" method="POST">
+      {% csrf_token %}
+      <a class="btn btn-outline-danger" href="{% url 'lista_users' %}" role="button">Cancelar</a>
+      <button type="submit" class="btn btn-outline-success">Dar acceso</button>
+
+    </form>
+
+
+{% endblock %}

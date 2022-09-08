@@ -13,6 +13,7 @@ Welcome to GestorProyectosAgiles's documentation!
    modules
    SSO
    tests
+   Usuarios
 
 Indices and tables
 ==================

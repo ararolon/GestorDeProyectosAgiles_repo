@@ -1,0 +1,47 @@
+{% extends 'SSO/base_admin.html' %}
+
+
+{# se carga head #}
+{% block title %}
+     Usuarios
+{% endblock %}
+
+{# body #}
+{% block content %}
+
+    <div>
+      <div>
+          <h2> Eliminar Usuario </h2>
+      </div>
+           <div>
+               <table class="table">
+                   <thead class="table-light">
+                       <tr>
+                            <th>User</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Email</th>
+                           <th>Fecha de Alta</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                        {% for u in lista %}
+                            <tr>
+                                <td>{{ u.username }}</td>
+                                <td>{{ u.first_name }}</td>
+                                <td>{{ u.last_name }}</td>
+                                <td>{{ u.email }}</td>
+                                <td>{{ u.date_joined }}</td>
+                                <td>
+                                     <div class="fa-align-center">
+                                         <a  href="{% url 'eliminar_user' u.id %}" class="btn btn-danger"  role="button">Eliminar</a>
+                                     </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                   </tbody>
+               </table>
+           </div>
+    </div>
+
+{% endblock %}

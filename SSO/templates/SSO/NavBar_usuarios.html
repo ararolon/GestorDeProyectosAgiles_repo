@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg " style="background-color:#196d46 ">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}" >
+      <a class="navbar-brand" href="{% url 'home' %}"  style="color: white;">
         Gestor de Proyectos
       </a> 
       {# referencia a home en views.py#}
@@ -9,7 +9,7 @@
         
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
               Proyecto
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -27,7 +27,7 @@
           {% if redirect_field_value %}
             <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
           {% endif %}
-            <button type="submit" class="btn btn-outline-danger">Cerrar Sesión</button>
+            <button type="submit" class="btn btn-danger" style="color: white">Cerrar Sesión</button>
           </form>
       </div>
     </div>  

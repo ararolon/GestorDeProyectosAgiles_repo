@@ -13,4 +13,5 @@ urlpatterns = [
     path('',views.configurar_sso,name='configurar_sso'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+    path('sinpermiso/',views.sin_permiso,name='sinpermiso'),
 ]

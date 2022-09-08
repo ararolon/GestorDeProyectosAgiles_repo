@@ -1,8 +1,6 @@
-
-
-<nav class="navbar navbar-expand-lg" style="background-color:#196d46">
+<nav class="navbar navbar-expand-lg" style="background-color:#196d46 ">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">
+    <a class="navbar-brand" href="{% url 'home' %}" style="color: white;">
       Gestor de Proyectos
     </a> 
     {# referencia a home #}
@@ -16,10 +14,8 @@
             Roles
           </a>
          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Crear Rol</a></li>
-            <li><a class="dropdown-item" href="#">Asignar Rol</a></li>
-            <li><a class="dropdown-item" href="#">Listar Roles</a></li>
-            <li><a class="dropdown-item" href="#">Importar Roles</a></li>
+            <li><a class="dropdown-item" href="/crearRol/">Crear Rol</a></li>
+            <li><a class="dropdown-item" href="/listarRol/">Listar Roles</a></li>
           </ul>
        </li>
         
@@ -38,8 +34,8 @@
              Usuarios
             </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/usuarios">Lista de Usuarios</a></li>
-            <li><a class="dropdown-item" href="/usuarios/Index_eliminar">Eliminar Usuario</a></li>
+            <li><a class="dropdown-item" href="{% url 'lista_users' %}">Lista de Usuarios</a></li>
+            <li><a class="dropdown-item" href="{% url 'index_eliminar'  %}"">Eliminar Usuario</a></li>
           </ul>
       </ul>
     </div>
@@ -50,7 +46,7 @@
         {% if redirect_field_value %}
           <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
         {% endif %}
-          <button type="submit" class="btn btn-outline-danger" style="color: white">Cerrar Sesión</button>
+          <button type="submit" class="btn btn-danger" style="color: white">Cerrar Sesión</button>
         </form>
     </div>
     
