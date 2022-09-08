@@ -37,7 +37,7 @@ def configurar_sso(request):
         return redirect('home')
     
     if not Group.objects.filter(name='administrador').exists():
-       rol = RolesdeSistema.objects.create(nombre='administrador')
+       rol = RolesdeSistema.objects.create(nombre='administrador',defecto =True)
        rol.permisos.clear()
        grupo = Group.objects.create(name=rol.get_nombre())
        grupo.save()
@@ -45,7 +45,7 @@ def configurar_sso(request):
    #pregunta por el grupo usuarios 
 
     if not Group.objects.filter(name='usuarios'):
-       rol = RolesdeSistema.objects.create(nombre='usuarios')
+       rol = RolesdeSistema.objects.create(nombre='usuarios',defecto=True)
        rol.permisos.clear()
        grupo = Group.objects.create(name='usuarios')
        grupo.save()
@@ -56,7 +56,7 @@ def configurar_sso(request):
    #pregunta por el grupo sin acceso
 
     if not Group.objects.filter(name='sin_acceso'):
-        rol = RolesdeSistema.objects.create(nombre='sin_acceso')
+        rol = RolesdeSistema.objects.create(nombre='sin_acceso',defecto=True)
 
         grupo = Group.objects.create(name='sin_acceso')
         grupo.save()

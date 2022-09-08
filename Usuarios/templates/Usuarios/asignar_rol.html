@@ -10,7 +10,7 @@
 {% block content %}
 
 <div class="container mt-3">
-    <h3 class="mx-auto"> Asignar Rol a {{form.usuario.get_full_name}}</h3>
+    <h3 class="mx-auto"> Asignar Rol al usuario {{form.usuario.get_full_name}}</h3>
     <hr class="col-12 col-md-12 mx-auto">
     <div class="col col-sm-12">
         <form method="POST" class="col-auto mx-auto">
@@ -21,7 +21,7 @@
         </br>
             <div class="col-sm-12 text-center">
                 <a href="../" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar</a>
-                <button type="submit" class="btn btn-success bg-color-accent col-2 ml-5">
+                <button type="submit" class="btn btn-primary bg-color-accent col-2 ml-5">
                     <i class="fas fa-check"></i>
                     Asignar Rol
                 </button>

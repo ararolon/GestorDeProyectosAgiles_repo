@@ -26,6 +26,7 @@ class RolesdeSistema(models.Model):
     permisos = conjunto de permisos para el rol
     """
     nombre = models.CharField(max_length=20, blank=False, unique=True)
+    defecto = models.BooleanField(default=False) # indica si el rol creado es predeterminado en el sistema y no puede borrarse.
     descripcion = models.TextField(max_length=60, blank=True)
     permisos = models.ManyToManyField(Permission, blank=True)  # Indica que varios roles pueden tener varios permisos
     
@@ -105,4 +106,6 @@ class RolesdeSistema(models.Model):
     
       return grupo.user__set.all().exists() if grupo is not None else False
    
-     
+    
+
+
