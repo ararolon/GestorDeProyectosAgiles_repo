@@ -21,14 +21,11 @@ def crearProyecto (request):
         if form.is_valid():
             proyecto = form.save(commit=False)
             proyecto.fecha_de_inicio = timezone.now()
-           # proyecto.estado = EstadoDeProyecto.CONFIGURACION
             proyecto.save()
-           # participante = Participante(usuario=proyecto.gerente, proyecto=proyecto)
-            #participante.save()
             return redirect('home')
     else:
          form = crearproyectoForm()
-    contexto = {'formulario': form
+    contexto = {'form': form
                 }
     return render(request,'proyectos/crearProyectos.html',context=contexto)    
 
