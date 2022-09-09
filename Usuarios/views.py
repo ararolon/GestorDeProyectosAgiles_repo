@@ -29,7 +29,7 @@ def lista_eliminar(request):
 
 
 
-@login_required(login_url='login')
+
 def eliminar_usuario(request,id):
   
   """
@@ -67,7 +67,7 @@ def listar_usuarios(request):
 
   return render(request,'Usuarios/listar_usuarios.html',{'usuarios':usuarios})
    
-@login_required(login_url='login')
+
 def crear_usuario(request,id):
 
   """
