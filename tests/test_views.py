@@ -77,3 +77,4 @@ class Test_views(TestCase):
         response = self.client.get(self.configuracion_inicial_url)
         #redirecciona a home
         self.assertTrue(response,self.home_url)
+
