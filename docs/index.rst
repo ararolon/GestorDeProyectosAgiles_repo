@@ -15,6 +15,7 @@ Welcome to GestorProyectosAgiles's documentation!
    tests
    Usuarios
    permisos
+   Proyectos
 
 Indices and tables
 ==================

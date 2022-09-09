@@ -10,4 +10,5 @@ GestorDeProyectosAgiles_repo
    Usuarios
    tests
    permisos
+   Proyectos
    
