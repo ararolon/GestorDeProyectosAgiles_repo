@@ -14,7 +14,7 @@ class Test_proyecto_views(TestCase):
         response = self.client.get(path)
         print(response.content)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'Proyectos/crearProyecto.html')
+        self.assertTemplateUsed(response, 'proyectos/crearProyectos.html')
 
 #    def test_listar_proyectos(self):
 #        path = reverse('')
