@@ -49,7 +49,7 @@ def configurar_sso(request):
        rol.permisos.clear()
        grupo = Group.objects.create(name='usuarios')
        grupo.save()
-       perm= Permission.objects.get(codename='acceder_al_sistema') 
+       perm= Permission.objects.get(codename='_acceder_al_sistema') 
        rol.permisos.add(perm)
        grupo.permissions.add(perm) # ya le asigna el permiso de acceder al sistema
 
