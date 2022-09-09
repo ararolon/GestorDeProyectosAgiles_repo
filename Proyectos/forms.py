@@ -14,10 +14,9 @@ class crearproyectoForm(forms.ModelForm):
     """
     Form que permite la creacion de un nuevo proyecto.
     Es necesario especificar el scrumMaster del proyecto.
-    Campos:
         -nombre: str, nombre del proyecto
         -descripcion: str, descripcion del proyecto
-        -scrumMaster: User, usuario que se le asignar el rol de scrumMaster del proyecto
+        -scrumMaster: Usuario que se le asignar el rol de scrumMaster del proyecto
     """
 
     nombre = forms.CharField(widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))

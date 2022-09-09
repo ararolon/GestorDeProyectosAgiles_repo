@@ -1,14 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
 from Usuarios.models import Usuario
 
 
 
 class Proyecto(models.Model):
     """
-        Modelo para la clase de Proyecto
+        Modelo para la clase de Proyecto con los campos necesarios para el mismo
     """
     id_proyecto = models.CharField(max_length=100)
     nombre = models.CharField(max_length=100)
@@ -27,7 +26,7 @@ class Proyecto(models.Model):
 
     def scrumMaster(self):
         """
-        Metodo que retorna el objeto User del Scrum Master del proyecto
+        Metodo que retorna el Usuario del Scrum Master del proyecto
         """
         return self.scrumMaster
 

@@ -10,7 +10,7 @@ from django.forms import model_to_dict
 
 def crearProyecto (request):
     """
-    Metodo para proyecto nuevo a crear
+    Metodo para crear proyecto
     param request: request para datos nuevos de un proyecto
     return: contexto para proyecto nuevo
     """
@@ -49,11 +49,14 @@ def listarProyectos(request):
 
 
 def mostrarUnProyecto(request):
-   
+    """
+    Vista que muestra al usuario los proyectos asignados a un solo usuario del Sistema.
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
    # proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     
     contexto = {'user': request.user,
-               #'id': Proyecto.id_proyecto,
                  'proyectoActual': [
                     {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion, 
                      } 

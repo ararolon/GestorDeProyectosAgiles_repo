@@ -1,4 +1,9 @@
 
+"""
+    urls de la app de Ptoyectos , vistas de las páginas para crear proyecto,
+    visualizar proyectos y visualizar proyectos individuales de un usuario
+"""
+
 from django.urls import path
 
 from Proyectos import views
