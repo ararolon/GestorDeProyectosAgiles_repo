@@ -101,7 +101,7 @@ def logout(request):
 @decoradores.agregar_usuarios
 def home(request):
     """
-    Vista que reidrecciona a la pagina principal del sistema dependiendo si el usuario es administrador del sistema o no
+    Vista que redrecciona a la pagina principal del sistema dependiendo si el usuario es administrador del sistema o no
 
     :param request: HttpRequest object
     :return: HttpRedirect

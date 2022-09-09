@@ -19,8 +19,8 @@ def agregar_usuarios(view_func):
         # no esta en grupo administrador ni en grupo usuarios, entonces agregar a grupo usuario
         # siguientes usuarios que ingresan al sistema
         if not request.user.groups.filter(name='administrador').exists() and not request.user.groups.filter(
-                name='sin_acceso').exists():
-            # no es administrador , entonces se le agrega al grupo sin_acceso , usuarios que no tienen acceso al sistema
+                name='usuarios').exists():
+            # no es administrador y no pertenece al grupo de usuarios, entonces se le agrega al grupo sin_acceso , usuarios que no tienen acceso al sistema
             # se verifica que no sea el superusuario de django
             if not request.user.is_superuser:
                 grupo = Group.objects.get(name='sin_acceso')
