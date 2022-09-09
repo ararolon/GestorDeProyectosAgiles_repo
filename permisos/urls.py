@@ -1,6 +1,6 @@
 """
-    urls de la app de SSO de Google , vistas de paginas principales
-    login y logout del proyecto
+    urls de la app de SSO de Google , vistas relacionas a los roles de sistema
+    crear rol, listar rol, modificar y eliminar rol del proyecto
 """
 
 

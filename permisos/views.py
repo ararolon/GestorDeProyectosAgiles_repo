@@ -32,7 +32,7 @@ def crear_rol (request):
 
 def listar_roles(request):
     """
-    Vista que muestra al usuario la lista de Roles de Sistema que existen dentro del Sistema.
+    Vista que muestra la lista de Roles que existen dentro del Sistema.
     Argumentos:
         request: HttpRequest
     Retorna:
@@ -53,7 +53,7 @@ def listar_roles(request):
 
 def modificar_rol(request, id_rol):
     """
-    Vista que permite al usuario editar un Rol de Sistema guardado dentro del sistema. \n
+    Vista que permite editar un Rol de Sistema guardado dentro del sistema. \n
     Si el metodo Http con el que se realizo la peticion fue GET se muestra la vista de edicion del rol. \n
     Si el metodo Http con el que se realizo la peticion fue POST se toman los datos recibidos y se guardan las
     modificaciones.
