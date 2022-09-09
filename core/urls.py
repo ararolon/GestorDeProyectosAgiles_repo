@@ -12,5 +12,6 @@ urlpatterns = [
     path('',include('SSO.urls')),
     path('',include('permisos.urls')),
     path('accounts/',include('allauth.urls')), #path del sso
+    path('',include('Proyectos.urls')),
     path('usuarios/',include('Usuarios.urls')),#path de usuarios
 ]
