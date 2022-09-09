@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from Usuarios.models import Usuario
+
 
 
 class Proyecto(models.Model):
@@ -11,7 +13,7 @@ class Proyecto(models.Model):
     id_proyecto = models.CharField(max_length=100)
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=400)
-    scrumMaster = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    scrumMaster = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     fecha_de_inicio = models.DateTimeField(verbose_name="Fecha de Inicio del proyecto", default=timezone.now)
     fecha_finalizacion = models.DateField(null=True, blank=True)
     estado = models.CharField(max_length=20, verbose_name="Estado actual del Proyecto")

@@ -39,23 +39,26 @@ def listarProyectos(request):
     contexto = {
                 'proyectos': [
                     {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion, 
-                  #  'url': reverse('mostrarUnProyecto', args=(Proyecto.id_proyecto))
+                    'scrumMaster': Proyecto.scrumMaster,
                      }
                     for Proyecto in Proyecto.objects.all()
                 ],
                 
                 }
-    mostrarUnProyecto(id)
     return render(request, 'proyectos/listarProyectos.html', contexto)
 
-id_proyecto=Proyecto.id_proyecto
 
-def mostrarUnProyecto(request, id_proyecto):
+def mostrarUnProyecto(request):
    
-    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+   # proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     
     contexto = {'user': request.user,
-                #'id': Proyecto.id_proyecto,
-                'proyecto': proyecto,
+               #'id': Proyecto.id_proyecto,
+                 'proyectoActual': [
+                    {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion, 
+                     } 
+                    for Proyecto in Proyecto.objects.all()
+                ],
+                
                 }
     return render(request, 'proyectos/mostrarUnProyecto.html', contexto)

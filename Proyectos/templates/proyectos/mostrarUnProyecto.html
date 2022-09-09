@@ -1,4 +1,4 @@
-{% extends 'SSO/base_usuario.html' %}
+{% extends 'SSO/base_usuarios.html' %}
 {% load auth_extras %}
 {% load crispy_forms_tags %}
 
@@ -54,12 +54,6 @@
                     <div id="collapse_proyecto_{{ p.id }}" class="" aria-labelledby="header_p_{{ p.id }}" data-parent="#mostrarUnProyecto">
                         <div class="card-body row">
                             <div class="col-12 "><u>Descripción: </u><p>{{p.descripcion }}</p>
-                               <!--  <u class="">Permisos:</u>
-                                <div class="col-11 row">
-                                    {% for permiso in rol.permisos %}
-                                        <p class="mx-1"><span class="">{{ permiso }}</span></p>
-                                    {% endfor %}
-                                </div> -->
                             </div>
                         </div>
                     </div>
