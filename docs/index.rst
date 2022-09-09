@@ -14,6 +14,7 @@ Welcome to GestorProyectosAgiles's documentation!
    SSO
    tests
    Usuarios
+   permisos
 
 Indices and tables
 ==================

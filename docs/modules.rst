@@ -9,4 +9,5 @@ GestorDeProyectosAgiles_repo
    SSO
    Usuarios
    tests
+   permisos
    
