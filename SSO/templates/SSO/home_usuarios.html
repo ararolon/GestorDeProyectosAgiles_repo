@@ -1,0 +1,19 @@
+{% extends 'SSO/base_usuarios.html' %}
+
+
+{# se carga head #}
+{% block title %}
+    home
+{% endblock %}
+
+{# body #}
+{% block content %}
+
+    <div>
+       <h2>
+           Bienvenido {{ user.username }}
+       </h2>
+
+    </div>
+
+{% endblock %}

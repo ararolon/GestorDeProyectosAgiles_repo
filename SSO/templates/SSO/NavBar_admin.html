@@ -1,47 +1,41 @@
-<nav class="navbar navbar-expand-lg bg-light">
+<nav class="navbar navbar-expand-lg" style="background-color:#196d46 ">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">Home</a> 
+    <a class="navbar-brand" href="{% url 'home' %}" style="color: white;">
+      Gestor de Proyectos
+    </a> 
     {# referencia a home #}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <div class="collapse navbar-collapse" id="navbarNavDropdown" style= "position:absolute; left:400px;">
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Roles de Proyecto
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+            Roles
           </a>
          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Crear Rol</a></li>
-            <li><a class="dropdown-item" href="#">Listar Roles</a></li>
+            <li><a class="dropdown-item" href="/crearRol/">Crear Rol</a></li>
+            <li><a class="dropdown-item" href="/listarRol/">Listar Roles</a></li>
           </ul>
        </li>
+        
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#"id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Roles de Sistema
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+            Proyectos
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Crear rol</a></li>
-              <li><a class="dropdown-item" href="#">Listar roles</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Proyecto
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Crear Proyecto</a></li>
+            <li><a class="dropdown-item" href="{% url 'crearProyecto' %}">Crear Proyecto</a></li>
             <li><a class="dropdown-item" href="#">Asignar miembros</a></li>
-            <li><a class="dropdown-item" href="#">Administrar proyectos</a></li>
+            <li><a class="dropdown-item" href="{% url 'listarProyectos' %}">Visualizar proyectos</a></li>
           </ul>
         </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
              Usuarios
             </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="/usuarios">Lista de Usuarios</a></li>
-            <li><a class="dropdown-item" href="/usuarios/Index_eliminar">Eliminar Usuario</a></li>
+            <li><a class="dropdown-item" href="{% url 'lista_users' %}">Lista de Usuarios</a></li>
+            <li><a class="dropdown-item" href="{% url 'index_eliminar'  %}"">Eliminar Usuario</a></li>
           </ul>
       </ul>
     </div>
@@ -52,7 +46,7 @@
         {% if redirect_field_value %}
           <input type="hidden" name="{{redirect_field_name}}" value="{{redirect_field_value}}">
         {% endif %}
-          <button type="submit" class="btn btn-outline-danger">Cerrar Sesión</button>
+          <button type="submit" class="btn btn-danger" style="color: white">Cerrar Sesión</button>
         </form>
     </div>
     

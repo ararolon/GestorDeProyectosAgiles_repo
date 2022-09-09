@@ -13,6 +13,9 @@ Welcome to GestorProyectosAgiles's documentation!
    modules
    SSO
    tests
+   Usuarios
+   permisos
+   Proyectos
 
 Indices and tables
 ==================

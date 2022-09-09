@@ -1,0 +1,84 @@
+{% extends 'SSO/base_admin.html' %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+
+{% block title %}Roles de Sistema {% endblock %}
+
+{% block content %}
+   <!-- {% include 'SSO/NavBar_admin.html' %} -->  
+
+    <style>
+        [data-toggle="collapse"] .fa:before {
+            content: "\f077";
+
+        }
+
+        [data-toggle="collapse"].collapsed .fa:before {
+            content: "\f078";
+
+        }
+    </style>
+    <div class="container my-3">
+        <div class="row">
+            <h3 class="col-12 col-md-10">Roles de Sistema</h3>
+            <!-- Falta agregar condicion para que esta opcion no se muestre si no se tiene el permiso -->
+            <div class="col-12 col-md-2 row">
+                {% if user.es_administrador %}
+                    <a href="{% url 'nuevo_rol_de_sistema' %}" class="btn bg-color-accent font-weight-bold col-12 ml-auto">Crear Nuevo Rol</a>
+                {% endif %}
+            </div>
+
+        </div>
+            <hr>
+        {% if messages %}
+
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                {% endif %}
+
+                {% endfor %}
+
+        {% endif %}
+
+        <div id="lista_roles" class="col-10 mx-auto">
+            {% for rol in roles %}
+                <div class="card" style="margin:10px">
+                    <div class="card-header bg-color-primary" id="header_rol_{{ rol.id }}">
+                        <div class="row">
+                            <div class="col-auto mr-auto">
+                                {{rol.nombre}}
+                            </div>
+                            <div>
+                                <!-- <a href="" class="btn bg-color-accent text-white font-weight-bold btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                    &nbsp Visualizar
+                                </a> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_rol_{{ rol.id }}" class="" aria-labelledby="header_rol_{{ rol.id }}" data-parent="#lista_roles">
+                        <div class="card-body row">
+                            <div class="col-12 "><u>Descripción: </u><p>{{ rol.descripcion }}</p>
+                                <u class="">Permisos:</u>
+                                <div class="col-11 row">
+                                    {% for permiso in rol.permisos %}
+                                        <p class="mx-1"><span class="">{{ permiso }}</span></p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="d-flex flex-row-reverse">
+                                    <a href="{% url 'eliminar_rol' rol.id %}" class="btn btn-outline-danger m-2">Eliminar Rol<a>
+                                    <a href="{% url 'modificar_rol' rol.id %}" class="btn btn-outline-primary m-2">Modificar Rol<a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
