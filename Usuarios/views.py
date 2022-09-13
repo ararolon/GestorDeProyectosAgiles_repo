@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User,Group, Permission
 from Usuarios.forms import AsignarRolForm
 from Usuarios.models import Usuario
+from django.contrib import messages
 """
 Vistas exclusivas del administrador del sistema sobre los usuarios
 
@@ -45,6 +46,7 @@ def eliminar_usuario(request,id):
 
   if request.method =="POST":
       usuario.delete()
+      messages.success(request,"El usuario ha sido eliminado")
       return redirect('index_eliminar')
   else:
       return render(request,'Usuarios/eliminar.html',{'usuario':usuario})    
@@ -86,7 +88,7 @@ def crear_usuario(request,id):
     usuario.groups.clear()
     acceso =  Group.objects.get(name='usuarios')
     usuario.groups.add(acceso)
-
+    messages.success(request,"Se ha otorgado permiso de acceso al usuario "+usuario.username)
     return redirect('lista_users')
 
   else:

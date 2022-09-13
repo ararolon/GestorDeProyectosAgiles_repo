@@ -4,6 +4,7 @@ from Proyectos.forms import crearproyectoForm
 from Proyectos.models import Proyecto
 from django.utils import timezone
 from django.forms import model_to_dict
+from django.contrib import messages
 # Create your views here.
 
 
@@ -22,6 +23,7 @@ def crearProyecto (request):
             proyecto = form.save(commit=False)
             proyecto.fecha_de_inicio = timezone.now()
             proyecto.save()
+            messages.success(request,"Se ha creado el proyecto satisfactoriamente")
             return redirect('home')
     else:
          form = crearproyectoForm()
