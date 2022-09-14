@@ -1,9 +1,13 @@
 from urllib import request
 from django.shortcuts import render, redirect,reverse, get_object_or_404
 from Proyectos.forms import crearproyectoForm
-from Proyectos.models import Proyecto
+from Proyectos.models import Miembro, Proyecto
 from django.utils import timezone
 from django.forms import model_to_dict
+from django.contrib.auth.models import User
+from Usuarios.models import Usuario
+
+
 # Create your views here.
 
 
@@ -39,7 +43,7 @@ def listarProyectos(request):
     contexto = {
                 'proyectos': [
                     {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion, 
-                    'scrumMaster': Proyecto.scrumMaster,
+                    'scrumMaster': Proyecto.scrumMaster
                      }
                     for Proyecto in Proyecto.objects.all()
                 ],
@@ -55,13 +59,23 @@ def mostrarUnProyecto(request):
     Return: HttpResponse
     """
    # proyecto = get_object_or_404(Proyecto, id=id_proyecto)
-    
-    contexto = {'user': request.user,
-                 'proyectoActual': [
-                    {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion, 
-                     } 
-                    for Proyecto in Proyecto.objects.all()
+
+    #contexto = {'user': request.user,
+    #             'proyectoActual': [
+    #               {'id': Proyecto.id_proyecto, 'nombre': Proyecto.nombre, 'descripcion': Proyecto.descripcion, 
+    #               } 
+    #               for Proyecto in Proyecto.objects.all()
+    #            ],
+    #            }
+
+
+    actual = get_object_or_404(Miembro, usuario=request.user)
+
+    contexto = {'proyectoActual_miembro': [
+                   {'id': actual.proyecto.id_proyecto, 'nombre': actual.usuario.nombre, 'rol': actual.rol.nombre, 
+                   } 
+                   for Miembro in Miembro.objects.all()
                 ],
-                
                 }
+    
     return render(request, 'proyectos/mostrarUnProyecto.html', contexto)

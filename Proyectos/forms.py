@@ -23,19 +23,15 @@ class crearproyectoForm(forms.ModelForm):
 
     descripcion = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
 
-    scrumMaster = forms.ModelChoiceField(queryset=Usuario.objects.filter(groups__isnull=False), empty_label='Seleccionar Scrum Master para el proyecto')
-
-
+    scrumMaster= forms.ModelChoiceField(queryset=Usuario.objects.filter(groups__name ='usuarios'))
+   
+    def __init__(self, *args, **kwargs):
+       super(crearproyectoForm, self).__init__(*args, **kwargs)
+       self.fields['scrumMaster'].empty_label = 'Seleccionar Scrum Master para el proyecto'
+       self.fields['scrumMaster'].queryset = Usuario.objects.filter(groups__name ='usuarios')
+    
+    
     class Meta:
         model = Proyecto
         fields = ('nombre', 'descripcion', 'scrumMaster')
-
-
-
-    def __init__(self, *args, **kwargs):
-    
-       super(crearproyectoForm, self).__init__(*args, **kwargs)
-       self.fields['scrumMaster'].empty_label = 'Seleccionar Scrum Master para el proyecto'
-       self.fields['scrumMaster'].queryset = Usuario.objects.filter(groups__isnull=False)
-    
     

@@ -35,30 +35,32 @@
 
         {% endif %}
 
-        <div id="crearProyecto" class="col-10 mx-auto">
-            {% for p in proyectoActual %}
-                <div class="card" style="margin:10px">
-                    <div class="card-header bg-color-primary" id="header_p_{{ p.id }}">
-                        <div class="row">
-                            <div class="col-auto mr-auto">
-                                {{p.nombre}}
+        <div id="mostrarProyecto" class="col-10 mx-auto">
+          
+                {% for p in proyectoActual_miembro %}
+                    <div class="card" style="margin:10px">
+                        <div class="card-header bg-color-primary" id="header_p_{{ p.id }}">
+                            <div class="row">
+                                <div class="col-auto mr-auto">
+                                    {{p.get_id_proyecto}}
+                                </div>
+                                <div>
+                                    <!-- <a href="" class="btn bg-color-accent text-white font-weight-bold btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                        &nbsp Visualizar
+                                    </a> -->
+                                </div>
                             </div>
-                            <div>
-                                <!-- <a href="" class="btn bg-color-accent text-white font-weight-bold btn-sm">
-                                    <i class="fas fa-eye"></i>
-                                    &nbsp Visualizar
-                                </a> -->
+                        </div>
+                        <div id="collapse_proyecto_{{ p.id }}" class="" aria-labelledby="header_p_{{ p.id }}" data-parent="#mostrarUnProyecto">
+                            <div class="card-body row">
+                                <div class="col-12 "><u>Rol: </u><p>{{p.rol }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div id="collapse_proyecto_{{ p.id }}" class="" aria-labelledby="header_p_{{ p.id }}" data-parent="#mostrarUnProyecto">
-                        <div class="card-body row">
-                            <div class="col-12 "><u>Descripción: </u><p>{{p.descripcion }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+           
         </div>
     </div>
 {% endblock %}
