@@ -54,9 +54,7 @@ def listarProyectos(request):
 
 def mostrarUnProyecto(request):
     """
-    Vista que muestra al usuario los proyectos asignados a un solo usuario del Sistema.
-    Argumentos:request: HttpRequest
-    Return: HttpResponse
+    
     """
    # proyecto = get_object_or_404(Proyecto, id=id_proyecto)
 
