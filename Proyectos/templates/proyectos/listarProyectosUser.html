@@ -2,7 +2,7 @@
 {% load auth_extras %}
 {% load crispy_forms_tags %}
 
-{% block title %}Proyectos Asignados{% endblock %}
+{% block title %}Proyectos de Sistema {% endblock %}
 
 {% block content %}
     <style>
@@ -18,7 +18,7 @@
     </style>
     <div class="container my-3">
         <div class="row">
-            <h3 class="col-12 col-md-10">Proyectos Asignados</h3>
+            <h3 class="col-12 col-md-10">Proyectos de Sistema</h3>
             <!-- Falta agregar condicion para que esta opcion no se muestre si no se tiene el permiso -->
         </div>
             <hr>
@@ -36,24 +36,29 @@
         {% endif %}
 
         <div id="crearProyecto" class="col-10 mx-auto">
-            {% for p in proyectoActual %}
+            {% for proyecto in proyectos %}
                 <div class="card" style="margin:10px">
-                    <div class="card-header bg-color-primary" id="header_p_{{ p.id }}">
+                    <div class="card-header bg-color-primary" id="header_proyecto_{{ proyecto.id }}">
                         <div class="row">
                             <div class="col-auto mr-auto">
-                                {{p.nombre}}
+                                {{proyecto.nombre}}
                             </div>
-                            <div>
-                                <!-- <a href="" class="btn bg-color-accent text-white font-weight-bold btn-sm">
-                                    <i class="fas fa-eye"></i>
-                                    &nbsp Visualizar
-                                </a> -->
+                            <div class="col-auto">
+                                {% if proyecto.scrumMaster == request.user %}
+                                    <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    <div id="collapse_proyecto_{{ p.id }}" class="" aria-labelledby="header_p_{{ p.id }}" data-parent="#mostrarUnProyecto">
+                    <div id="collapse_proyecto_{{ proyecto.id }}" class="" aria-labelledby="header_proyecto_{{ proyecto.id }}" data-parent="#listarProyectos">
                         <div class="card-body row">
-                            <div class="col-12 "><u>Descripción: </u><p>{{p.descripcion }}</p>
+                            <div class="col-12 "><u>Descripción: </u><p>{{ proyecto.descripcion }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_proyecto_{{ proyecto.id }}" class="" aria-labelledby="header_proyecto_{{ proyecto.id }}" data-parent="#listarProyectos">
+                        <div class="card-body row">
+                            <div class="col-12 "><u>Scrum Master: </u><p>{{ proyecto.scrumMaster }}</p>
                             </div>
                         </div>
                     </div>
