@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'crispy_forms', #para usar crispy forms para formularios
     "bootstrap4", #para usar bootstrap
     "Proyectos",
+    "UserStories",
 ]
 
 #configuracion para poder usar el crispy forms con bootstrap4
