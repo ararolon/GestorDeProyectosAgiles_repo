@@ -1,3 +1,4 @@
+from re import T
 from django import forms
 from django.contrib.auth.models import Group
 
@@ -18,11 +19,8 @@ class crearproyectoForm(forms.ModelForm):
         -descripcion: str, descripcion del proyecto
         -scrumMaster: Usuario que se le asignar el rol de scrumMaster del proyecto
     """
-
     nombre = forms.CharField(widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
-
     descripcion = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
-
     scrumMaster = forms.ModelChoiceField(queryset=Usuario.objects.filter(groups__isnull=False), empty_label='Seleccionar Scrum Master para el proyecto')
 
 
@@ -30,12 +28,27 @@ class crearproyectoForm(forms.ModelForm):
         model = Proyecto
         fields = ('nombre', 'descripcion', 'scrumMaster')
 
-
-
     def __init__(self, *args, **kwargs):
-    
        super(crearproyectoForm, self).__init__(*args, **kwargs)
        self.fields['scrumMaster'].empty_label = 'Seleccionar Scrum Master para el proyecto'
        self.fields['scrumMaster'].queryset = Usuario.objects.filter(groups__isnull=False)
     
+    
+class AsignarMiembroForm(forms.ModelForm):
+    """
+    Form que permite asignar miembros al proyecto
+    """
+    disabled_fields = ('nombre', 'descripcion', 'scrumMaster')
+
+    class Meta:
+        model = Proyecto
+        fields = ('nombre', 'descripcion', 'miembros', 'scrumMaster')
+        
+    def __init__(self, *args, **kwargs):
+        super(AsignarMiembroForm, self).__init__(*args, **kwargs)
+        self.fields['miembros'].widget = forms.CheckboxSelectMultiple()
+        self.fields['miembros'].queryset = Usuario.objects.exclude(id=self.instance.scrumMaster.id)
+
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
     
