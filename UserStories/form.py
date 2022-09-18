@@ -1,4 +1,10 @@
+from dataclasses import field
 from django import forms
+
+"""
+Forms para la creacion de estados de kanban y tipos de user stories
+"""
+
 
 from UserStories.models import Estados_Kanban, TipoUSerStory
 
@@ -24,7 +30,6 @@ class EstadosKanbanForm(forms.ModelForm):
         Agrega, en el campo 'permisos', los Permisos de Sistema que podrá tener el rol.
         """
         super(EstadosKanbanForm, self).__init__(*args, **kwargs)
- 
 
   class Meta:
         model = Estados_Kanban
@@ -45,6 +50,7 @@ class TiposUSForm(forms.ModelForm):
         Agrega, en el campo 'permisos', los Permisos de Sistema que podrá tener el rol.
         """
         super(TiposUSForm, self).__init__(*args, **kwargs)
+        self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
         self.fields['estados_kanban'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False,
                                                             choices=[(e.id, e.nombre) for e in Estados_Kanban.objects.all()
                                                                      ])

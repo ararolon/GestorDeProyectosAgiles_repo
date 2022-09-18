@@ -4,6 +4,7 @@ from statistics import mode
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+
 # Create your models here.
 
 class Estados_Kanban(models.Model):

@@ -1,7 +1,8 @@
 from ast import arg
 from importlib.resources import path
+from unicodedata import name
 from urllib import response
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User, Group, Permission
 from django.test import TestCase, Client
 from django.urls import reverse
 from permisos.views import *
@@ -16,9 +17,7 @@ class Test_usuarios_views(TestCase):
 
   def setUp(self):
     self.client = Client()
-    self.usuario = User.objects.create(username='test')
-
-
+    self.usuario = User.objects.create(username='test',password='12345')
 
   def test_lista_eliminar(self):
 

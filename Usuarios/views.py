@@ -14,6 +14,8 @@ Vistas exclusivas del administrador del sistema sobre los usuarios
 administrar usuarios del sistema
 """
 
+@login_required(login_url='login')
+@permission_required('permisos._eliminar_usuario',login_url='sinpermiso')
 def lista_eliminar(request):
     """
     Vista que permite ver todos los usuarios del sistema para luego borrarlos.
@@ -30,7 +32,8 @@ def lista_eliminar(request):
 
 
 
-
+@login_required(login_url='login')
+@permission_required('permisos._eliminar_usuario',login_url='sinpermiso')
 def eliminar_usuario(request,id):
   
   """
@@ -52,6 +55,8 @@ def eliminar_usuario(request,id):
       return render(request,'Usuarios/eliminar.html',{'usuario':usuario})    
 
 
+@login_required(login_url='login')
+@permission_required('permisos._visualizar_usuario',login_url='sinpermiso')
 def listar_usuarios(request):
   
   """
@@ -70,6 +75,8 @@ def listar_usuarios(request):
   return render(request,'Usuarios/listar_usuarios.html',{'usuarios':usuarios})
    
 
+@login_required(login_url='login')
+@permission_required('permisos._crear_usuario',login_url='sinpermiso')
 def crear_usuario(request,id):
 
   """
