@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 """
  vistas relacionadas a la app UserStories
 """
-@login_required(login_url='login')
-@permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
+#@login_required(login_url='login')
+#@permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
 def crear_estadokanban(request):
   
    """
@@ -37,8 +37,8 @@ def crear_estadokanban(request):
    return render(request, 'UserStories/crear_estado.html',contexto)
 
 
-@login_required(login_url='login')
-@permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
+#login_required(login_url='login')
+#permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
 def crear_TipoUS(request):
 
     """

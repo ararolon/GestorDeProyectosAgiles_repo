@@ -1,4 +1,4 @@
-from ast import arg
+from ast import pytest
 from importlib.resources import path
 from unicodedata import name
 from urllib import response
@@ -18,6 +18,13 @@ class Test_usuarios_views(TestCase):
   def setUp(self):
     self.client = Client()
     self.usuario = User.objects.create(username='test',password='12345')
+
+
+  
+  def test_login_required(self):
+    path = reverse('lista_users')
+    response = self.client.get(path)
+    self.assertRedirects(response,reverse('login'))
 
   def test_lista_eliminar(self):
 
