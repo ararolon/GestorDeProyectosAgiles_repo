@@ -1,6 +1,5 @@
 from urllib import request
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-import Proyectos
 from Proyectos.forms import AsignarMiembroForm, crearproyectoForm
 from Proyectos.models import Proyecto
 from django.utils import timezone
@@ -81,6 +80,27 @@ def listarProyectosUser(request):
     }
     return render(request, 'proyectos/listarProyectosUser.html', contexto)
 
+def mostrarProyecto(request, id_proyecto):
+    """
+    Vista que donde el Scrum master puede seleccionar los participantes del proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    print('*'*66)
+    print(id_proyecto)
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    form = AsignarMiembroForm(instance=proyecto)
+    if request.method == 'POST':
+        form = AsignarMiembroForm( instance=proyecto, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Los miembros han sido asignado al proyecto')
+            return redirect('home')
+    contexto = {
+        'form': form,
+        'proyecto': proyecto,
+    }
+    return render(request, 'proyectos/mostrarProyecto.html', contexto)
 
 def asignar_miembro(request, id_proyecto):
     """
