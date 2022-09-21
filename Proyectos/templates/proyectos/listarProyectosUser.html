@@ -44,9 +44,10 @@
                                 {{proyecto.nombre}}
                             </div>
                             <div class="col-auto">
-                                {% if proyecto.scrumMaster == request.user %}
-                                    <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
-                                {% endif %}
+                                <a href="{% url 'mostrarProyecto' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Ir al proyecto</a>
+                                <!-- {% if proyecto.scrumMaster == request.user %} -->
+                                    <!-- <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a> -->
+                                <!-- {% endif %} -->
                             </div>
                         </div>
                     </div>
