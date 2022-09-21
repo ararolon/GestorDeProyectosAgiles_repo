@@ -13,4 +13,5 @@ urlpatterns = [
     path('listarProyectos/', views.listarProyectos, name='listarProyectos'), 
     path('listarProyectosUser/', views.listarProyectosUser, name='listarProyectosUser'), 
     path('asignar_miembro/<int:id_proyecto>', views.asignar_miembro, name='asignar_miembro'),
+    path('mostrarProyecto/<int:id_proyecto>', views.mostrarProyecto, name='mostrarProyecto'),
 ]
