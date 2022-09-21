@@ -1,9 +1,11 @@
 from multiprocessing.dummy import Array
+from pydoc import describe
 from pyexpat import model
 from statistics import mode
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-
+from Usuarios.models import Usuario
+from Proyectos.models import Proyecto
 
 # Create your models here.
 
@@ -26,7 +28,7 @@ class Estados_Kanban(models.Model):
       return self.nombre
 
 
-
+#preguntar si un user story es por proyecto tambien
 class TipoUSerStory(models.Model):
 
   """
@@ -35,11 +37,9 @@ class TipoUSerStory(models.Model):
         Clase Padre : models.Model
   """
   nombre = models.CharField(max_length=20,unique=True,blank=False)
-  prefijo = models.CharField(max_length=20)
   descripcion = models.TextField(max_length=80,blank=True)
   estados_kanban = ArrayField(models.CharField(max_length=20,blank=False))
-
-  
+  #proyectos =  ArrayField(models.CharField(max_length=20,blank=False)) #para guardar el id de los proyectos
   class Meta:
         verbose_name = 'TipoUS'
         verbose_name_plural = 'TiposUS'
@@ -58,4 +58,62 @@ class TipoUSerStory(models.Model):
 
 
 
+"""
+ Prioridades de User stories
+"""
 
+PRIORIDAD_CHOICES=[
+    ('ALTA','Alta'),
+    ('MEDIA','Media'),
+    ('BAJA','Baja'),
+]
+
+class UserStories(models.Model):
+  """
+    Modelo que representa a los user stories de un proyecto
+
+    Clase Padre : models.Model
+  """
+  id_us = models.AutoField(primary_key = True)
+  nombre = models.CharField(max_length=20,unique=True,blank=False)  
+  descripcion = models.TextField(max_length=60,blank=True)
+  tipo = models.ForeignKey(TipoUSerStory,on_delete=models.CASCADE,null=False,blank=False)
+  prioridad = models.CharField(max_length=20,choices=PRIORIDAD_CHOICES,blank=False)
+  miembro_asignado = models.ForeignKey(Usuario,on_delete=models.CASCADE,null=True)
+  comentarios = models.TextField(default='',blank=True)
+  horas_estimadas = models.IntegerField(default=0,blank=False)
+ # id_proyecto = models.ManyToManyField(Proyecto,on_delete=models.CASCADE,blank=False)
+  class Meta:
+    verbose_name = 'UserStory'
+    verbose_name_plural = 'UserStories'
+     
+  def _str_(self):
+    return self.nombre
+
+  def get_miembro_asignado(self):
+    """
+    Funcion que obtiene el miembro asignado al user story
+
+      Argumento :
+           Objeto User Story
+
+      Retorna : 
+           El miembro del equipo asignado  
+    """
+    return self.miembro_asignado
+
+  def set_proyecto_id(self,proyecto_id):
+     """
+     Funcion para establecer el id de un proyecto  a un User Story
+
+       Argumento :
+           User story,
+           id del proyecto
+     """
+
+     self.id_proyecto = proyecto_id 
+
+
+
+
+  

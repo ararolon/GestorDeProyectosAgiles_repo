@@ -1,4 +1,5 @@
 from dataclasses import field
+from xml.etree.ElementInclude import include
 from django import forms
 
 """
@@ -6,7 +7,7 @@ Forms para la creacion de estados de kanban y tipos de user stories
 """
 
 
-from UserStories.models import Estados_Kanban, TipoUSerStory
+from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
 
 """
  Archivo que define los formularios de creacion de tipos de US y
@@ -27,7 +28,7 @@ class EstadosKanbanForm(forms.ModelForm):
   def __init__(self,*args,**kwargs):
         """
         Constructor del Formulario.
-        Agrega, en el campo 'permisos', los Permisos de Sistema que podrá tener el rol.
+                
         """
         super(EstadosKanbanForm, self).__init__(*args, **kwargs)
 
@@ -47,7 +48,6 @@ class TiposUSForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         """
         Constructor del Formulario.
-        Agrega, en el campo 'permisos', los Permisos de Sistema que podrá tener el rol.
         """
         super(TiposUSForm, self).__init__(*args, **kwargs)
         self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
@@ -57,4 +57,33 @@ class TiposUSForm(forms.ModelForm):
 
     class Meta:
         model = TipoUSerStory
-        fields = ['nombre','prefijo','descripcion','estados_kanban']
+        fields = ['nombre','descripcion','estados_kanban']
+
+
+class UserStoryForm(forms.ModelForm):
+   """
+   Formulario utilizado para la creacion de un nuevo user story
+   clase Padre:
+         form.ModelForm        
+   """
+   def __init__(self,*args,**kwargs):
+        """
+        Constructor del Formulario.
+        
+        """
+        PRIORIDAD_CHOICES = [
+        ('ALTA', 'Alta'),
+        ('MEDIA', 'Media'),
+        ('BAJA', 'Baja'),
+        ]
+   
+        super(UserStoryForm, self).__init__(*args, **kwargs)
+        self.fields['prioridad'].empty_label = 'Seleccionar la prioridad del User Story'
+        self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
+    
+   class Meta:
+        model = UserStories
+        fields = ['nombre','descripcion','tipo','prioridad','comentarios','horas_estimadas']
+
+
+

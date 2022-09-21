@@ -11,5 +11,5 @@ from . import views
 urlpatterns = [
     path('crearEstado/',views.crear_estadokanban,name='crear_estado'),
     path('crearTipoUS/',views.crear_TipoUS,name='crear_tipoUS'),
-   
+    path('crearUS/',views.crear_us,name='crear_us'),
 ]
