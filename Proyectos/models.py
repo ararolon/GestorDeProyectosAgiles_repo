@@ -16,6 +16,7 @@ class Proyecto(models.Model):
     fecha_de_inicio = models.DateTimeField(verbose_name="Fecha de Inicio del proyecto", default=timezone.now)
     fecha_finalizacion = models.DateField(null=True, blank=True)
     estado = models.CharField(max_length=20, verbose_name="Estado actual del Proyecto")
+    miembros = models.ManyToManyField(Usuario, related_name='set_miembros')
     #id_sprints = models.ManyToManyField(Sprint, blank=True) -->preguntar
     #tipoUS = models.CharField(max_length=100, verbose_name="Tipos de US") -->preguntar bien como hacer y como se llama en esta clase
 
@@ -24,7 +25,7 @@ class Proyecto(models.Model):
         return self.nombre
 
 
-    def scrumMaster(self):
+    def get_scrumMaster(self):
         """
         Metodo que retorna el Usuario del Scrum Master del proyecto
         """
