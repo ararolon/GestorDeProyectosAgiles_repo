@@ -82,20 +82,19 @@ def crear_usuario(request,id):
   :param id : id del usuario a eliminar
 
   """
-
   usuario =  get_object_or_404(User,pk=id)
 
   if request.method == 'POST':
-    #elimina el rol de 'sin acceso'
-    usuario.groups.clear()
-    acceso =  Group.objects.get(name='usuarios')
-    usuario.groups.add(acceso)
-    messages.success(request,"Se ha otorgado permiso de acceso al usuario "+usuario.username)
-    return redirect('lista_users')
+      #elimina el rol de 'sin acceso'
+      usuario.groups.clear()
+      acceso =  Group.objects.get(name='usuarios')
+      usuario.groups.add(acceso)
+      messages.success(request,"Se ha otorgado permiso de acceso al usuario "+usuario.username)
+      return redirect('lista_users')
 
   else:
-    return render(request,'Usuarios/Daracceso.html',{'usuario':usuario})    
-
+      return render(request,'Usuarios/Daracceso.html',{'usuario':usuario})    
+  
 
 def asignar_rol_usuario(request,id):
  
