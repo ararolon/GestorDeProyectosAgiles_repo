@@ -8,21 +8,17 @@ DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
 class crearSprintForm(forms.ModelForm):
     """
-    Form que permite la creacion de un nuevo proyecto.
-    Es necesario especificar el scrumMaster del proyecto.
-        -nombre: str, nombre del proyecto
-        -descripcion: str, descripcion del proyecto
-        -scrumMaster: Usuario que se le asignar el rol de scrumMaster del proyecto
+    Form que permite la creacion de un nuevo Sprint.
     """
-    nombre_sprint = forms.CharField(widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
-    duracion_sprint = forms.IntegerField(label="Duración de los sprints (en días)", min_value=0)
+    nombre_sprint = forms.CharField(label="Nombre del Sprint", widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
+    duracion_sprint = forms.IntegerField(label="Duración de los Sprints (en días)", min_value=0)
     fecha_inicio = forms.DateField(label="Fecha de inicio",
+                                   widget=forms.DateInput(attrs={'onchange': 'actualizar_fecha_inicio()'}),
+                                   error_messages={'invalid': 'La fecha debe estar en formato dd/mm/aaaa.'})
+    fecha_fin = forms.DateField(label="Fecha de finalización",
                                    widget=forms.DateInput(attrs={'onchange': 'actualizar_fecha_fin()'}),
                                    error_messages={'invalid': 'La fecha debe estar en formato dd/mm/aaaa.'})
-    fecha_fin = forms.DateField(label="Fecha de fin",
-                                   widget=forms.DateInput(attrs={'onchange': 'actualizar_fecha_fin()'}),
-                                   error_messages={'invalid': 'La fecha debe estar en formato dd/mm/aaaa.'})
-    descripcion = forms.CharField(widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
+    descripcion = forms.CharField(label="Descripción", widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
 
     class Meta:
         model = Sprint
@@ -32,5 +28,3 @@ class crearSprintForm(forms.ModelForm):
        super(crearSprintForm, self).__init__(*args, **kwargs)
 
    
-
-
