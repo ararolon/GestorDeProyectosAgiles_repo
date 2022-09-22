@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from Usuarios.models import Usuario
-
+from django.contrib.postgres.fields import ArrayField
+from UserStories.models import UserStories,TipoUSerStory
 
 
 class Proyecto(models.Model):
@@ -15,8 +16,11 @@ class Proyecto(models.Model):
     scrumMaster = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     fecha_de_inicio = models.DateTimeField(verbose_name="Fecha de Inicio del proyecto", default=timezone.now)
     fecha_finalizacion = models.DateField(null=True, blank=True)
-    estado = models.CharField(max_length=20, verbose_name="Estado actual del Proyecto")
+    estado = models.CharField(max_length=20, verbose_name="Estado actual del Proyecto",default='Pendiente')
     miembros = models.ManyToManyField(Usuario, related_name='set_miembros')
+    user_stories = ArrayField(models.CharField(max_length=20),default=list, blank=True)
+    tipos_us = ArrayField(models.CharField(max_length=20),default=list, blank=True)
+
     #id_sprints = models.ManyToManyField(Sprint, blank=True) -->preguntar
     #tipoUS = models.CharField(max_length=100, verbose_name="Tipos de US") -->preguntar bien como hacer y como se llama en esta clase
 
@@ -45,6 +49,9 @@ class Proyecto(models.Model):
         else:
             self.estado = estadoProyecto.CANCELADO
         return True
+
+
+
 
 
 class estadoProyecto:

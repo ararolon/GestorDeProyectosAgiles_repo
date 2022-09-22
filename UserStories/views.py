@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm
+
+from UserStories.models import UserStories
+from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
+from Proyectos.models import Proyecto
 # Create your views here.
 
 """
@@ -9,17 +11,19 @@ from django.contrib.auth.decorators import login_required, permission_required
 """
 #@login_required(login_url='login')
 #@permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
-def crear_estadokanban(request):
+def crear_estadokanban(request,id):
   
    """
     Vista que permite la creacion de un nuevo estado de kanban 
 
     Argumentos:
         request: HttpRequest
+        id : id del proyecto
     Retorna:
         HttpResponse
    """
-   contexto = {'user': request.user}
+   proyecto = get_object_or_404(Proyecto,id=id)
+   contexto = {'user': request.user,'proyecto':proyecto}
    contexto['form'] = EstadosKanbanForm()
 
    if request.method == 'POST':
@@ -28,7 +32,7 @@ def crear_estadokanban(request):
             estado = form.save()
             estado.save()
             messages.success(request,"El estado "+estado.nombre+ " ha sido creado satisfactoriamente")
-            #return redirect('listar_roles')
+            return redirect('crear_tipoUS',id=id)
         else:
             contexto['mensajeError'] = 'El estado ya existe'
    else:
@@ -39,18 +43,19 @@ def crear_estadokanban(request):
 
 #login_required(login_url='login')
 #permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
-def crear_TipoUS(request):
+def crear_TipoUS(request,id):
 
     """
     Formulario para crear un nuevo tipo de US en el sistema
     
     Argumentos:
         request: HttpRequest
+        id : id del proyecto
     Retorna:
         HttpResponse
     """
-
-    contexto = {'user': request.user}
+    proyecto = get_object_or_404(Proyecto,id=id)
+    contexto = {'user': request.user,'proyecto':proyecto}
     contexto['form'] = TiposUSForm()
 
     if request.method == 'POST':
@@ -59,7 +64,7 @@ def crear_TipoUS(request):
             tipoUS = form.save()
             tipoUS.save()
             messages.success(request,"El Tipo de US "+tipoUS.nombre+" ha sido creado satisfactoriamente")
-            #return redirect('listar_roles')
+            return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
         else:
             contexto['mensajeError'] = 'El Tipo de US ya existe en el sistema'
     else:
@@ -67,30 +72,85 @@ def crear_TipoUS(request):
 
     return render(request, 'UserStories/crear_tipoUS.html',contexto)
 
-def crear_us(request):
+def crear_us(request,id):
     """
     Formulario para crear un nuevo tipo de US en el sistema
     
     Argumentos:
         request: HttpRequest
+         id : id del proyecto
     Retorna:
         HttpResponse
     """
-
-    contexto = {'user': request.user}
+    proyecto = get_object_or_404(Proyecto,id=id)
+    contexto = {'user': request.user,'proyecto':proyecto}
     contexto['form'] = UserStoryForm()
 
     if request.method == 'POST':
         form = UserStoryForm(request.POST)
         if form.is_valid():
+            id = form.cleaned_data['nombre']
             us = form.save()
             us.save()
+            proyecto.user_stories.append(id)
+            proyecto.save()
             messages.success(request,"El User Story "+us.nombre+" ha sido creado satisfactoriamente")
-            #return redirect('listar_roles')
+            return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
         else:
-            contexto['mensajeError'] = 'El User Story no pude crearse correctamente'
+            contexto['mensajeError'] = 'El User Story no pudo crearse correctamente'
     else:
         contexto['form'] = UserStoryForm()
 
     return render(request, 'UserStories/crear_US.html',contexto)
 
+
+def importar_tipoUS(request,id):
+   
+    """
+      Llama al formulario para importar tipos de user stories a un proyecto
+        
+        Argumentos:
+          request: HttpRequest
+          id : id del proyecto
+        Retorna:
+          HttpResponse
+    """
+    proyecto = get_object_or_404(Proyecto,id=id)
+
+    contexto = {'user': request.user,'proyecto':proyecto}
+    contexto['form'] = ImportarTipoUSForm()
+
+    if request.method == 'POST':
+        form = ImportarTipoUSForm(request.POST)
+        if form.is_valid():
+            t = form.save()
+            t.save()
+            messages.success(request,"Los tipos de User Stories han sido importados satisfactoriamente")
+            return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
+        else:
+            contexto['mensajeError'] = 'No se han podido importar los tipos de User Stories'
+    else:
+        contexto['form'] = ImportarTipoUSForm()
+
+    return render(request, 'UserStories/importar_tipoUS.html',contexto)
+
+def ver_product_backlog(request,id):
+    """
+    Vista que permite visualizar los user stories asignados del proyecto
+    en el product Backlog
+      Argumentos:
+          request: HttpRequest
+          id : id del proyecto
+        Retorna:
+          HttpResponse
+    """
+   
+    proyecto = get_object_or_404(Proyecto,id=id)
+    us =[]
+    contexto={'proyecto':proyecto,'us':us} 
+    for i in proyecto.user_stories:
+        userStory = UserStories.objects.get(nombre=i)
+        us.append(userStory)
+
+    return render(request,'UserStories/ver_product_backlog.html',contexto)
+   
