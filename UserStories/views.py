@@ -9,8 +9,7 @@ from Proyectos.models import Proyecto
 """
  vistas relacionadas a la app UserStories
 """
-#@login_required(login_url='login')
-#@permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
+
 def crear_estadokanban(request,id):
   
    """
@@ -41,8 +40,6 @@ def crear_estadokanban(request,id):
    return render(request, 'UserStories/crear_estado.html',contexto)
 
 
-#login_required(login_url='login')
-#permission_required('permisos._crear_tipos_us',login_url='sinpermiso')
 def crear_TipoUS(request,id):
 
     """
@@ -148,9 +145,8 @@ def ver_product_backlog(request,id):
     proyecto = get_object_or_404(Proyecto,id=id)
     us =[]
     contexto={'proyecto':proyecto,'us':us} 
-    for i in proyecto.user_stories:
-        userStory = UserStories.objects.get(nombre=i)
-        us.append(userStory)
+    
+    us = proyecto.get_user_stories()
 
     return render(request,'UserStories/ver_product_backlog.html',contexto)
    
