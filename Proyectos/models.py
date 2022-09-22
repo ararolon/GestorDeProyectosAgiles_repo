@@ -18,7 +18,7 @@ class Proyecto(models.Model):
     fecha_finalizacion = models.DateField(null=True, blank=True)
     estado = models.CharField(max_length=20, verbose_name="Estado actual del Proyecto",default='Pendiente')
     miembros = models.ManyToManyField(Usuario, related_name='set_miembros')
-    user_stories = ArrayField(models.CharField(max_length=20),default=list, blank=True)
+    user_stories = ArrayField(models.CharField(max_length=20),default=list, blank=True) # almacena los nombres de los user stories en un array, para filtrar los objetos por nombres
     tipos_us = ArrayField(models.CharField(max_length=20),default=list, blank=True)
 
     #id_sprints = models.ManyToManyField(Sprint, blank=True) -->preguntar
@@ -51,6 +51,25 @@ class Proyecto(models.Model):
         return True
 
 
+    def get_user_stories(self):
+       """
+       Funcion que devuelve los user stories asociados al proyecto
+       buscando los objetos UserStories por los nombres guardados en el modelo de proyecto
+    
+         Argumento : 
+             objeto Proyecto
+         
+         Retorna:
+             Lista con objetos UserStories asociados al proyecto
+
+       """
+         
+       lista =[]
+       for i in self.user_stories:
+          US = UserStories.objects.get(nombre=i)
+          lista.append(US)
+
+       return lista
 
 
 
