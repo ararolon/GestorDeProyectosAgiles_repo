@@ -1,13 +1,13 @@
-from dataclasses import field
+from dataclasses import field, fields
+from pyexpat import model
 from xml.etree.ElementInclude import include
 from django import forms
+from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
+from Proyectos.models import *
 
 """
 Forms para la creacion de estados de kanban y tipos de user stories
 """
-
-
-from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
 
 """
  Archivo que define los formularios de creacion de tipos de US y
@@ -82,8 +82,21 @@ class UserStoryForm(forms.ModelForm):
         self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
     
    class Meta:
-        model = UserStories
+        model = UserStories,Proyecto
         fields = ['nombre','descripcion','tipo','prioridad','comentarios','horas_estimadas']
 
 
-
+class ImportarTipoUSForm(forms.ModelForm):
+      """
+      Form utilizado para importar tipos de user stories a un proyecto
+      """
+      def __init__(self,*args,**kwargs):
+       
+            super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
+            self.fields['tipos_us'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False,
+                                                            choices=[(t.id, t.nombre) for t in TipoUSerStory.objects.all()
+                                                                     ])
+      class Meta :
+          model = Proyecto
+          fields = ['tipos_us']        
+    
