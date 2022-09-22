@@ -30,6 +30,21 @@
 
         <div class="container">
             {% include 'SSO/NavBar_usuarios.html' %}
+        </br>
+            {% if messages %}
+            {% for message in messages %}
+              {% if message.tags == 'success' %}
+              <div class="alert alert-success" role="alert">
+                {{message}}
+              </div>
+              {%else%}
+              <div class="alert alert-danger" role="alert">
+                {{message}}
+              </div>
+              {% endif %}
+
+            {% endfor %}
+        {% endif %}
             {% block content %} 
             {% endblock %}
         </div>
