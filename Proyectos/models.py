@@ -51,26 +51,6 @@ class Proyecto(models.Model):
         return True
 
 
-    def get_user_stories(self):
-       """
-       Funcion que devuelve los user stories asociados al proyecto
-       buscando los objetos UserStories por los nombres guardados en el modelo de proyecto
-    
-         Argumento : 
-             objeto Proyecto
-         
-         Retorna:
-             Lista con objetos UserStories asociados al proyecto
-
-       """
-         
-       lista =[]
-       for i in self.user_stories:
-          US = UserStories.objects.get(nombre=i)
-          lista.append(US)
-
-       return lista
-
 
 
 class estadoProyecto:
