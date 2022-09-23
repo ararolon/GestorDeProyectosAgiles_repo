@@ -62,11 +62,15 @@
                     <div id="collapse_rol_{{ rol.id }}" class="" aria-labelledby="header_rol_{{ rol.id }}" data-parent="#lista_roles">
                         <div class="card-body row">
                             <div class="col-12 "><u>Descripción: </u><p>{{ rol.descripcion }}</p>
-                                <u class="">Permisos:</u>
-                                <div class="col-11 row">
-                                    {% for permiso in rol.permisos %}
-                                        <p class="mx-1"><span class="">{{ permiso }}</span></p>
-                                    {% endfor %}
+                                <a data-toggle="collapse" style="color: blue;"
+                                    onclick="document.getElementById('rol-{{rol.id}}').classList.toggle('show');"
+                                role="button" aria-expanded="false" aria-controls="rol-{{rol.id}}">Ver permisos</a>
+                                <div class="collapse" id="rol-{{rol.id}}">
+                                    <div class="col-11 row">
+                                        {% for permiso in rol.permisos %}
+                                            <p class="mx-1"><span class="">{{ permiso }}</span></p>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
