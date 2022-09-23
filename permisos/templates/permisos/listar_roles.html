@@ -71,8 +71,11 @@
                             </div>
                             <div class="row">
                                 <div class="d-flex flex-row-reverse">
-                                    <a href="{% url 'eliminar_rol' rol.id %}" class="btn btn-outline-danger m-2">Eliminar Rol<a>
-                                    <a href="{% url 'modificar_rol' rol.id %}" class="btn btn-outline-primary m-2">Modificar Rol<a>
+                                    <!-- if rol is not defecto -->
+                                    {% if not rol.defecto %}
+                                        <a href="{% url 'eliminar_rol' rol.id %}" class="btn btn-outline-danger m-2">Eliminar Rol<a>
+                                        <a href="{% url 'modificar_rol' rol.id %}" class="btn btn-outline-primary m-2">Modificar Rol<a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

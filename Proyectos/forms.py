@@ -65,7 +65,7 @@ class ImportarRolForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ImportarRolForm, self).__init__(*args, **kwargs)
         self.fields['roles'].widget = forms.CheckboxSelectMultiple()
-        self.fields['roles'].queryset = RolesdeSistema.objects.all()
+        self.fields['roles'].queryset = RolesdeSistema.objects.filter(defecto=False)
 
 class AsignarRolForm(forms.ModelForm):
     """
