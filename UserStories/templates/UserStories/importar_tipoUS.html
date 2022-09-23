@@ -16,7 +16,7 @@
             {% csrf_token %}
             {{ form|crispy }}
         </br>
-            <button class="btn btn-primary bg-color-accent col-5" type="submit">Crear</button>
+            <button class="btn btn-primary bg-color-accent col-5" type="submit">Importar</button>
             <a href="{% url 'mostrarProyecto' proyecto.id %}" class="btn btn-danger col-5">Cancelar</a>
         </form>
     </div>
