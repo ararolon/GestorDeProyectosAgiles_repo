@@ -120,8 +120,9 @@ def importar_tipoUS(request,id):
     if request.method == 'POST':
         form = ImportarTipoUSForm(request.POST)
         if form.is_valid():
-            t = form.save()
-            t.save()
+            nombre_t = form.cleaned_data['nombre']
+            proyecto.tipos_us.append(nombre_t)
+            proyecto.save()
             messages.success(request,"Los tipos de User Stories han sido importados satisfactoriamente")
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
         else:
@@ -130,6 +131,7 @@ def importar_tipoUS(request,id):
         contexto['form'] = ImportarTipoUSForm()
 
     return render(request, 'UserStories/importar_tipoUS.html',contexto)
+
 
 def ver_product_backlog(request,id):
     """
@@ -146,7 +148,10 @@ def ver_product_backlog(request,id):
     us =[]
     contexto={'proyecto':proyecto,'us':us} 
     
-    us = proyecto.get_user_stories()
+    for i in proyecto.user_stories:
+      userS = UserStories.objects.get(nombre=i)    
+      us.append(userS)
+
 
     return render(request,'UserStories/ver_product_backlog.html',contexto)
    
