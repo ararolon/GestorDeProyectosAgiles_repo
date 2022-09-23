@@ -13,6 +13,7 @@
             <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint(m)</a>
             <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear tipo de user story(m)</a>
             <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar tipo de user story(m)</a>
+            <a href="{% url 'importarRol' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar Rol</a>
             {% endif %}
         </div>
     </div>
@@ -27,7 +28,9 @@
             <h6>Miembros del proyecto:</h6>
             <ul class="list-group list-group-flush">
                 {% for miembro in proyecto.miembros.all %}
-                    <li class="list-group-item">{{miembro}}</li>
+                    <li class="list-group-item">{{miembro}}
+                        <a href="{% url 'asignarRol' proyecto.id miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar Rol</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
