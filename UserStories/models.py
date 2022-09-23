@@ -5,7 +5,8 @@ from statistics import mode
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from Usuarios.models import Usuario
-from Proyectos.models import Proyecto
+
+
 
 # Create your models here.
 
@@ -18,7 +19,7 @@ class Estados_Kanban(models.Model):
       models.Model
    """
 
-   nombre = models.CharField(max_length=20,blank=False)
+   nombre = models.CharField(max_length=20,blank=False,unique=True)
 
    class Meta:
         verbose_name = 'Estado_Kanban'
@@ -39,7 +40,6 @@ class TipoUSerStory(models.Model):
   nombre = models.CharField(max_length=20,unique=True,blank=False)
   descripcion = models.TextField(max_length=80,blank=True)
   estados_kanban = ArrayField(models.CharField(max_length=20,blank=False))
-  #proyectos =  ArrayField(models.CharField(max_length=20,blank=False)) #para guardar el id de los proyectos
   class Meta:
         verbose_name = 'TipoUS'
         verbose_name_plural = 'TiposUS'
@@ -77,12 +77,13 @@ class UserStories(models.Model):
   id_us = models.AutoField(primary_key = True)
   nombre = models.CharField(max_length=20,unique=True,blank=False)  
   descripcion = models.TextField(max_length=60,blank=True)
-  tipo = models.ForeignKey(TipoUSerStory,on_delete=models.CASCADE,null=False,blank=False)
+  tipo = models.CharField(max_length=20,unique=True,blank=False)
   prioridad = models.CharField(max_length=20,choices=PRIORIDAD_CHOICES,blank=False)
   miembro_asignado = models.ForeignKey(Usuario,on_delete=models.CASCADE,null=True)
   comentarios = models.TextField(default='',blank=True)
   horas_estimadas = models.IntegerField(default=0,blank=False)
- # id_proyecto = models.ManyToManyField(Proyecto,on_delete=models.CASCADE,blank=False)
+  #id_proyecto = models.ForeignKey(Proyecto,on_delete=models.CASCADE,blank=False)
+  #guarda el id del proyecto al que pertenece para filtrar por proyecto
   class Meta:
     verbose_name = 'UserStory'
     verbose_name_plural = 'UserStories'
@@ -102,16 +103,9 @@ class UserStories(models.Model):
     """
     return self.miembro_asignado
 
-  def set_proyecto_id(self,proyecto_id):
-     """
-     Funcion para establecer el id de un proyecto  a un User Story
 
-       Argumento :
-           User story,
-           id del proyecto
-     """
 
-     self.id_proyecto = proyecto_id 
+
 
 
 
