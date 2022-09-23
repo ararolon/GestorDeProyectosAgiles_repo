@@ -53,6 +53,16 @@ class RolesdeSistema(models.Model):
     def __str__(self):
       return self.nombre
 
+    def asignar_permisos(self, lista_permisos):
+      """
+      Funcion que asigna permisos a un rol
+      param: lista de permisos
+      """
+
+      for p in lista_permisos:
+        perm = Permission.objects.get(codename=p) 
+        self.permisos.add(perm)
+
     def get_permisos(self):
       """
       Método que retorna los permisos asignados al rol.

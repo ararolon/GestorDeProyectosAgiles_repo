@@ -40,14 +40,17 @@ def listar_roles(request):
         HttpResponse
     """
     contexto = {
-                'roles': [
-                    {'id': rol.id, 'nombre': rol.nombre, 'descripcion': rol.descripcion,
-                     'permisos': [p.name for p in rol.get_permisos()]
-                     }
-                    for rol in RolesdeSistema.objects.all()
-                ],
-                
-                }
+        'roles': [
+            {
+                'id': rol.id, 
+                'nombre': rol.nombre, 
+                'descripcion': rol.descripcion,
+                'defecto': rol.defecto,
+                'permisos': [p.name for p in rol.get_permisos()]
+            }
+            for rol in RolesdeSistema.objects.all().order_by('-id')
+        ],
+    }
 
     return render(request, 'permisos/listar_roles.html', contexto)
 
