@@ -1,10 +1,12 @@
 from urllib import request
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-from Proyectos.forms import AsignarMiembroForm, crearproyectoForm
-from Proyectos.models import Proyecto
+from Proyectos.forms import AsignarMiembroForm, AsignarRolForm, ImportarRolForm, crearproyectoForm
+from Proyectos.models import Proyecto, RolUsuario
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
+
+from Usuarios.models import Usuario
 # Create your views here.
 
 
@@ -86,8 +88,6 @@ def mostrarProyecto(request, id_proyecto):
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
-    print('*'*66)
-    print(id_proyecto)
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     form = AsignarMiembroForm(instance=proyecto)
     if request.method == 'POST':
@@ -123,3 +123,53 @@ def asignar_miembro(request, id_proyecto):
         'proyecto': proyecto,
     }
     return render(request, 'proyectos/asignar_miembro.html', contexto)
+
+def asignarRol(request, id_proyecto, id_usuario):
+    """
+    Vista que donde el Scrum master puede seleccionar el rol a asignar a un usuario dentro del proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    
+    """
+   
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    usuario_rol = RolUsuario.objects.filter(miembro=id_usuario).first()
+    if request.method == 'POST':
+        form = AsignarRolForm(id_proyecto, request.POST, instance=usuario_rol) 
+        if form.is_valid():
+            usuario_rol = form.save()
+            usuario = Usuario.objects.get(id=id_usuario)
+            usuario_rol.miembro = usuario
+            usuario_rol.save()
+            proyecto.usuario_roles.add(usuario_rol)
+            messages.success(request,"Se asigno correctamente")
+            return redirect('mostrarProyecto', id_proyecto=id_proyecto)
+    else:
+        if usuario_rol:
+            form = AsignarRolForm(id_proyecto, instance=usuario_rol)
+        else:
+            form = AsignarRolForm(id_proyecto, )
+    contexto = {'form': form}
+    return render(request, 'proyectos/asignarRol.html', contexto)
+
+def importarRol(request, id_proyecto):
+    """
+    Vista que donde el Scrum master puede seleccionar el rol a asignar a un usuario dentro del proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    form = ImportarRolForm(instance=proyecto)
+    if request.method == 'POST':
+        form = ImportarRolForm( instance=proyecto, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Los miembros han sido asignado al proyecto')
+            return redirect('mostrarProyecto', id_proyecto=id_proyecto)
+    contexto = {
+        'form': form,
+        'proyecto': proyecto,
+    }
+    return render(request, 'proyectos/importarRol.html', contexto)
+

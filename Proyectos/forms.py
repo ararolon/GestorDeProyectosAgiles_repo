@@ -7,6 +7,7 @@ import datetime
 from functools import partial
 from django.forms import fields
 from Usuarios.models import *
+from Proyectos.models import RolUsuario
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -51,4 +52,36 @@ class AsignarMiembroForm(forms.ModelForm):
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
-    
+
+class ImportarRolForm(forms.ModelForm):
+    """
+    Form que permite importar roles de un proyecto a otro
+    """
+
+    class Meta:
+        model = Proyecto
+        fields = ('roles',)
+        
+    def __init__(self, *args, **kwargs):
+        super(ImportarRolForm, self).__init__(*args, **kwargs)
+        self.fields['roles'].widget = forms.CheckboxSelectMultiple()
+        self.fields['roles'].queryset = RolesdeSistema.objects.all()
+
+class AsignarRolForm(forms.ModelForm):
+    """
+    Form que permite asignar roles a un miembro del proyecto
+    """
+    disabled_fields = ()
+    # disabled_fields = ('miembro',)
+
+    class Meta:
+        model = RolUsuario
+        fields = ('roles',)
+        
+    def __init__(self, id_proyecto, *args, **kwargs):
+        super(AsignarRolForm, self).__init__(*args, **kwargs)
+        self.fields['roles'].widget = forms.CheckboxSelectMultiple()
+        self.fields['roles'].queryset = RolesdeSistema.objects.filter(proyecto=id_proyecto)
+
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
