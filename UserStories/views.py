@@ -81,7 +81,7 @@ def crear_us(request,id):
     """
     proyecto = get_object_or_404(Proyecto,id=id)
     contexto = {'user': request.user,'proyecto':proyecto}
-    contexto['form'] = UserStoryForm()
+    contexto['form'] = UserStoryForm(proyecto)
 
     if request.method == 'POST':
         form = UserStoryForm(request.POST)

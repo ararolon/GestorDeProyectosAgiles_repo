@@ -77,7 +77,7 @@ class UserStories(models.Model):
   id_us = models.AutoField(primary_key = True)
   nombre = models.CharField(max_length=20,unique=True,blank=False)  
   descripcion = models.TextField(max_length=60,blank=True)
-  tipo = models.ForeignKey(TipoUSerStory,on_delete=models.CASCADE,null=False,blank=False)
+  tipo = models.CharField(max_length=20,unique=True,blank=False)
   prioridad = models.CharField(max_length=20,choices=PRIORIDAD_CHOICES,blank=False)
   miembro_asignado = models.ForeignKey(Usuario,on_delete=models.CASCADE,null=True)
   comentarios = models.TextField(default='',blank=True)
