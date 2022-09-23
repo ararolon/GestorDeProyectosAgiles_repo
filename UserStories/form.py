@@ -78,9 +78,10 @@ class UserStoryForm(forms.ModelForm):
         ]
    
         super(UserStoryForm, self).__init__(*args, **kwargs)
+       
         self.fields['prioridad'].empty_label = 'Seleccionar la prioridad del User Story'
         self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
-        
+        self.fields['tipo']=forms.ChoiceField(choices=[(t.id,t.nombre) for t in TipoUSerStory.objects.all()])
         
    class Meta:
         model = UserStories
