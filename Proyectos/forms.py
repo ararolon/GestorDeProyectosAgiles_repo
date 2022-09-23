@@ -31,7 +31,7 @@ class crearproyectoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
        super(crearproyectoForm, self).__init__(*args, **kwargs)
        self.fields['scrumMaster'].empty_label = 'Seleccionar Scrum Master para el proyecto'
-       self.fields['scrumMaster'].queryset = Usuario.objects.filter(groups__isnull=False)
+       self.fields['scrumMaster'].queryset = Usuario.objects.filter(groups__name='usuarios')
     
     
 class AsignarMiembroForm(forms.ModelForm):
