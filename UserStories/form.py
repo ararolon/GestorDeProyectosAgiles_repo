@@ -80,9 +80,10 @@ class UserStoryForm(forms.ModelForm):
         super(UserStoryForm, self).__init__(*args, **kwargs)
         self.fields['prioridad'].empty_label = 'Seleccionar la prioridad del User Story'
         self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
-    
+        
+        
    class Meta:
-        model = UserStories,Proyecto
+        model = UserStories
         fields = ['nombre','descripcion','tipo','prioridad','comentarios','horas_estimadas']
 
 
@@ -93,10 +94,10 @@ class ImportarTipoUSForm(forms.ModelForm):
       def __init__(self,*args,**kwargs):
        
             super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
-            self.fields['tipos_us'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False,
+            self.fields['nombre'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False,
                                                             choices=[(t.id, t.nombre) for t in TipoUSerStory.objects.all()
                                                                      ])
       class Meta :
-          model = Proyecto
-          fields = ['tipos_us']        
+          model = TipoUSerStory
+          fields = ['nombre']        
     
