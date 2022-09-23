@@ -39,9 +39,7 @@ class Sprint(models.Model):
         Metodo del modelo de Sprint que retorna un booleano en caso
         que no se hayan completado los campos obligatorios en el sprint.
         """
-
-        if not self.id_sprint:
-            return False
+        
         if not self.nombre_sprint:
             return False   
         if not self.duracion_sprint:

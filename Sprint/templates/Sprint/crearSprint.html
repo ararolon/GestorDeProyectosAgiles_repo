@@ -1,10 +1,10 @@
-{% extends 'SSO/base_admin.html' %}
+{% extends 'SSO/base_usuarios.html' %}
 {% load crispy_forms_tags%}
 {%  load static %}
-{% block title %}Sprint{% endblock %}
+{% block title %}Nuevo Sprint{% endblock %}
 {% block content %}
    <div class="container mt-3">
-       <h3>Sprint</h3><hr>
+       <h3>Crear Sprint</h3><hr>
        {%  if mensajeError %}
            <div class="alert alert-danger" role="alert">
                <h4 class="alert-heading">Error</h4>
@@ -14,10 +14,10 @@
        <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
            {% csrf_token %}
            <div class="col-12 col-md-10 mx-auto">{{ form|crispy }}</div>
-           </br>
+        </br>
            <div style="text-align:center" >
                <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Crear Sprint</button>
-               <a href="/home" class="btn btn-danger col-5">Cancelar</a>
+               <a href="/listarProyectosUser" class="btn btn-danger col-5">Cancelar</a>
            </div>
        </form>
    </div>

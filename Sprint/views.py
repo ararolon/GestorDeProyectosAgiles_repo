@@ -3,6 +3,7 @@ from Sprint.forms import crearSprintForm
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
+from Sprint.models import Sprint
 
 # Create your views here.
 
@@ -22,9 +23,25 @@ def crearSprint (request):
             sprint.fecha_de_fin = timezone.now()
             sprint.save()
             messages.success(request,"Se ha creado el sprint satisfactoriamente")
-            return redirect('home')
+            return redirect('mostrarSprint')
     else:
          form = crearSprintForm()
     contexto = {'form': form
                 }
     return render(request,'Sprint/crearSprint.html',context=contexto)    
+
+def mostrarSprint (request):
+    """
+    Metodo para mostrar sprint
+    """
+    sprint = Sprint.objects.all()
+    contexto = {
+        'sprint': [
+            {
+                'id': Sprint.id_sprint,
+                'nombre': Sprint.nombre_sprint,
+                'descripcion': Sprint.descripcion,
+            } for Sprint in sprint
+        ],
+    }
+    return render(request, 'Sprint/mostrarSprint.html', contexto)
