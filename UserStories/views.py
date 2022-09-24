@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from UserStories.models import UserStories
+from UserStories.models import TipoUSerStory, UserStories
 from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto
@@ -154,4 +154,26 @@ def ver_product_backlog(request,id):
 
 
     return render(request,'UserStories/ver_product_backlog.html',contexto)
-   
+
+
+def listarTipoUS(request):
+    """
+    Vista que permite visualizar los tipos user stories
+    Argumentos:
+        request: HttpRequest
+                 id : id del proyecto
+        Retorna: HttpResponse
+    """
+
+    contexto = {
+        'tiposUS': [
+            {
+                'nombre': tipoUS.nombre, 
+                'descripcion': tipoUS.descripcion,
+                # 'estados_kanban': tipoUS.estado_kanban,
+            }
+            for tipoUS in TipoUSerStory.objects.all()
+        ],
+    }
+
+    return render(request, 'UserStories/listarTipoUS.html', contexto)

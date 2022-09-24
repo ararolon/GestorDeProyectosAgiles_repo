@@ -2,37 +2,39 @@
 {% load auth_extras %}
 {% load crispy_forms_tags %}
 
-{% block title %} Sprints del Proyecto {% endblock %}
+{% block title %} Sprint del Proyecto {% endblock %}
 
 {% block content %}
 
-    <style>
-        [data-toggle="collapse"] .fa:before {
-            content: "\f077";
-
-        }
-
-        [data-toggle="collapse"].collapsed .fa:before {
-            content: "\f078";
-
-        }
-    </style>
-    <div class="container my-3">
-        <div class="row">
-            <h3 class="col-12 col-md-10">Sprints del Proyecto</h3>
-        </div>
-        <hr>
-        <div class="card my-4">
-            <div class="card-header  bg-color-primary"> 
-                <div class="col-auto">
-                    <a href="{% url 'mostrarSprint' %}" class="btn btn-primary ml-3 bg-color-danger border-0">  Sprint #{{Sprint.id_sprint}}</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <h6 class="card-title">Nombre: {{crearSprintForm.nombre_sprint}}</h6>
-                <h6 class="card-text">Duracion: {{crearSprintForm.duracion}}</h6>
-                <h6 class="card-text">Descripcion: {{crearSprintForm.descripcion}}</h6>
-            </div>
-        </div>    
+    <div class="row">
+        <h3 class="col-12 col-md-10">Sprint del Proyecto</h3>
     </div>
+    <hr>
+            
+    <div id="lista_sprint" class="col-10 mx-auto">
+        <div class="my-4">
+            {% for sprint in sprints %}
+                <div class="card" style="margin:10px">
+                    <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
+                        <div class="card-header  bg-color-primary">Sprint #{{id_sprint}}
+                            {% if sprint.estado_sprint == 'En Planificacion' %}
+                            <a href="{% url 'iniciarSprint' id_sprint %}" class="ml-3 bg-color-danger border-0">Iniciar Sprint</a>
+                            {% endif %}
+                            {% if sprint.estado_sprint == 'En Curso' %}
+                            <a href="{% url 'cancelarSprint' sprint.id_sprint %}" class="ml-3 bg-color-danger border-0">Cancelar Sprint</a>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-body row">
+                            <div class="col-12 "><u>Nombre: </u><p>{{ sprint.nombre_sprint }}</p> </div>
+                            <div class="col-12 "><u>Fecha de inicio: </u><p>{{ sprint.fecha_inicio }}</p> </div>
+                            <div class="col-12 "><u>Fecha de finalización: </u><p>{{ sprint.fecha_fin }}</p> </div>
+                            <div class="col-12 "><u>Descripción: </u><p>{{ sprint.descripcion }}</p> </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}

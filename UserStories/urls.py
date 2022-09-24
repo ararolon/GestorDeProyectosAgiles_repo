@@ -14,4 +14,5 @@ urlpatterns = [
     path('crearUS/<int:id>',views.crear_us,name='crear_us'),
     path('importarTipoUS/<int:id>',views.importar_tipoUS,name='importar_tipoUS'),
     path('productBacklog/<int:id>',views.ver_product_backlog,name='product_backlog'),
+    path('listarTipoUS',views.listarTipoUS,name='listarTipoUS'),
 ]

@@ -7,7 +7,7 @@ class estadoSprint(models.TextChoices):
     Modelo que representa los estados posibles de un sprint.
     """
     EN_PLANIFICACION = "En Planificacion"
-    EN_EJECUCION = "En curso"
+    EN_EJECUCION = "En Curso"
     FINALIZADO = "Finalizado"
     CANCELADO = "Cancelado"
  
@@ -33,6 +33,15 @@ class Sprint(models.Model):
 
     def __str__(self):
         return self.nombre_sprint
+
+
+    def cancelar_sprint(self):
+        if self.estado_sprint == estadoSprint.FINALIZADO:
+            return False
+        else:
+            self.estado_sprint = estadoSprint.CANCELADO
+        return True
+
 
     def validar(self):
         """

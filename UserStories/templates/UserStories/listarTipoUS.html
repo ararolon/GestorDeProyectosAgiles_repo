@@ -1,0 +1,30 @@
+{% extends 'SSO/base_usuarios.html' %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+
+{% block title %} Tipos de User Stories {% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <h3 class="col-12 col-md-10"> Tipos de US del Proyecto </h3>
+    </div>
+    <hr>
+            
+    <div id="lista_tipoUS" class="col-10 mx-auto">
+        <div class="my-4">
+            {% for tipoUS in tiposUS %}
+                <div class="card" style="margin:10px">
+                    <div id="collapse_tipoUS" class="" aria-labelledby="header_tipoUS" data-parent="#lista_tipoUS">
+                        <div class="card-body row">
+                            <div class="col-12 "><u>Nombre: </u><p>{{ tipoUS.nombre }}</p> </div>
+                            <div class="col-12 "><u>Descripción: </u><p>{{ tipoUS.descripcion }}</p> </div>
+                            <div class="col-12 "><u>Estados kanban: </u><p>{{ tipoUS.estados_kanban }}</p> </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -30,18 +30,50 @@ def crearSprint (request):
                 }
     return render(request,'Sprint/crearSprint.html',context=contexto)    
 
-def mostrarSprint (request):
+
+def mostrarSprint(request):
     """
-    Metodo para mostrar sprint
+    Metodo para mostrar sprint.
+    Argumentos:
+        request: HttpRequest
+    Retorna:
+        HttpResponse
     """
-    sprint = Sprint.objects.all()
     contexto = {
-        'sprint': [
+        'sprints': [
             {
-                'id': Sprint.id_sprint,
-                'nombre': Sprint.nombre_sprint,
-                'descripcion': Sprint.descripcion,
-            } for Sprint in sprint
+                'id_sprint': sprint.id_sprint, 
+                'nombre_sprint': sprint.nombre_sprint, 
+                'fecha_inicio': sprint.fecha_inicio,
+                'fecha_fin': sprint.fecha_fin,
+                'descripcion': sprint.descripcion,
+            }
+            for sprint in Sprint.objects.all()
         ],
     }
+
     return render(request, 'Sprint/mostrarSprint.html', contexto)
+
+
+def iniciarSprint(request, id_sprint):
+    """
+    Vista donde el Scrum master puede iniciar un sprint
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    sprint = get_object_or_404(Sprint, id=id_sprint)
+    sprint.estado_sprint = 'En Curso'
+    sprint.save()
+    return redirect('Sprint/mostrarSprint.html', id_sprint=id_sprint)
+
+
+def cancelarSprint(request, id_sprint):
+    """
+    Vista donde el Scrum master puede cancelar un proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    sprint = get_object_or_404(Sprint, id=id_sprint)
+    sprint.estado_sprint = 'Cancelado'
+    sprint.save()
+    return redirect('mostrarSprint', id_sprint=id_sprint)
