@@ -90,7 +90,6 @@ def configurar_sso(request):
             '_modificar_sprint_backlog',
             '_crear_tipos_us',
             '_modificar_tipos_us',
-            '_visualizar_burndown_chart',
             '_visualizar_kanban',
             '_iniciar_proyecto',
             '_asignar_us'

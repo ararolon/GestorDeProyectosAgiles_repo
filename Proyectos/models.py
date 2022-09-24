@@ -4,6 +4,20 @@ from django.utils import timezone
 from Usuarios.models import Usuario
 from permisos.models import RolesdeSistema
 
+class estadoProyecto:
+   
+    PLANIFICACION = "En Planificacion"
+    ENEJECUCION = "En curso"
+    FINALIZADO = "Finalizado"
+    CANCELADO = "Cancelado"
+
+estado_choices = (
+        (estadoProyecto.PLANIFICACION, 'En Planificacion'),
+        (estadoProyecto.ENEJECUCION, 'En Curso'),
+        (estadoProyecto.FINALIZADO, 'Finalizado'),
+        (estadoProyecto.CANCELADO, 'Cancelado'),
+    )
+    
 class RolUsuario(models.Model):
     """
     Modelo para la clase de RolUsuario con los campos necesarios para el mismo
@@ -22,7 +36,8 @@ class Proyecto(models.Model):
     scrumMaster = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     fecha_de_inicio = models.DateTimeField(verbose_name="Fecha de Inicio del proyecto", default=timezone.now)
     fecha_finalizacion = models.DateField(null=True, blank=True)
-    estado = models.CharField(max_length=20, verbose_name="Estado actual del Proyecto")
+    estado = models.CharField(max_length=20, choices=estado_choices, 
+                    default=estadoProyecto.PLANIFICACION)
     miembros = models.ManyToManyField(Usuario, related_name='set_miembros')
     roles = models.ManyToManyField(RolesdeSistema)
     usuario_roles = models.ManyToManyField(RolUsuario)
@@ -56,10 +71,5 @@ class Proyecto(models.Model):
         return True
 
 
-class estadoProyecto:
-   
-    PLANIFICACION = "En Planificacion"
-    ENEJECUCION = "En curso"
-    FINALIZADO = "Finalizado"
-    CANCELADO = "Cancelado"
+
 

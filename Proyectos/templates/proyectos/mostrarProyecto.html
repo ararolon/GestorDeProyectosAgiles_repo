@@ -18,11 +18,15 @@
         </div>
     </div>
     <div class="card my-4">
-        <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}} </div>
+        <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}} 
+            <a href="" class="ml-3 bg-color-danger border-0">Iniciar Proyecto</a>
+        </div>
         <div class="card-body">
             <h6 class="card-title">Nombre: {{proyecto.nombre}}</h6>
             <h6 class="card-text">Descripcion: {{proyecto.descripcion}}</h6>
             <h6 class="card-text">Scrummaster: {{proyecto.scrumMaster}}</h6>
+            <h6 class="card-text">Estado: {{proyecto.estado}}</h6>
+
         </div>
         <div class="card-body">
             <h6>Miembros del proyecto:</h6>

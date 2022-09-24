@@ -44,10 +44,12 @@ class RolesdeSistema(models.Model):
             ('_modificar_sprint_backlog','Modificar Sprint Backlog'),
             ('_crear_tipos_us','Crear tipos de US'),
             ('_modificar_tipos_us','Modificar tipos de US'),
-            ('_visualizar_burndown_chart','Visualizar Burndown Chart'),
             ('_visualizar_kanban','Visualizar Tabla Kamban'),
             ('_iniciar_proyecto','Iniciar un proyecto'),
             ('_asignar_us','Asignar US'),
+            ('_visualizar_sprint','Visualizar Sprint'),
+            ('_visualizar Product Backlog','Visualizar Product Backlog'),
+
         ]    
 
     def __str__(self):
