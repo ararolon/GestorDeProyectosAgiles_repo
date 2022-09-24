@@ -173,3 +173,25 @@ def importarRol(request, id_proyecto):
     }
     return render(request, 'proyectos/importarRol.html', contexto)
 
+def iniciarProyecto(request, id_proyecto):
+    """
+    Vista que donde el Scrum master puede iniciar un proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    proyecto.estado = 'En Curso'
+    proyecto.save()
+    return redirect('mostrarProyecto', id_proyecto=id_proyecto)
+
+
+def cancelarProyecto(request, id_proyecto):
+    """
+    Vista que donde el Scrum master puede cancelar un proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    proyecto.estado = 'Cancelado'
+    proyecto.save()
+    return redirect('mostrarProyecto', id_proyecto=id_proyecto)

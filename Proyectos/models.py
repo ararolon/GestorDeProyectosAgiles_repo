@@ -7,7 +7,7 @@ from permisos.models import RolesdeSistema
 class estadoProyecto:
    
     PLANIFICACION = "En Planificacion"
-    ENEJECUCION = "En curso"
+    ENEJECUCION = "En Curso"
     FINALIZADO = "Finalizado"
     CANCELADO = "Cancelado"
 
@@ -17,7 +17,7 @@ estado_choices = (
         (estadoProyecto.FINALIZADO, 'Finalizado'),
         (estadoProyecto.CANCELADO, 'Cancelado'),
     )
-    
+
 class RolUsuario(models.Model):
     """
     Modelo para la clase de RolUsuario con los campos necesarios para el mismo
