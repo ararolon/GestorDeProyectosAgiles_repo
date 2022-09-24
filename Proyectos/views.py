@@ -89,15 +89,15 @@ def mostrarProyecto(request, id_proyecto):
     Return: HttpResponse
     """
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
-    form = AsignarMiembroForm(instance=proyecto)
-    if request.method == 'POST':
-        form = AsignarMiembroForm( instance=proyecto, data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Los miembros han sido asignado al proyecto')
-            return redirect('home')
+    # form = AsignarMiembroForm(instance=proyecto)
+    # if request.method == 'POST':
+    #     form = AsignarMiembroForm( instance=proyecto, data=request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, 'Los miembros han sido asignado al proyecto')
+    #         return redirect('home')
     contexto = {
-        'form': form,
+        # 'form': form,
         'proyecto': proyecto,
     }
     return render(request, 'proyectos/mostrarProyecto.html', contexto)
