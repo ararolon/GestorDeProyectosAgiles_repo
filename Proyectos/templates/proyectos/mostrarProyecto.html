@@ -18,8 +18,13 @@
         </div>
     </div>
     <div class="card my-4">
-        <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}} 
-            <a href="" class="ml-3 bg-color-danger border-0">Iniciar Proyecto</a>
+        <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}}
+            {% if proyecto.estado == 'En Planificacion' %}
+            <a href="{% url 'iniciarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Iniciar Proyecto</a>
+            {% endif %}
+            {% if proyecto.estado == 'En Curso' %}
+            <a href="{% url 'cancelarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Cancelar Proyecto</a>
+            {% endif %}
         </div>
         <div class="card-body">
             <h6 class="card-title">Nombre: {{proyecto.nombre}}</h6>

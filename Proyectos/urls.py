@@ -16,7 +16,8 @@ urlpatterns = [
     path('mostrarProyecto/<int:id_proyecto>', views.mostrarProyecto, name='mostrarProyecto'),
     path('importarRol/<int:id_proyecto>', views.importarRol, name='importarRol'),
     path('asignarRol/<int:id_proyecto>/miembro/<int:id_usuario>', views.asignarRol, name='asignarRol'),
-    #path('asignarRol/<int:id_proyecto>', views.asignarRol, name='asignarRol'),
+    path('iniciarProyecto/<int:id_proyecto>', views.iniciarProyecto, name='iniciarProyecto'),
+    path('cancelarProyecto/<int:id_proyecto>', views.cancelarProyecto, name='cancelarProyecto'),
     
 
 ]
