@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import Permission, Group
 
 
+
 # Create your models here.
 class RolesdeSistema(models.Model):
     
@@ -11,7 +12,8 @@ class RolesdeSistema(models.Model):
     defecto = models.BooleanField(default=False) # indica si el rol creado es predeterminado en el sistema y no puede borrarse.
     descripcion = models.TextField(max_length=60, blank=True)
     permisos = models.ManyToManyField(Permission, blank=True)  # Indica que varios roles pueden tener varios permisos
-    
+   # rol_usuario = models.ManyToManyField(RolUsuario, blank=True)
+
     class Meta:
         permissions = [
             ('_crear_usuario', 'Crear usuario'),
@@ -42,12 +44,26 @@ class RolesdeSistema(models.Model):
             ('_modificar_sprint_backlog','Modificar Sprint Backlog'),
             ('_crear_tipos_us','Crear tipos de US'),
             ('_modificar_tipos_us','Modificar tipos de US'),
-            ('_visualizar_burndown_chart','Visualizar Burndown Chart'),
             ('_visualizar_kanban','Visualizar Tabla Kamban'),
+            ('_iniciar_proyecto','Iniciar un proyecto'),
+            ('_asignar_us','Asignar US'),
+            ('_visualizar_sprint','Visualizar Sprint'),
+            ('_visualizar Product Backlog','Visualizar Product Backlog'),
+
         ]    
 
-    def _str_(self):
+    def __str__(self):
       return self.nombre
+
+    def asignar_permisos(self, lista_permisos):
+      """
+      Funcion que asigna permisos a un rol
+      param: lista de permisos
+      """
+
+      for p in lista_permisos:
+        perm = Permission.objects.get(codename=p) 
+        self.permisos.add(perm)
 
     def get_permisos(self):
       """
