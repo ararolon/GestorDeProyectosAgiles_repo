@@ -26,7 +26,7 @@ class Estados_Kanban(models.Model):
         verbose_name = 'Estado_Kanban'
         verbose_name_plural = 'Estados_Kanban'
    
-   def _str_(self):
+   def __str__(self):
       return self.nombre
 
 
@@ -93,7 +93,7 @@ class UserStories(models.Model):
     verbose_name = 'UserStory'
     verbose_name_plural = 'UserStories'
      
-  def _str_(self):
+  def __str__(self):
     return self.nombre
 
   def get_miembro_asignado(self):
