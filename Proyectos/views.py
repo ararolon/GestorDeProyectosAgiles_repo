@@ -117,7 +117,7 @@ def asignar_miembro(request, id_proyecto):
         if form.is_valid():
             form.save()
             messages.success(request, 'Los miembros han sido asignado al proyecto')
-            return redirect('home')
+            return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     contexto = {
         'form': form,
         'proyecto': proyecto,
@@ -164,7 +164,9 @@ def importarRol(request, id_proyecto):
     if request.method == 'POST':
         form = ImportarRolForm( instance=proyecto, data=request.POST)
         if form.is_valid():
-            form.save()
+            tipos = form.cleaned_data['tipo_us']
+            proyecto.tipo_us = tipos
+            proyecto.save()
             messages.success(request, 'Los miembros han sido asignado al proyecto')
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     contexto = {

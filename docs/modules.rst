@@ -11,4 +11,5 @@ GestorDeProyectosAgiles_repo
    tests
    permisos
    Proyectos
+   UserStories
    

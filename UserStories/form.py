@@ -1,7 +1,9 @@
 from dataclasses import field, fields
 from pyexpat import model
+from random import choices
 from xml.etree.ElementInclude import include
 from django import forms
+from Proyectos.models import Proyecto
 from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
 from Proyectos.models import *
 
@@ -60,13 +62,31 @@ class TiposUSForm(forms.ModelForm):
         fields = ['nombre','descripcion','estados_kanban']
 
 
+
+class ImportarTipoUSForm(forms.ModelForm):
+      """
+      Form utilizado para importar tipos de user stories a un proyecto
+      """
+      def __init__(self,proyecto,*args,**kwargs):
+       
+            super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
+            self.fields['tipo_us'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=[(i.id,i.nombre) for i in TipoUSerStory.objects.all()])
+
+      class Meta :
+          model = Proyecto
+          fields = ['tipo_us']
+    
+
+
+
+
 class UserStoryForm(forms.ModelForm):
    """
    Formulario utilizado para la creacion de un nuevo user story
    clase Padre:
          form.ModelForm        
    """
-   def __init__(self,*args,**kwargs):
+   def __init__(self,proyecto,*args,**kwargs):
         """
         Constructor del Formulario.
         
@@ -78,27 +98,13 @@ class UserStoryForm(forms.ModelForm):
         ]
    
         super(UserStoryForm, self).__init__(*args, **kwargs)
-       
+
+              
         self.fields['prioridad'].empty_label = 'Seleccionar la prioridad del User Story'
         self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
-        self.fields['tipo']=forms.ChoiceField(choices=[(t.id,t.nombre) for t in TipoUSerStory.objects.all()])
+        self.fields['tipo']= forms.ModelChoiceField(queryset = proyecto.tipo_us.all())
         
    class Meta:
         model = UserStories
         fields = ['nombre','descripcion','tipo','prioridad','comentarios','horas_estimadas']
 
-
-class ImportarTipoUSForm(forms.ModelForm):
-      """
-      Form utilizado para importar tipos de user stories a un proyecto
-      """
-      def __init__(self,*args,**kwargs):
-       
-            super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
-            self.fields['nombre'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False,
-                                                            choices=[(t.id, t.nombre) for t in TipoUSerStory.objects.all()
-                                                                     ])
-      class Meta :
-          model = TipoUSerStory
-          fields = ['nombre']        
-    
