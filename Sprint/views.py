@@ -46,12 +46,13 @@ def mostrarSprint(request):
     contexto = {
         'sprints': [
             {
+                'id': sprint.id,
                 'id_sprint': sprint.id_sprint, 
                 'nombre_sprint': sprint.nombre_sprint, 
                 'fecha_inicio': sprint.fecha_inicio,
                 'fecha_fin': sprint.fecha_fin,
                 'descripcion': sprint.descripcion,
-                # 'estado_sprint': sprint.estado_sprint,
+                'estado_sprint': sprint.estado_sprint,
             }
             for sprint in Sprint.objects.all()
         ],
@@ -69,7 +70,7 @@ def iniciarSprint(request, id_sprint):
     sprint = get_object_or_404(Sprint, id=id_sprint)
     sprint.estado_sprint = 'En Curso'
     sprint.save()
-    return redirect('Sprint/mostrarSprint.html', id_sprint=id_sprint)
+    return redirect('mostrarSprint')
 
 
 def cancelarSprint(request, id_sprint):
@@ -81,4 +82,4 @@ def cancelarSprint(request, id_sprint):
     sprint = get_object_or_404(Sprint, id=id_sprint)
     sprint.estado_sprint = 'Cancelado'
     sprint.save()
-    return redirect('mostrarSprint', id_sprint=id_sprint)
+    return redirect('mostrarSprint')
