@@ -16,6 +16,7 @@ Welcome to GestorProyectosAgiles's documentation!
    Usuarios
    permisos
    Proyectos
+   UserStories
 
 Indices and tables
 ==================
