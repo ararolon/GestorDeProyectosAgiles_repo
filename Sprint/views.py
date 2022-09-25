@@ -3,17 +3,21 @@ from Sprint.forms import crearSprintForm
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
+from Proyectos.models import Proyecto
 from Sprint.models import Sprint
 
 # Create your views here.
 
 
-def crearSprint (request):
+def crearSprint (request,id):
     """
     Metodo para crear sprint
     param request: request para datos nuevos de un sprint
     return: contexto para sprint nuevo
     """
+    proyecto = get_object_or_404(Proyecto,id=id)
+    contexto = {'user': request.user,'proyecto':proyecto}
+    contexto['form'] = crearSprintForm()
 
     if request.method == 'POST':
         form = crearSprintForm(request.POST)
@@ -47,6 +51,7 @@ def mostrarSprint(request):
                 'fecha_inicio': sprint.fecha_inicio,
                 'fecha_fin': sprint.fecha_fin,
                 'descripcion': sprint.descripcion,
+                # 'estado_sprint': sprint.estado_sprint,
             }
             for sprint in Sprint.objects.all()
         ],
