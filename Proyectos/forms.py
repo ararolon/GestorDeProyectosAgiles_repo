@@ -48,7 +48,7 @@ class AsignarMiembroForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AsignarMiembroForm, self).__init__(*args, **kwargs)
         self.fields['miembros'].widget = forms.CheckboxSelectMultiple()
-        self.fields['miembros'].queryset = Usuario.objects.exclude(id=self.instance.scrumMaster.id)
+        self.fields['miembros'].queryset = Usuario.objects.exclude(id=self.instance.scrumMaster.id).filter(groups__name='usuarios')
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
