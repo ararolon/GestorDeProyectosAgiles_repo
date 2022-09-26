@@ -90,8 +90,6 @@ def crear_us(request,id):
             us = form.save()
             us.id_proyecto = proyecto.id
             us.save()
-            proyecto.user_stories.append(id)
-            proyecto.save()
             messages.success(request,"El User Story "+us.nombre+" ha sido creado satisfactoriamente")
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
         else:
