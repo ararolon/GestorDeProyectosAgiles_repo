@@ -15,8 +15,11 @@
             {% csrf_token %}
             <div class=" col-12 text-muted mb-4 font-italic">Ingrese un nombre, una descipción y un usuario Scrum Master para el proyecto.</div>
             <div class="col-12 col-md-10 mx-auto">{{ form|crispy }}</div>
-            <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Crear Proyecto</button>
-            <a href="/home" class="btn btn-danger col-5">Cancelar</a>
+            </br>
+            <div style="text-align:center" >
+                <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Crear Proyecto</button>
+                <a onclick="window.history.back()" class="btn btn-danger col-5">Cancelar</a>
+            </div>
         </form>
     </div>
 {% endblock %}

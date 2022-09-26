@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from .form import NewRolForm 
 from .models import RolesdeSistema
-
+from django.contrib import messages
 # Create your views here.
 
 def crear_rol (request):
@@ -21,6 +21,7 @@ def crear_rol (request):
             group = Group.objects.create(name=rol.nombre)
             group.save()
             rol.darpermisos_a_grupo(group)
+            messages.success(request,"El rol "+rol.nombre+ " ha sido creado satisfactoriamente")
             return redirect('listar_roles')
         else:
             contexto['mensajeError'] = 'El nombre del rol ya existe'
@@ -39,14 +40,17 @@ def listar_roles(request):
         HttpResponse
     """
     contexto = {
-                'roles': [
-                    {'id': rol.id, 'nombre': rol.nombre, 'descripcion': rol.descripcion,
-                     'permisos': [p.name for p in rol.get_permisos()]
-                     }
-                    for rol in RolesdeSistema.objects.all()
-                ],
-                
-                }
+        'roles': [
+            {
+                'id': rol.id, 
+                'nombre': rol.nombre, 
+                'descripcion': rol.descripcion,
+                'defecto': rol.defecto,
+                'permisos': [p.name for p in rol.get_permisos()]
+            }
+            for rol in RolesdeSistema.objects.all().order_by('-id')
+        ],
+    }
 
     return render(request, 'permisos/listar_roles.html', contexto)
 
@@ -71,8 +75,10 @@ def modificar_rol(request, id_rol):
         if form.is_valid():
             rs = form.save()
             rs.save()
+            messages.success(request,"El rol se ha modificado satisfactoriamente")
             return redirect('listar_roles')
-
+        else:
+            messages.error(request,"El rol no ha sido modificado")
         contexto = {'user': request.user, 'form': form}
     else:
         contexto = {'user': request.user,
@@ -96,6 +102,7 @@ def eliminar_rol(request, id_rol):
     if request.method == 'POST':
           #agregar opcion de si el rol es utilizado , no se puede eliminar
             rol.delete()
+            messages.success(request,"El rol "+rol.nombre+" ha sido eliminado satisfactoriamente")
             return redirect('listar_roles')
 
     return render(request, 'permisos/eliminar_rol.html', contexto)

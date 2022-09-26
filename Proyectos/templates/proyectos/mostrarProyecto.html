@@ -1,0 +1,60 @@
+{% extends 'SSO/base_usuarios.html' %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+
+{% block title %}Proyectos de Sistema {% endblock %}
+
+{% block content %}
+    </br>
+    </br>
+    <div class="row mb-3">
+        <div class="col flex-justify-center">
+            
+            {% if proyecto.scrumMaster == request.user %}
+            <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
+            <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
+            <a href="{% url 'mostrarSprint' %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+            <a href="{% url 'importarRol' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar Rol</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col flex-justify-center">
+            {% if proyecto.scrumMaster == request.user %}
+            <a href="{% url 'crear_us' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear user story</a>
+            <a href="{% url 'crear_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear tipo de user story</a>
+            <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
+            <a href="{% url 'importar_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar tipo de US</a>
+            {% endif %}
+           <a href="{% url 'product_backlog' proyecto.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">ProductBacklog</a>
+
+        </div>
+    </div>
+    <div class="card my-4">
+        <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}}
+            {% if proyecto.estado == 'En Planificacion' %}
+            <a href="{% url 'iniciarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Iniciar Proyecto</a>
+            {% endif %}
+            {% if proyecto.estado == 'En Curso' %}
+            <a href="{% url 'cancelarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Cancelar Proyecto</a>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <h6 class="card-title">Nombre: {{proyecto.nombre}}</h6>
+            <h6 class="card-text">Descripcion: {{proyecto.descripcion}}</h6>
+            <h6 class="card-text">Scrummaster: {{proyecto.scrumMaster}}</h6>
+            <h6 class="card-text">Estado: {{proyecto.estado}}</h6>
+        </div>
+        <div class="card-body">
+            <h6>Miembros del proyecto:</h6>
+            <ul class="list-group list-group-flush">
+                {% for miembro in proyecto.miembros.all %}
+                    <li class="list-group-item">{{miembro}}
+                        <a href="{% url 'asignarRol' proyecto.id miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar Rol</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
