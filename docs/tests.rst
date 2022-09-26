@@ -20,6 +20,14 @@ tests.test\_proyecto\_views module
    :undoc-members:
    :show-inheritance:
 
+tests.test\_pruebas module
+--------------------------
+
+.. automodule:: tests.test_pruebas
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 tests.test\_rol\_url module
 ---------------------------
 
@@ -36,10 +44,42 @@ tests.test\_rol\_views module
    :undoc-members:
    :show-inheritance:
 
+tests.test\_sprint\_urls module
+-------------------------------
+
+.. automodule:: tests.test_sprint_urls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_sprint\_views module
+--------------------------------
+
+.. automodule:: tests.test_sprint_views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 tests.test\_urls module
 -----------------------
 
 .. automodule:: tests.test_urls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_userstories\_urls module
+------------------------------------
+
+.. automodule:: tests.test_userstories_urls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tests.test\_userstories\_views module
+-------------------------------------
+
+.. automodule:: tests.test_userstories_views
    :members:
    :undoc-members:
    :show-inheritance:

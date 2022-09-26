@@ -12,4 +12,5 @@ GestorDeProyectosAgiles_repo
    permisos
    Proyectos
    UserStories
+   Sprint
    
