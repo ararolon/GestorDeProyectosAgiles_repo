@@ -7,16 +7,25 @@
 {% block content %}
     </br>
     </br>
+    <div class="row mb-3">
+        <div class="col flex-justify-center">
+            
+            {% if proyecto.scrumMaster == request.user %}
+            <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
+            <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
+            <a href="{% url 'mostrarSprint' %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+            <a href="{% url 'importarRol' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar Rol</a>
+            {% endif %}
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col flex-justify-center">
             {% if proyecto.scrumMaster == request.user %}
-            <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
             <a href="{% url 'crear_us' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear user story</a>
-            <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
             <a href="{% url 'crear_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear tipo de user story</a>
             <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
             <a href="{% url 'importar_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar tipo de US</a>
-            <a href="{% url 'mostrarSprint' %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
             {% endif %}
            <a href="{% url 'product_backlog' proyecto.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">ProductBacklog</a>
 
@@ -35,13 +44,7 @@
             <h6 class="card-title">Nombre: {{proyecto.nombre}}</h6>
             <h6 class="card-text">Descripcion: {{proyecto.descripcion}}</h6>
             <h6 class="card-text">Scrummaster: {{proyecto.scrumMaster}}</h6>
-            <h6 class="card-text">Tipos de US: 
-                {% for i in proyectos%}
-                    {{i.tipos_us}}>
-                
-                {% endfor %}   
-            </h6>
-
+            <h6 class="card-text">Estado: {{proyecto.estado}}</h6>
         </div>
         <div class="card-body">
             <h6>Miembros del proyecto:</h6>
