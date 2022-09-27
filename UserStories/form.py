@@ -53,9 +53,8 @@ class TiposUSForm(forms.ModelForm):
         """
         super(TiposUSForm, self).__init__(*args, **kwargs)
         self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
-        self.fields['estados_kanban'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False,
-                                                            choices=[(e.id, e.nombre) for e in Estados_Kanban.objects.all()
-                                                                     ])
+        self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                              queryset= Estados_Kanban.objects.all())
 
     class Meta:
         model = TipoUSerStory
@@ -70,7 +69,7 @@ class ImportarTipoUSForm(forms.ModelForm):
       def __init__(self,proyecto,*args,**kwargs):
        
             super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
-            self.fields['tipo_us'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=[(i.id,i.nombre) for i in TipoUSerStory.objects.all()])
+            self.fields['tipo_us'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple   ,queryset=TipoUSerStory.objects.all())
 
       class Meta :
           model = Proyecto

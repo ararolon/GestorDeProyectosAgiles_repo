@@ -40,7 +40,7 @@ class TipoUSerStory(models.Model):
   """
   nombre = models.CharField(max_length=20,unique=True,blank=False)
   descripcion = models.TextField(max_length=80,blank=True,null=True)
-  estados_kanban = ArrayField(models.CharField(max_length=20,blank=False))
+  estados_kanban = models.ManyToManyField(Estados_Kanban)
   class Meta:
         verbose_name = 'TipoUS'
         verbose_name_plural = 'TiposUS'
