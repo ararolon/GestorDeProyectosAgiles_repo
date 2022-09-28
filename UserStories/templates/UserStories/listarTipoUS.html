@@ -10,17 +10,32 @@
         <h3 class="col-12 col-md-10"> Tipos de US del Proyecto </h3>
     </div>
     <hr>
-            
+
     <div id="lista_tipoUS" class="col-10 mx-auto">
         <div class="my-4">
             {% for tipoUS in tiposUS %}
                 <div class="card" style="margin:10px">
-                    <div id="collapse_tipoUS" class="" aria-labelledby="header_tipoUS" data-parent="#lista_tipoUS">
-                        <div class="card-body row">
-                            <div class="col-12 "><u>Nombre: </u><p>{{ tipoUS.nombre }}</p> </div>
-                            <div class="col-12 "><u>Descripción: </u><p>{{ tipoUS.descripcion }}</p> </div>
+                    <div class="card-header bg-color-primary" aria-labelledby="header_tipoUS" data-parent="#lista_tipoUS">
+                        <div class="row">
+                          <div class="col-auto mr-auto">
+                                  {{tipoUS.nombre}}
+                          </div>
                         </div>
                     </div>
+                    <div class="card-body row">
+                        <div class="col-12 "><u>Descripción: </u><p>{{ tipoUS.descripcion }}</p> 
+                            <div class="col-12">Estados de Kanban:
+                                <u>
+                                    {% for e in tipoUS.estados_kanban.all%}
+                                        <li>
+                                            {{e.nombre}}
+                                        </li>   
+                                    {% endfor %}
+                                        
+                                </u>
+                            </div>
+                        </div>
+                    </div>    
                 </div>
             {% endfor %}
         </div>

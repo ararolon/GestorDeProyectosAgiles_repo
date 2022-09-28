@@ -47,6 +47,7 @@ class TipoUSerStory(models.Model):
      
   def __str__(self):
       return self.nombre
+      
      
 
   def get_estados_kanban(self):
