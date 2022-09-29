@@ -23,7 +23,6 @@
         </div>
             <hr>
         {% if messages %}
-
                 {% for message in messages %}
                     {% if message.tags == 'error' %}
                         <div class="alert alert-danger">
@@ -34,7 +33,6 @@
                 {% endfor %}
 
         {% endif %}
-
         <div id="crearProyecto" class="col-10 mx-auto">
             {% for proyecto in proyectos %}
                 <div class="card" style="margin:10px">
@@ -44,7 +42,7 @@
                                 {{proyecto.nombre}}
                             </div>
                             <div class="col-auto">
-                                <a href="{% url 'mostrarProyecto' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Ir al proyecto</a>
+                                <a href="{% url 'mostrarProyectoAdmin' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Ir al proyecto</a>
                                 <!-- {% if proyecto.scrumMaster == request.user %}
                                     <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
                                 {% endif %} -->

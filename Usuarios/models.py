@@ -49,10 +49,12 @@ class Usuario(User):
         per6 = Permission.objects.get(codename='_crear_roles')
         per7 = Permission.objects.get(codename='_eliminar_roles')
         per8 = Permission.objects.get(codename='_visualizar_roles')
+        per9 = Permission.objects.get(codename='_visualizar_proyecto')
+
 
 
         rol = RolesdeSistema.objects.get(nombre='administrador')
-        rol.permisos.add(per1,per2,per3,per4,per5,per6,per7,per8)
+        rol.permisos.add(per1,per2,per3,per4,per5,per6,per7,per8,per9)
 
         grupo = Group.objects.get(name='administrador')
         permisos = rol.get_permisos() # obtiene todos los permisos del rol y los guarda en una variable 

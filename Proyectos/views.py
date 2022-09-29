@@ -82,7 +82,7 @@ def listarProyectosUser(request):
     }
     return render(request, 'proyectos/listarProyectosUser.html', contexto)
 
-def mostrarProyecto(request, id_proyecto):
+def mostrarProyectoAdmin(request, id_proyecto):
     """
     Vista que donde el Scrum master puede seleccionar los participantes del proyecto
     Argumentos:request: HttpRequest
@@ -100,7 +100,9 @@ def mostrarProyecto(request, id_proyecto):
         # 'form': form,
         'proyecto': proyecto,
     }
-    return render(request, 'proyectos/mostrarProyecto.html', contexto)
+    return render(request, 'proyectos/mostrarProyectoAdmin.html', contexto)
+
+    
 
 def asignar_miembro(request, id_proyecto):
     """
@@ -194,3 +196,25 @@ def cancelarProyecto(request, id_proyecto):
     proyecto.estado = 'Cancelado'
     proyecto.save()
     return redirect('mostrarProyecto', id_proyecto=id_proyecto)
+
+def mostrarProyecto(request, id_proyecto):
+    """
+    Vista que donde el Scrum master puede seleccionar los participantes del proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    # form = AsignarMiembroForm(instance=proyecto)
+    # if request.method == 'POST':
+    #     form = AsignarMiembroForm( instance=proyecto, data=request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, 'Los miembros han sido asignado al proyecto')
+    #         return redirect('home')
+    contexto = {
+        # 'form': form,
+        'proyecto': proyecto,
+    }
+    return render(request, 'proyectos/mostrarProyecto.html', contexto)
+
+    
