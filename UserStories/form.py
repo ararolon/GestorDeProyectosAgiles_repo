@@ -69,6 +69,7 @@ class ImportarTipoUSForm(forms.ModelForm):
       def __init__(self,proyecto,*args,**kwargs):
        
             super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
+            self.fields['tipo_us'].label = "Tipos User stories del sistema"
             self.fields['tipo_us'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple   ,queryset=TipoUSerStory.objects.all())
 
       class Meta :
