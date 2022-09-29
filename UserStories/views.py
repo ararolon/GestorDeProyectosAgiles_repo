@@ -110,8 +110,8 @@ def importar_tipoUS(request,id):
           HttpResponse
     """
     proyecto = get_object_or_404(Proyecto,id=id)
-
-    contexto = {'user': request.user,'proyecto':proyecto}
+    tipos = proyecto.tipo_us.all()
+    contexto = {'user': request.user,'proyecto':proyecto,'tipos':tipos}
     contexto['form'] = ImportarTipoUSForm(proyecto,instance=proyecto)
 
     if request.method == 'POST':

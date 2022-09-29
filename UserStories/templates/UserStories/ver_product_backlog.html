@@ -12,27 +12,29 @@
 <div>
     <div>
         <h2> User Stories del Proyecto</h2>
+        <hr>
+    </br>
     </div>
          <div>
-             <table class="table">
-                 <thead class="table-light">
-                     <tr>
-                          <th>Nombre</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                      {% for us in us %}
-                          <tr>
-                              <td>{{ us.nombre }}</td>
-                            
-                             
-                    
-            
-                          </tr>
-                      {% endfor %}
-                 </tbody>
-             </table>
-         </div>
-  </div>
+             {% for us in us  %}
+                <div class="card" style="margin: 10px">
+                    <div class="card-header bg-color-primary">
+                        <div class="row">
+                            <div class="col-auto mr-auto">
+                                 {{us.nombre}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body row">
+                        <div class="col-12">
+                            Tipo de User Story: {{us.tipo.nombre}}
+                        </div>
+                        <div class="col-12">
+                            Prioridad : {{us.prioridad}}
+                        </div>      
+                    </div>
+                </div>
+             {% endfor %}
+          </div>
 
 {% endblock %}
