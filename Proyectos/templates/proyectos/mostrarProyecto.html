@@ -50,11 +50,13 @@
             <ul class="list-group list-group-flush">
                 {% for miembro in proyecto.miembros.all %}
                     <li class="list-group-item">{{miembro}}
-                        <a href="{% url 'asignarRol' proyecto.id miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar Rol</a>
+                        <a href="{% url 'asignarRol' proyecto.id miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar Rol o Desasignar Rol</a>
                         <h6 class="card-text">Roles:</h6>
                         {% for roles in proyecto.usuario_roles.all %}
                             {% for rol in roles.roles.all %}
+                                {% if roles.miembro == miembro %}
                                 <p>-{{rol}}</p>
+                                {% endif %}
                             {% endfor %} 
                         {% endfor %}
                     </li>                    

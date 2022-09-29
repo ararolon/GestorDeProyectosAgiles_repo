@@ -82,6 +82,8 @@ class AsignarRolForm(forms.ModelForm):
         super(AsignarRolForm, self).__init__(*args, **kwargs)
         self.fields['roles'].widget = forms.CheckboxSelectMultiple()
         self.fields['roles'].queryset = RolesdeSistema.objects.filter(proyecto=id_proyecto)
+        #roles es no requerido
+        self.fields['roles'].required = False
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
