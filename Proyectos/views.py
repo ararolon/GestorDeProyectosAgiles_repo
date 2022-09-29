@@ -108,7 +108,6 @@ def asignar_miembro(request, id_proyecto):
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
-    print('*'*66)
     print(id_proyecto)
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     form = AsignarMiembroForm(instance=proyecto)

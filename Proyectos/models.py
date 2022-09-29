@@ -27,6 +27,11 @@ class RolUsuario(models.Model):
     miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     roles = models.ManyToManyField(RolesdeSistema)   
  
+    def __str__(self):
+        #retorna el nombre de los roles de usuario
+
+        return ''.join([rol for rol in self.roles.all()])
+ 
 
 
 class Proyecto(models.Model):
