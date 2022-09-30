@@ -21,7 +21,6 @@
                 <div class="col flex-justify-center">
                     {% if proyecto.scrumMaster == request.user %}
                     <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
-                    <a href="{% url 'mostrarSprint' %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
                     <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
                     {% endif %}
                 </div>

@@ -80,7 +80,7 @@ class AsignarRolForm(forms.ModelForm):
         
     def __init__(self, id_proyecto, id_miembro, *args, **kwargs):
         super(AsignarRolForm, self).__init__(*args, **kwargs)
-        self.fields['id_proyecto'].initial = id_proyecto
+        self.fields['miembro'].initial = id_miembro
         self.fields['roles'].widget = forms.CheckboxSelectMultiple()
         self.fields['roles'].queryset = RolesdeSistema.objects.filter(proyecto=id_proyecto)
         #roles es no requerido
