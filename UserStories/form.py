@@ -103,6 +103,7 @@ class UserStoryForm(forms.ModelForm):
         self.fields['prioridad'].empty_label = 'Seleccionar la prioridad del User Story'
         self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
         self.fields['tipo']= forms.ModelChoiceField(queryset = proyecto.tipo_us.all())
+        self.fields['horas_estimadas'] = forms.IntegerField(min_value=1,max_value=100)
         
    class Meta:
         model = UserStories

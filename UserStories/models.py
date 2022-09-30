@@ -6,6 +6,8 @@ from statistics import mode
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from Usuarios.models import Usuario
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 
 
 
@@ -87,7 +89,7 @@ class UserStories(models.Model):
   prioridad = models.CharField(max_length=20,choices=PRIORIDAD_CHOICES,blank=False)
   miembro_asignado = models.ForeignKey(Usuario,on_delete=models.CASCADE,null=True)
   comentarios = models.TextField(default='',blank=True)
-  horas_estimadas = models.IntegerField(default=0,blank=False)
+  horas_estimadas = models.IntegerField(default=0,blank=False,validators=[MaxValueValidator(100), MinValueValidator(1)])
   #id_proyecto = models.ForeignKey(Proyecto,on_delete=models.CASCADE,blank=False)
   #guarda el id del proyecto al que pertenece para filtrar por proyecto
   class Meta:

@@ -13,6 +13,7 @@
             </div>
         {% endif %}
         <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
+            <div class=" col-12 text-muted mb-4 font-italic">Ingrese un nombre, un tipo de US, prioridad y estimacion en horas en el rango de 1 a 100 horas.</div>
             {% csrf_token %}
             {{ form|crispy }}
         </br>
