@@ -10,14 +10,20 @@ test para los views.py de Sprint
  
 class Test_sprint_views(TestCase):
     def setUp(self):
-        self.proyecto = Proyecto.objects.create(nombre='test',descripcion='prueba')
-        self.sprint = Sprint.objects.create(nombre_sprint='testSprint',fecha_inicio='2022-10-01',fecha_fin='2022-10-15', descripcion='testSprint')
+        self.proyecto = Proyecto.objects.create(nombre='test',id_proyecto='1',descripcion='prueba')
+        self.sprint = Sprint.objects.create(nombre_sprint='testSprint', descripcion='testSprint', id_proyecto=self.proyecto.id)
     
     def test_crear_Sprint(self):
         path = reverse('crearSprint',args=[self.proyecto.id])
         response = self.client.get(path)
         self.assertEqual(response.status_code, 200,"Error")
         self.assertTemplateUsed(response, 'Sprint/crearSprint.html')
+    
+    def test_listar_Sprint(self):
+        path = reverse('listarSprint',args=[self.proyecto.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200,"Error")
+        self.assertTemplateUsed(response, 'Sprint/listarSprint.html')
  
     def test_mostrar_sprint(self):
         path = reverse('mostrarSprint')
@@ -26,7 +32,6 @@ class Test_sprint_views(TestCase):
         self.assertTemplateUsed(response, 'Sprint/mostrarSprint.html')   
 
     def test_iniciarSprint(self):
-        print(self.sprint.estado_sprint)
         path = reverse('iniciarSprint', args=[self.sprint.id])
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
