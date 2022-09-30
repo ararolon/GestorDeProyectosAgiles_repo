@@ -1,24 +1,23 @@
 {% extends 'SSO/base_usuarios.html' %}
 {% load crispy_forms_tags %}
 {%  load static %}
-{% block title %}Nuevo User Story{% endblock %}
+{% block title %}Asignar miembros al Sprint {{nombre_sprint}}{% endblock %}
 {% block content %}
-<!-- {% include 'SSO/NavBar_admin.html' %} -->  
     <div class="container mt-3">
-        <h3>Crear User Story</h3><hr>
+        <h3>Asignar miembros al Sprint </h3><hr>
         {%  if mensajeError %}
             <div class="alert alert-danger" role="alert">
                 <h4 class="alert-heading">Error</h4>
                 <p>{{mensajeError}}</p>
             </div>
         {% endif %}
+        
         <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
-            <div class=" col-12 text-muted mb-4 font-italic">Ingrese un nombre, un tipo de US, prioridad y estimacion en horas en el rango de 1 a 100 horas.</div>
             {% csrf_token %}
             {{ form|crispy }}
         </br>
-            <button class="btn btn-primary bg-color-accent col-5" type="submit">Crear</button>
-            <a href="{% url 'mostrarProyecto' proyecto.id  %}" class="btn btn-danger col-5">Cancelar</a>
+            <button class="btn btn-primary bg-color-accent col-5" type="submit">Aceptar</button>
+            <a onclick="window.history.back()" class="btn btn-danger col-5">Cancelar</a>
         </form>
     </div>
 {% endblock %}

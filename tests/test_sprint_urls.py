@@ -11,8 +11,8 @@ test para los urls del Sprint
 class Test_sprint_urls(TestCase):
 
    def setUp(self):
-      self.proyecto = Proyecto.objects.create(nombre='testProyecto', descripcion='testProyecto')
-      self.sprint = Sprint.objects.create(nombre_sprint='testSprint',fecha_inicio='2022-10-01',fecha_fin='2022-10-15', descripcion='testSprint')
+      self.proyecto = Proyecto.objects.create(nombre='testProyecto', id_proyecto='1', descripcion='testProyecto')
+      self.sprint = Sprint.objects.create(nombre_sprint='testSprint', descripcion='testSprint')
 
    def test_crearSprint(self):
       url = reverse('crearSprint', args=[self.proyecto.id])
@@ -21,6 +21,10 @@ class Test_sprint_urls(TestCase):
    def test_mostrarSprint(self):
       url = reverse('mostrarSprint')
       self.assertEqual(resolve(url).func, mostrarSprint, "no se pudo mostrar sprint")
+   
+   def test_listarSprint(self):
+      url = reverse('listarSprint',args=[self.proyecto.id])
+      self.assertEqual(resolve(url).func, listarSprint, "no se pudo mostrar sprint")
 
    def test_iniciarSprint(self):
       url = reverse('iniciarSprint', args=[self.sprint.id])

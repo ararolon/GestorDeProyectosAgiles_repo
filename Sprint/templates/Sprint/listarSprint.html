@@ -2,22 +2,27 @@
 {% load auth_extras %}
 {% load crispy_forms_tags %}
 
-{% block title %} Sprint del Proyecto {% endblock %}
+{% block title %} Sprint {% endblock %}
 
 {% block content %}
 
     <div class="row">
-        <h3 class="col-12 col-md-10">Sprint del Proyecto</h3>
+        <h3 
+            class="col-12 col-md-10">Sprint del Proyecto {{proyecto.nombre}}
+        </h3>
     </div>
-    <hr>        
+    <hr>
     <div id="lista_sprint" class="col-10 mx-auto">
         <div class="my-4">
-            {% for sprint in sprints %}
+            {% for sprint in sprint %}
                 <div class="card" style="margin:10px">
                     <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
                         <div class="card-header  bg-color-primary">Sprint #{{sprint.id}}
-                            {% if sprint.estado_sprint == 'En Planificacion' %}
-                            <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Iniciar Sprint</a>
+                            
+                            {% if hayPlanificacion and not hayCurso %}
+                                {% if sprint.estado_sprint == 'En Planificacion' %}
+                                <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Iniciar Sprint</a>
+                                {% endif %}
                             {% endif %}
                             {% if sprint.estado_sprint == 'En Curso' %}
                             <a href="{% url 'cancelarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Cancelar Sprint</a>
@@ -32,7 +37,8 @@
                             <div class="col-12 "><u>Descripción: </u><p>{{ sprint.descripcion }}</p> </div>
                             <div class="col-12 "><u>Estado: </u><p>{{ sprint.estado_sprint }}</p> </div>
                         </div>
-                        <div class="card-body">
+
+                        <!-- <div class="card-body">
                             <h6>Miembros del Sprint:</h6>
                             <ul class="list-group list-group-flush">
                                 {% for sprintM in sprintM %}
@@ -41,11 +47,17 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            {% endfor %}        
+        </div>    
     </div>
+    </br> 
+    <svg onclick="window.history.back()" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+    </svg>
+    </br>
+    <h6>Volver</h6> 
 
 {% endblock %}

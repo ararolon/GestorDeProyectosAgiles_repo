@@ -64,8 +64,6 @@ def crear_TipoUS(request,id):
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
         else:
             contexto['mensajeError'] = 'El Tipo de US ya existe en el sistema'
-    else:
-        contexto['form'] = TiposUSForm()
 
     return render(request, 'UserStories/crear_tipoUS.html',contexto)
 
@@ -112,12 +110,12 @@ def importar_tipoUS(request,id):
           HttpResponse
     """
     proyecto = get_object_or_404(Proyecto,id=id)
-
-    contexto = {'user': request.user,'proyecto':proyecto}
-    contexto['form'] = ImportarTipoUSForm(proyecto)
+    tipos =  TipoUSerStory.objects.all()
+    contexto = {'user': request.user,'proyecto':proyecto,'tipos':tipos}
+    contexto['form'] = ImportarTipoUSForm(proyecto,instance=proyecto)
 
     if request.method == 'POST':
-        form = ImportarTipoUSForm(proyecto, data=request.POST)
+        form = ImportarTipoUSForm(proyecto,instance=proyecto,data=request.POST)
         if form.is_valid():
             tipo = form.cleaned_data['tipo_us']
             proyecto.tipo_us.set(tipo)

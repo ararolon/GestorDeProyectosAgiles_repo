@@ -7,6 +7,7 @@ from django.forms import model_to_dict
 from django.contrib import messages
 
 from Usuarios.models import Usuario
+from permisos.models import RolesdeSistema
 # Create your views here.
 
 
@@ -36,7 +37,7 @@ def crearProyecto (request):
 
 def listarProyectos(request):
     """
-    Vista que muestra al usuario la lista de Proyectos que existen dentro del Sistema.
+    Vista que muestra al Administrador del sistema la lista de Proyectos que existen dentro del Sistema.
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -82,9 +83,9 @@ def listarProyectosUser(request):
     }
     return render(request, 'proyectos/listarProyectosUser.html', contexto)
 
-def mostrarProyecto(request, id_proyecto):
+def mostrarProyectoAdmin(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede seleccionar los participantes del proyecto
+    Vista donde el admin puede ver los detalles del proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -100,7 +101,9 @@ def mostrarProyecto(request, id_proyecto):
         # 'form': form,
         'proyecto': proyecto,
     }
-    return render(request, 'proyectos/mostrarProyecto.html', contexto)
+    return render(request, 'proyectos/mostrarProyectoAdmin.html', contexto)
+
+    
 
 def asignar_miembro(request, id_proyecto):
     """
@@ -108,7 +111,6 @@ def asignar_miembro(request, id_proyecto):
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
-    print('*'*66)
     print(id_proyecto)
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     form = AsignarMiembroForm(instance=proyecto)
@@ -133,9 +135,9 @@ def asignarRol(request, id_proyecto, id_usuario):
     """
    
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
-    usuario_rol = RolUsuario.objects.filter(miembro=id_usuario).first()
+    usuario_rol = proyecto.usuario_roles.filter(miembro=id_usuario).first()
     if request.method == 'POST':
-        form = AsignarRolForm(id_proyecto, request.POST, instance=usuario_rol) 
+        form = AsignarRolForm(id_proyecto, id_usuario, request.POST, instance=usuario_rol) 
         if form.is_valid():
             usuario_rol = form.save()
             usuario = Usuario.objects.get(id=id_usuario)
@@ -146,15 +148,15 @@ def asignarRol(request, id_proyecto, id_usuario):
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     else:
         if usuario_rol:
-            form = AsignarRolForm(id_proyecto, instance=usuario_rol)
+            form = AsignarRolForm(id_proyecto, id_usuario, instance=usuario_rol)
         else:
-            form = AsignarRolForm(id_proyecto, )
+            form = AsignarRolForm(id_proyecto, id_usuario, )
     contexto = {'form': form}
     return render(request, 'proyectos/asignarRol.html', contexto)
 
 def importarRol(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede seleccionar el rol a asignar a un usuario dentro del proyecto
+    Vista que donde el Scrum master puede importar el rol dentro de un proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -170,12 +172,14 @@ def importarRol(request, id_proyecto):
     contexto = {
         'form': form,
         'proyecto': proyecto,
+        'roles': RolesdeSistema.objects.filter(defecto=False)
+
     }
     return render(request, 'proyectos/importarRol.html', contexto)
 
 def iniciarProyecto(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede iniciar un proyecto
+    Donde el Scrum master puede iniciar un proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -187,7 +191,7 @@ def iniciarProyecto(request, id_proyecto):
 
 def cancelarProyecto(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede cancelar un proyecto
+    Donde el Scrum master puede cancelar un proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -195,3 +199,25 @@ def cancelarProyecto(request, id_proyecto):
     proyecto.estado = 'Cancelado'
     proyecto.save()
     return redirect('mostrarProyecto', id_proyecto=id_proyecto)
+
+def mostrarProyecto(request, id_proyecto):
+    """
+    Vista donde el Scrum Master visualiza detalles del proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    # form = AsignarMiembroForm(instance=proyecto)
+    # if request.method == 'POST':
+    #     form = AsignarMiembroForm( instance=proyecto, data=request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, 'Los miembros han sido asignado al proyecto')
+    #         return redirect('home')
+    contexto = {
+        # 'form': form,
+        'proyecto': proyecto,
+    }
+    return render(request, 'proyectos/mostrarProyecto.html', contexto)
+
+    

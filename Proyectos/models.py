@@ -1,7 +1,7 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from Sprint.models import Sprint
 from Usuarios.models import Usuario
 from permisos.models import RolesdeSistema
 from UserStories.models import UserStories,TipoUSerStory
@@ -24,8 +24,13 @@ class RolUsuario(models.Model):
     """
     Modelo para la clase de RolUsuario con los campos necesarios para el mismo
     """
-    miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
+    miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     roles = models.ManyToManyField(RolesdeSistema)   
+ 
+    def __str__(self):
+        #retorna el nombre de los roles de usuario
+
+        return ''.join([rol for rol in self.roles.all()])
  
 
 
@@ -45,6 +50,8 @@ class Proyecto(models.Model):
     roles = models.ManyToManyField(RolesdeSistema)
     usuario_roles = models.ManyToManyField(RolUsuario)
     tipo_us = models.ManyToManyField(TipoUSerStory)
+    sprint = models.ManyToManyField(Sprint) 
+
     #id_sprints = models.ManyToManyField(Sprint, blank=True) -->preguntar
     #tipoUS = models.CharField(max_length=100, verbose_name="Tipos de US") -->preguntar bien como hacer y como se llama en esta clase
 

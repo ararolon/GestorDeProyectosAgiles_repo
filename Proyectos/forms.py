@@ -72,16 +72,19 @@ class AsignarRolForm(forms.ModelForm):
     Form que permite asignar roles a un miembro del proyecto
     """
     disabled_fields = ()
-    # disabled_fields = ('miembro',)
+    disabled_fields = ('miembro',)
 
     class Meta:
         model = RolUsuario
-        fields = ('roles',)
+        fields = ('miembro', 'roles',)
         
-    def __init__(self, id_proyecto, *args, **kwargs):
+    def __init__(self, id_proyecto, id_miembro, *args, **kwargs):
         super(AsignarRolForm, self).__init__(*args, **kwargs)
+        self.fields['miembro'].initial = id_miembro
         self.fields['roles'].widget = forms.CheckboxSelectMultiple()
         self.fields['roles'].queryset = RolesdeSistema.objects.filter(proyecto=id_proyecto)
+        #roles es no requerido
+        self.fields['roles'].required = False
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True

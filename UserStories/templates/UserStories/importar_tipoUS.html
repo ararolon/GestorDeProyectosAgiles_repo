@@ -12,6 +12,29 @@
                 <p>{{mensajeError}}</p>
             </div>
         {% endif %}
+       <div>
+            <div class="col-12" style="margin: 10px">
+                {% for t in tipos%}
+                <div>
+                   <div class="row"> 
+                        {{t.nombre}}
+                   <div>
+                  <div class="row">
+                    {% for e in t.estados_kanban.all%}
+                      <li>
+                          {{e.nombre}}
+                      </li>
+                    {% endfor %}  
+                  </div>
+
+                </div>
+             
+
+                {% endfor %}
+            </div>   
+       
+        </div>     
+        <hr>        
         <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
             {% csrf_token %}
             {{ form|crispy }}
