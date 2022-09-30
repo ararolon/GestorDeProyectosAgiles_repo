@@ -13,7 +13,7 @@ class crearSprintForm(forms.ModelForm):
     Form que permite la creacion de un nuevo Sprint.
     """
     nombre_sprint = forms.CharField(label="Nombre del Sprint", widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
-    duracion_sprint = forms.IntegerField(label="Duración de los Sprints en días", min_value=0)
+    duracion_sprint = forms.IntegerField(label="Duración de los Sprints en días", min_value=7,max_value=30)
     descripcion = forms.CharField(label="Descripción", widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
 
     class Meta:
