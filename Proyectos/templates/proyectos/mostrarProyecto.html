@@ -13,7 +13,7 @@
             {% if proyecto.scrumMaster == request.user %}
             <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
             <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
-            <a href="{% url 'mostrarSprint' %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+            <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
             <a href="{% url 'importarRol' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar Rol</a>
             {% endif %}
         </div>

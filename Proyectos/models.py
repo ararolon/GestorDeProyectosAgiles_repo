@@ -1,7 +1,7 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from Sprint.models import Sprint
 from Usuarios.models import Usuario
 from permisos.models import RolesdeSistema
 from UserStories.models import UserStories,TipoUSerStory
@@ -45,6 +45,8 @@ class Proyecto(models.Model):
     roles = models.ManyToManyField(RolesdeSistema)
     usuario_roles = models.ManyToManyField(RolUsuario)
     tipo_us = models.ManyToManyField(TipoUSerStory)
+    sprint = models.ManyToManyField(Sprint) 
+
     #id_sprints = models.ManyToManyField(Sprint, blank=True) -->preguntar
     #tipoUS = models.CharField(max_length=100, verbose_name="Tipos de US") -->preguntar bien como hacer y como se llama en esta clase
 

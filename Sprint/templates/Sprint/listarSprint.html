@@ -2,22 +2,29 @@
 {% load auth_extras %}
 {% load crispy_forms_tags %}
 
-{% block title %} Sprint del Proyecto {% endblock %}
+{% block title %} Sprint {% endblock %}
 
 {% block content %}
 
     <div class="row">
-        <h3 class="col-12 col-md-10">Sprint del Proyecto</h3>
+        <h3 
+            class="col-12 col-md-10">Sprint del Proyecto #{{proyecto.nombre}}
+        </h3>
     </div>
-    <hr>        
+    <hr>
     <div id="lista_sprint" class="col-10 mx-auto">
         <div class="my-4">
-            {% for sprint in sprints %}
+        {{hayCurso}}
+        {{hayPlanificacion}}
+            {% for sprint in sprint %}
                 <div class="card" style="margin:10px">
                     <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
                         <div class="card-header  bg-color-primary">Sprint #{{sprint.id}}
-                            {% if sprint.estado_sprint == 'En Planificacion' %}
-                            <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Iniciar Sprint</a>
+                            
+                            {% if hayPlanificacion and not hayCurso %}
+                                {% if sprint.estado_sprint == 'En Planificacion' %}
+                                <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Iniciar Sprint</a>
+                                {% endif %}
                             {% endif %}
                             {% if sprint.estado_sprint == 'En Curso' %}
                             <a href="{% url 'cancelarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Cancelar Sprint</a>
@@ -32,6 +39,7 @@
                             <div class="col-12 "><u>Descripción: </u><p>{{ sprint.descripcion }}</p> </div>
                             <div class="col-12 "><u>Estado: </u><p>{{ sprint.estado_sprint }}</p> </div>
                         </div>
+
                         <div class="card-body">
                             <h6>Miembros del Sprint:</h6>
                             <ul class="list-group list-group-flush">
@@ -44,8 +52,8 @@
                         </div>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            {% endfor %}        
+        </div>    
     </div>
 
 {% endblock %}
