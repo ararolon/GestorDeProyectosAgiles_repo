@@ -220,6 +220,30 @@ Proyectos.migrations.0023\_merge\_0015\_merge\_20220925\_1726\_0022\_proyecto\_t
    :undoc-members:
    :show-inheritance:
 
+Proyectos.migrations.0024\_alter\_rolusuario\_miembro module
+------------------------------------------------------------
+
+.. automodule:: Proyectos.migrations.0024_alter_rolusuario_miembro
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Proyectos.migrations.0024\_proyecto\_sprint module
+--------------------------------------------------
+
+.. automodule:: Proyectos.migrations.0024_proyecto_sprint
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Proyectos.migrations.0025\_merge\_20220930\_0211 module
+-------------------------------------------------------
+
+.. automodule:: Proyectos.migrations.0025_merge_20220930_0211
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

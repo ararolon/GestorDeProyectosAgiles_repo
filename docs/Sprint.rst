@@ -44,6 +44,14 @@ Sprint.models module
    :undoc-members:
    :show-inheritance:
 
+Sprint.sprint module
+--------------------
+
+.. automodule:: Sprint.sprint
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Sprint.tests module
 -------------------
 
