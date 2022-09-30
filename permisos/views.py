@@ -55,6 +55,7 @@ def listar_roles(request):
     return render(request, 'permisos/listar_roles.html', contexto)
 
 
+
 def modificar_rol(request, id_rol):
     """
     Vista que permite editar un Rol de Sistema guardado dentro del sistema. \n

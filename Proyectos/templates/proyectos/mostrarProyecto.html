@@ -6,31 +6,40 @@
 
 {% block content %}
     </br>
-    </br>
-    <div class="row mb-3">
-        <div class="col flex-justify-center">
-            
-            {% if proyecto.scrumMaster == request.user %}
-            <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
-            <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
-            <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
-            <a href="{% url 'importarRol' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar Rol</a>
-            {% endif %}
+    </br>  
+    {% if not proyecto.estado == 'Cancelado' %}
+        <div class="row mb-3">
+            <div class="col flex-justify-center">
+                {% if proyecto.scrumMaster == request.user %}
+                <a href="{% url 'asignar_miembro' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar miembros</a>
+                <a href="{% url 'importarRol' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar Rol</a>
+                {% endif %}
+            </div>
         </div>
-    </div>
-    
-    <div class="row">
-        <div class="col flex-justify-center">
-            {% if proyecto.scrumMaster == request.user %}
-            <a href="{% url 'crear_us' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear user story</a>
-            <a href="{% url 'crear_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear tipo de user story</a>
-            <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
-            <a href="{% url 'importar_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar tipo de US</a>
-            {% endif %}
-           <a href="{% url 'product_backlog' proyecto.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">ProductBacklog</a>
+        {% if proyecto.estado == 'En Curso' %}
+            <div class="row mb-3">
+                <div class="col flex-justify-center">
+                    {% if proyecto.scrumMaster == request.user %}
+                    <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
+                    <a href="{% url 'mostrarSprint' %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+                    <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col flex-justify-center">
+                    {% if proyecto.scrumMaster == request.user %}
+                    <a href="{% url 'crear_us' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear user story</a>
+                    <a href="{% url 'crear_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear tipo de user story</a>
+                    <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
+                    <a href="{% url 'importar_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar tipo de US</a>
+                    {% endif %}
+                <a href="{% url 'product_backlog' proyecto.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">ProductBacklog</a>
+                </div>
+            </div>
+        {% endif %}  
+    {% endif %}
 
-        </div>
-    </div>
     <div class="card my-4">
         <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}}
             {% if proyecto.estado == 'En Planificacion' %}
@@ -51,10 +60,27 @@
             <ul class="list-group list-group-flush">
                 {% for miembro in proyecto.miembros.all %}
                     <li class="list-group-item">{{miembro}}
-                        <a href="{% url 'asignarRol' proyecto.id miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar Rol</a>
-                    </li>
+                        {% if not proyecto.estado == 'Cancelado' %}
+                            <a href="{% url 'asignarRol' proyecto.id miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar Rol o Desasignar Rol</a>
+                        {% endif %}
+                        <h6 class="card-text">Roles:</h6>
+                        {% for roles in proyecto.usuario_roles.all %}
+                            {% for rol in roles.roles.all %}
+                                {% if roles.miembro == miembro %}
+                                <p>-{{rol}}</p>
+                                {% endif %}
+                            {% endfor %} 
+                        {% endfor %}
+                    </li>                    
                 {% endfor %}
             </ul>
         </div>
     </div>
+    </br> 
+    <svg onclick="window.history.back()" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+    </svg>
+    </br>
+    <h6>Volver</h6> 
+    
 {% endblock %}

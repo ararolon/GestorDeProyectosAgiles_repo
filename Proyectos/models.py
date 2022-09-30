@@ -24,8 +24,13 @@ class RolUsuario(models.Model):
     """
     Modelo para la clase de RolUsuario con los campos necesarios para el mismo
     """
-    miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
+    miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     roles = models.ManyToManyField(RolesdeSistema)   
+ 
+    def __str__(self):
+        #retorna el nombre de los roles de usuario
+
+        return ''.join([rol for rol in self.roles.all()])
  
 
 

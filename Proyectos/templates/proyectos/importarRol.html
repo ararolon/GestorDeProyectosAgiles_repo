@@ -12,12 +12,26 @@
                 <p>{{mensajeError}}</p>
             </div>
         {% endif %}
-
-        
+        {% for rol in roles %}
+        <p>{{rol.nombre}} </span>
+            <a data-toggle="collapse" style="color: blue;"
+                onclick="document.getElementById('rol-{{rol.id}}').classList.toggle('show');"
+                role="button" aria-expanded="false" aria-controls="rol-{{rol.id}}">Ver permisos</a>
+            <div class="collapse" id="rol-{{rol.id}}">
+                <div class="col-11 row">
+                    {% for permiso in rol.permisos.all %}
+                    <!-- django permission name -->
+                        <p class="mx-1"><span class="">{{ permiso.name }}</span></p>
+                    {% endfor %}
+                </div>   
+            </div>
+        </hr>
+         {% endfor %}
         <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
             {% csrf_token %}
             {{ form|crispy }}
         </br>
+
             <button class="btn btn-primary bg-color-accent col-5" type="submit">Importar</button>
             <a onclick="window.history.back()" class="btn btn-danger col-5">Cancelar</a>
         </form>

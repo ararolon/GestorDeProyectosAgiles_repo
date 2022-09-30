@@ -46,6 +46,12 @@ class Test_proyecto_views(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'proyectos/mostrarProyecto.html')
 
+    def test_mostrarProyectoAdmin(self):
+        path = reverse('mostrarProyectoAdmin', args=[self.proyecto.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'proyectos/mostrarProyectoAdmin.html')
+
     def test_importarRol(self):
         path = reverse('importarRol', args=[self.proyecto.id])
         response = self.client.get(path)

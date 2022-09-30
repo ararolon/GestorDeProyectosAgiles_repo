@@ -12,6 +12,7 @@ from Proyectos.views import asignarRol
 from Proyectos.views import iniciarProyecto
 from Proyectos.views import cancelarProyecto
 from Usuarios.models import Usuario
+from Proyectos.views import mostrarProyectoAdmin
 
 
 
@@ -59,3 +60,7 @@ class Test_proyecto_urls(TestCase):
     def test_cancelarProyecto(self):
         url = reverse('cancelarProyecto', args=[self.proyecto.id])
         self.assertEqual(resolve(url).func, cancelarProyecto)    
+    
+    def test_mostrarProyectoAdmin(self):
+        url = reverse('mostrarProyectoAdmin', args=[self.proyecto.id])
+        self.assertEqual(resolve(url).func, mostrarProyectoAdmin)
