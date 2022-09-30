@@ -7,6 +7,7 @@ from django.forms import model_to_dict
 from django.contrib import messages
 
 from Usuarios.models import Usuario
+from permisos.models import RolesdeSistema
 # Create your views here.
 
 
@@ -134,9 +135,9 @@ def asignarRol(request, id_proyecto, id_usuario):
     """
    
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
-    usuario_rol = RolUsuario.objects.filter(miembro=id_usuario).first()
+    usuario_rol = proyecto.usuario_roles.filter(miembro=id_usuario).first()
     if request.method == 'POST':
-        form = AsignarRolForm(id_proyecto, request.POST, instance=usuario_rol) 
+        form = AsignarRolForm(id_proyecto, id_usuario, request.POST, instance=usuario_rol) 
         if form.is_valid():
             usuario_rol = form.save()
             usuario = Usuario.objects.get(id=id_usuario)
@@ -147,9 +148,9 @@ def asignarRol(request, id_proyecto, id_usuario):
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     else:
         if usuario_rol:
-            form = AsignarRolForm(id_proyecto, instance=usuario_rol)
+            form = AsignarRolForm(id_proyecto, id_usuario, instance=usuario_rol)
         else:
-            form = AsignarRolForm(id_proyecto, )
+            form = AsignarRolForm(id_proyecto, id_usuario, )
     contexto = {'form': form}
     return render(request, 'proyectos/asignarRol.html', contexto)
 
@@ -171,6 +172,8 @@ def importarRol(request, id_proyecto):
     contexto = {
         'form': form,
         'proyecto': proyecto,
+        'roles': RolesdeSistema.objects.filter(defecto=False)
+
     }
     return render(request, 'proyectos/importarRol.html', contexto)
 
