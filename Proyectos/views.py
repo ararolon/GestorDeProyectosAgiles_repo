@@ -37,7 +37,7 @@ def crearProyecto (request):
 
 def listarProyectos(request):
     """
-    Vista que muestra al usuario la lista de Proyectos que existen dentro del Sistema.
+    Vista que muestra al Administrador del sistema la lista de Proyectos que existen dentro del Sistema.
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -85,7 +85,7 @@ def listarProyectosUser(request):
 
 def mostrarProyectoAdmin(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede seleccionar los participantes del proyecto
+    Vista donde el admin puede ver los detalles del proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -156,7 +156,7 @@ def asignarRol(request, id_proyecto, id_usuario):
 
 def importarRol(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede seleccionar el rol a asignar a un usuario dentro del proyecto
+    Vista que donde el Scrum master puede importar el rol dentro de un proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -179,7 +179,7 @@ def importarRol(request, id_proyecto):
 
 def iniciarProyecto(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede iniciar un proyecto
+    Donde el Scrum master puede iniciar un proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -191,7 +191,7 @@ def iniciarProyecto(request, id_proyecto):
 
 def cancelarProyecto(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede cancelar un proyecto
+    Donde el Scrum master puede cancelar un proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
@@ -202,7 +202,7 @@ def cancelarProyecto(request, id_proyecto):
 
 def mostrarProyecto(request, id_proyecto):
     """
-    Vista que donde el Scrum master puede seleccionar los participantes del proyecto
+    Vista donde el Scrum Master visualiza detalles del proyecto
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
