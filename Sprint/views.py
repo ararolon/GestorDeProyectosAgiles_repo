@@ -31,32 +31,10 @@ def crearSprint (request,id):
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     else:
         form = crearSprintForm(proyecto.id)
-    contexto = {'form': form
+    contexto = {'form': form,
+                'proyecto':proyecto
                 }
     return render(request,'Sprint/crearSprint.html',context=contexto)    
-
-# def crearSprint (request,id):
-#     """
-#     Metodo para crear sprint
-#     param request: request para datos nuevos de un sprint
-#     return: contexto para sprint nuevo
-#     """
-#     proyecto = get_object_or_404(Proyecto,id=id)
-#     contexto = {'user': request.user,'proyecto':proyecto}
-#     contexto['form'] = crearSprintForm()
-
-#     if request.method == 'POST':
-#         form = crearSprintForm(proyecto, data=request.POST)
-#         if form.is_valid():
-#             id = form.cleaned_data['nombre_sprint']
-#             sprint = form.save(commit=False)
-#             sprint.id_proyecto = proyecto.id
-#             sprint.save()
-#             messages.success(request,"Se ha creado el sprint satisfactoriamente")
-#             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
-#     else:
-#         contexto['form'] = crearSprintForm(proyecto)
-#     return render(request,'Sprint/crearSprint.html',context=contexto)    
 
 
 def mostrarSprint(request):
