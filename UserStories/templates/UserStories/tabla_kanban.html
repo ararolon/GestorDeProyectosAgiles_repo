@@ -4,30 +4,34 @@
 {% block title %}Nuevo Estado Kanban{% endblock %}
 {% block content %}
 
+<div class="row">
+    <h3 
+        class="col-12 col-md-10">Tabla Kanban
+    </h3>
+</div>
+<hr>
+
 <div class="container-fluid pt-3">
-    <h3 class="font-weight-light text-white">Kanban Board</h3>
-    <div class="small  text-light">Drag and drop between swim lanes</div>
     <div class="row flex-row flex-sm-nowrap py-3">
         {% for estado in estados %} 
             <div class="col-sm-6 col-md-4 col-xl-3">
                 <div class="card bg-light">
                     <div class="card-body">
-                        <h6 class="card-title text-uppercase text-truncate py-2">{{estado}}</h6>
+                        <h6 class="card-title text-uppercase text-truncate py-2" style="color: rgb(29, 82, 47)">{{estado}}</h6>
                         {% for userstory in userstories %}
                             {% if userstory.estado == estado %}
                             <div class="items border border-light">
                                 <div class="card draggable shadow-sm" id="cd1" draggable="true" ondragstart="drag(event)">
                                     <div class="card-body p-2">
                                         <div class="card-title">
-                                            <img src="//via.placeholder.com/30" class="rounded-circle float-right">
-                                            <a href="" class="lead font-weight-light">
+                                            <h5 style="color: rgb(8, 160, 59)">
                                                 {{userstory.nombre}}
-                                            </a>
+                                            </h5>
                                         </div>
                                         <p>
                                             {{userstory.descripcion}}
                                         </p>
-                                        <button class="btn btn-primary btn-sm">View</button>
+                                        <button class="btn btn-secundary btn-sm" style="color: rgb(25, 59, 182)">Cambiar estado</button>
                                     </div>
                                 </div>
                             </div> 

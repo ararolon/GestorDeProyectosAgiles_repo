@@ -165,9 +165,9 @@ def listarTipoUS(request,id):
      
     return render(request,'UserStories/listarTipoUS.html',contexto)
 
-def tablaKanban(request, id_tipoUs):
+def tablaKanban(request, id_tipoUs, id_proyecto):
     """
-    Vista que permite visualizar los estados de un tipo de user story
+    Vista que permite visualizar los estados de un user story
       Argumentos:
           request: HttpRequest
           id_tipoUs : id del tipo de user story
@@ -176,6 +176,7 @@ def tablaKanban(request, id_tipoUs):
     """
     tipoUS = get_object_or_404(TipoUSerStory,id=id_tipoUs)
     estados = tipoUS.estados_kanban.all()
-    userstories = UserStories.objects.filter(tipo=tipoUS)
+    userstories = UserStories.objects.filter(id_proyecto = id_proyecto).filter(tipo=tipoUS)
     contexto = {'tipoUS':tipoUS,'estados':estados ,'userstories':userstories}
     return render(request,'UserStories/tabla_kanban.html',contexto)
+
