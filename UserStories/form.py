@@ -1,6 +1,7 @@
 from dataclasses import field, fields
 from pyexpat import model
 from random import choices
+
 from xml.etree.ElementInclude import include
 from django import forms
 from Proyectos.models import Proyecto
@@ -53,15 +54,64 @@ class TiposUSForm(forms.ModelForm):
         """
         super(TiposUSForm, self).__init__(*args, **kwargs)
         self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
+        self.fields['estados_kanban'].required = True
         self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                              queryset= Estados_Kanban.objects.all())
+                                                                       queryset= Estados_Kanban.objects.all(),initial=Estados_Kanban.objects.filter(defecto=True),
+                                                                       label = "Seleccione los estados para el tablero Kanban")
+        
 
     class Meta:
         model = TipoUSerStory
         fields = ['nombre','descripcion','estados_kanban']
+   
+    
+    def clean(self):
 
+        estados = self.cleaned_data['estados_kanban']
+        contador = 0;
+        for e in estados:
+            if (e.nombre == 'Pendiente' or e.nombre == 'En curso' or e.nombre == 'Finalizado'):
+                       contador = contador + 1 
 
+        if contador != 3 :
+            raise forms.ValidationError("No se pudo crear el Tipo de User Story , debe incluirse los estados obligatorios")               
+    
+           
 
+class ModificarTipoUSForm(forms.ModelForm):
+    """
+    Formulario utilizado para modificar un tipo de US , se modifican el nombre y la descripcion.
+    Formulario basado en el modelo TipoUserStory
+    Clase Padre:
+        form.ModelForm
+    """
+    def __init__(self,*args,**kwargs):
+        """
+        Constructor del Formulario.
+        """
+        super(ModificarTipoUSForm, self).__init__(*args, **kwargs)
+        self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
+        self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                                       queryset= Estados_Kanban.objects.all(),initial=Estados_Kanban.objects.filter(defecto=True),
+                                                                       label = "Seleccione los estados para el tablero Kanban")
+        
+    class Meta:
+        model = TipoUSerStory
+        fields = ['nombre','descripcion','estados_kanban']
+
+    def clean(self):
+
+        estados = self.cleaned_data['estados_kanban']
+        contador = 0;
+        for e in estados:
+            if (e.nombre == 'Pendiente' or e.nombre == 'En curso' or e.nombre == 'Finalizado'):
+                       contador = contador + 1 
+
+        if contador != 3 :
+            raise forms.ValidationError("No se pudo modificar el Tipo de User Story , debe incluirse los estados obligatorios")               
+    
+           
+        
 class ImportarTipoUSForm(forms.ModelForm):
       """
       Form utilizado para importar tipos de user stories a un proyecto
@@ -70,7 +120,7 @@ class ImportarTipoUSForm(forms.ModelForm):
        
             super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
             self.fields['tipo_us'].label = "Tipos User stories del sistema"
-            self.fields['tipo_us'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple   ,queryset=TipoUSerStory.objects.all())
+            self.fields['tipo_us'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,queryset=TipoUSerStory.objects.all())
 
       class Meta :
           model = Proyecto

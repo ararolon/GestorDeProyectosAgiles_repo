@@ -1,0 +1,21 @@
+{% extends 'SSO/base_usuarios.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Modificar Tipo de US {% endblock %}
+{% block content %}
+    
+    <h3>Modificar Tipo de US</h3>
+    <hr>
+    <form method="POST" class="col-12 col-md-8 mx-auto">
+        {% csrf_token %}
+        {{ form|crispy }}
+        </br>
+        <div style="text-align:center" >
+            <input type="submit" class="btn btn-primary col-8 col-md-5 mx-auto" value="Modificar" >
+            <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-danger col-8 col-md-5 mx-auto">Cancelar</a>
+        </div>
+    </form>
+
+</div>
+
+
+{% endblock %}

@@ -19,13 +19,15 @@
                    <div class="row"> 
                         {{t.nombre}}
                    <div>
-                  <div class="row">
-                    {% for e in t.estados_kanban.all%}
-                      <li>
-                          {{e.nombre}}
-                      </li>
-                    {% endfor %}  
-                  </div>
+                    <a style="text-decoration: none;" class="" data-bs-toggle="collapse" href="#EstadoKanban" role="button" aria-expanded="false" aria-controls="EstadoKanban">
+                        Ver Estado Kanban
+                    </a>
+                    <div class="collapse" id="EstadoKanban">
+                                {% for e in t.estados_kanban.all %}
+                                    <p class="mx-1"><span class="">{{ e.nombre }}</span></p>
+                                {% endfor %}
+                        
+                    </div>    
 
                 </div>
              

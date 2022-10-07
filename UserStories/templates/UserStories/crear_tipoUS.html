@@ -3,16 +3,9 @@
 {%  load static %}
 {% block title %}Nuevo Tipo de US{% endblock %}
 {% block content %}
-<!-- {% include 'SSO/NavBar_admin.html' %} -->  
-    <div class="container mt-3">
-        <h3>Crear nuevo tipo de User Story</h3><hr>
-        {%  if mensajeError %}
-            <div class="alert alert-danger" role="alert">
-                <h4 class="alert-heading">Error</h4>
-                <p>{{mensajeError}}</p>
-            </div>
-        {% endif %}
+<h3>Crear nuevo tipo de User Story</h3><hr>
         <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
+            <p style="color: gray;">*Los estados Kanban : 'Pendiente'-'En curso'-'Finalizado' son obligatorios</p>
             {% csrf_token %}
             {{ form|crispy }}
         </br>
