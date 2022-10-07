@@ -92,6 +92,7 @@ class UserStories(models.Model):
   horas_estimadas = models.IntegerField(default=0,blank=False,validators=[MaxValueValidator(100), MinValueValidator(1)])
   #id_proyecto = models.ForeignKey(Proyecto,on_delete=models.CASCADE,blank=False)
   #guarda el id del proyecto al que pertenece para filtrar por proyecto
+  estado = models.ForeignKey(Estados_Kanban,on_delete=models.CASCADE, null=True, blank=True)
   class Meta:
     verbose_name = 'UserStory'
     verbose_name_plural = 'UserStories'

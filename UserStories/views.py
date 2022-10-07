@@ -87,6 +87,7 @@ def crear_us(request,id):
             id = form.cleaned_data['nombre']
             us = form.save()
             us.id_proyecto = proyecto.id
+            us.estado = us.tipo.estados_kanban.all().first()
             us.save()
             messages.success(request,"El User Story "+us.nombre+" ha sido creado satisfactoriamente")
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
@@ -163,3 +164,18 @@ def listarTipoUS(request,id):
     contexto = {'proyecto':proyecto,'tiposUS':tipoUS}
      
     return render(request,'UserStories/listarTipoUS.html',contexto)
+
+def tablaKanban(request, id_tipoUs):
+    """
+    Vista que permite visualizar los estados de un tipo de user story
+      Argumentos:
+          request: HttpRequest
+          id_tipoUs : id del tipo de user story
+        Retorna:
+          HttpResponse
+    """
+    tipoUS = get_object_or_404(TipoUSerStory,id=id_tipoUs)
+    estados = tipoUS.estados_kanban.all()
+    userstories = UserStories.objects.filter(tipo=tipoUS)
+    contexto = {'tipoUS':tipoUS,'estados':estados ,'userstories':userstories}
+    return render(request,'UserStories/tabla_kanban.html',contexto)
