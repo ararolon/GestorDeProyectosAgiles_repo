@@ -108,4 +108,22 @@ class UserStoryForm(forms.ModelForm):
    class Meta:
         model = UserStories
         fields = ['nombre','descripcion','tipo','prioridad','comentarios','horas_estimadas']
+        
 
+class CambiarEstadoUSForm(forms.ModelForm):
+    """
+    Formulario utilizado para cambiar el estado de un user story
+    clase Padre:
+          form.ModelForm        
+    """
+    def __init__(self,proyecto,*args,**kwargs):
+        """
+        Constructor del Formulario.
+        
+        """
+        super(CambiarEstadoUSForm, self).__init__(*args, **kwargs)
+        self.fields['estado']= forms.ModelChoiceField(queryset = proyecto.tipo_us.all().first().estados_kanban.all())
+        
+    class Meta:
+        model = UserStories
+        fields = ['estado']

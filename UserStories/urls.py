@@ -16,5 +16,6 @@ urlpatterns = [
     path('productBacklog/<int:id>',views.ver_product_backlog,name='product_backlog'),
     path('listarTipoUS/<int:id>',views.listarTipoUS,name='listarTipoUS'),
     path('tabla_kanban/<int:id_tipoUs>/proyecto/<int:id_proyecto>',views.tablaKanban,name='tabla_kanban'),
+    path('cambiarEstado/<int:id_us>/estado/<int:id_estado>',views.cambiarEstado,name='cambiarEstado'),
 
 ]

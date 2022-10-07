@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from UserStories.models import TipoUSerStory, UserStories
+from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
 from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto
@@ -180,3 +180,18 @@ def tablaKanban(request, id_tipoUs, id_proyecto):
     contexto = {'tipoUS':tipoUS,'estados':estados ,'userstories':userstories}
     return render(request,'UserStories/tabla_kanban.html',contexto)
 
+def cambiarEstado(request,id_us,id_estado):
+    """
+    Vista que permite cambiar el estado de un user story
+      Argumentos:
+          request: HttpRequest
+          id_us : id del user story
+          id_estado : id del estado
+        Retorna:
+          HttpResponse
+    """
+    us = get_object_or_404(UserStories,id_us=id_us)
+    estado = get_object_or_404(Estados_Kanban,id=id_estado)
+    us.estado = estado
+    us.save()
+    return redirect('tabla_kanban',id_tipoUs=us.tipo.id,id_proyecto=us.id_proyecto)

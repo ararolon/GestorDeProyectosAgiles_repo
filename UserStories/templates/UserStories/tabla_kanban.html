@@ -31,7 +31,16 @@
                                         <p>
                                             {{userstory.descripcion}}
                                         </p>
-                                        <button class="btn btn-secundary btn-sm" style="color: rgb(25, 59, 182)">Cambiar estado</button>
+                                        <button onclick="document.getElementById('us-{{userstory.id_us}}').classList.toggle('show');" class="btn btn-secundary btn-sm" style="color: rgb(25, 59, 182)" >Cambiar estado</button>
+                                        <div class="collapse" id="us-{{userstory.id_us}}">
+                                            <div class="row">
+                                                {% for estado in estados %} 
+                                                    {% if not userstory.estado == estado %}
+                                                        <a href="{% url 'cambiarEstado' userstory.id_us estado.id %}" class="ml-3 bg-color-danger border-0">{{estado}}</a>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>   
                                     </div>
                                 </div>
                             </div> 
