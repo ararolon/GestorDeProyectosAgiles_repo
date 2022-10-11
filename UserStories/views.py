@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import render, redirect, get_object_or_404
 
 from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
@@ -52,8 +53,9 @@ def crear_TipoUS(request,id):
         HttpResponse
     """
     proyecto = get_object_or_404(Proyecto,id=id)
-    contexto = {'user': request.user,'proyecto':proyecto}
-    contexto['form'] = TiposUSForm()
+    form = TiposUSForm()
+    contexto = {'form': form,'proyecto':proyecto}
+
 
     if request.method == 'POST':
         form = TiposUSForm(request.POST)
@@ -61,9 +63,9 @@ def crear_TipoUS(request,id):
             tipoUS = form.save()
             tipoUS.save()
             messages.success(request,"El Tipo de US "+tipoUS.nombre+" ha sido creado satisfactoriamente")
-            return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
+            return render(request, 'proyectos/mostrarProyecto.html',contexto)
         else:
-            contexto['mensajeError'] = 'El Tipo de US ya existe en el sistema'
+            messages.error(request,'El Tipo de User Story no pudo crearse, ya existe en el sistema')
 
     return render(request, 'UserStories/crear_tipoUS.html',contexto)
 
@@ -80,21 +82,24 @@ def crear_us(request,id):
     proyecto = get_object_or_404(Proyecto,id=id)
     contexto = {'user': request.user,'proyecto':proyecto}
     contexto['form'] = UserStoryForm(proyecto)
+   
 
     if request.method == 'POST':
         form = UserStoryForm(proyecto, data=request.POST)
         if form.is_valid():
-            id = form.cleaned_data['nombre']
+            us = form.cleaned_data['nombre']
             us = form.save()
             us.id_proyecto = proyecto.id
             us.estado = us.tipo.estados_kanban.all().first()
             us.save()
             messages.success(request,"El User Story "+us.nombre+" ha sido creado satisfactoriamente")
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
+                
         else:
-            contexto['mensajeError'] = 'El User Story no pudo crearse correctamente'
+            messages.error(request,"El tipo de US no pudo ser creado, ya existe en el sistema")
     else:
         contexto['form'] = UserStoryForm(proyecto)
+   
 
     return render(request, 'UserStories/crear_US.html',contexto)
 

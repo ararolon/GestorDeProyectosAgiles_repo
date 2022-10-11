@@ -1,5 +1,4 @@
-
-from multiprocessing.dummy import Array
+from email.policy import default
 from pydoc import describe
 from pyexpat import model
 from statistics import mode
@@ -23,6 +22,7 @@ class Estados_Kanban(models.Model):
    """
 
    nombre = models.CharField(max_length=20,blank=False,unique=True)
+   defecto = models.BooleanField(default=False)
 
    class Meta:
         verbose_name = 'Estado_Kanban'
@@ -59,6 +59,8 @@ class TipoUSerStory(models.Model):
     """
    
     return [e for e in self.estados_kanban.all()]
+
+
 
 
 
@@ -111,6 +113,27 @@ class UserStories(models.Model):
            El miembro del equipo asignado  
     """
     return self.miembro_asignado
+
+
+  def es_usado(self,id):
+    """
+    Funcion que determina si el tipo de US
+    esta asociado a algun User story
+
+    Argumento:
+          self: objeto UserStory
+          id : id del Tipo de US a ser analizado 
+        
+    Retorna:
+         True si esta siendo usado , False en caso contrario
+
+    """
+    t = TipoUSerStory.objects.get(id=id)
+    if UserStories.objects.filter(tipo=t).exists():
+       return True
+
+    return False    
+
 
 
 
