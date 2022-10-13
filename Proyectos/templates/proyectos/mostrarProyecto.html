@@ -33,7 +33,7 @@
                     <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
                     <a href="{% url 'importar_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar tipo de US</a>
                     {% endif %}
-                <a href="" class="btn btn-primary ml-3 bg-color-danger border-0">Tabla Kanban</a>
+                <a href="{% url 'tabla_kanban' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Tabla Kanban</a>
                 <a href="{% url 'product_backlog' proyecto.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">ProductBacklog</a>
                 </div>
             </div>

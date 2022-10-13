@@ -56,7 +56,7 @@ class TiposUSForm(forms.ModelForm):
         self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
         self.fields['estados_kanban'].required = True
         self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                                       queryset= Estados_Kanban.objects.all(),initial=Estados_Kanban.objects.filter(defecto=True),
+                                                                       queryset= Estados_Kanban.objects.all().order_by('id'),initial=Estados_Kanban.objects.filter(defecto=True),
                                                                        label = "Seleccione los estados para el tablero Kanban")
         
 

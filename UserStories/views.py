@@ -170,7 +170,7 @@ def listarTipoUS(request,id):
      
     return render(request,'UserStories/listarTipoUS.html',contexto)
 
-def tablaKanban(request, id_tipoUs, id_proyecto):
+def tablaKanban(request, id_proyecto):
     """
     Vista que permite visualizar los estados de un user story
       Argumentos:
@@ -179,10 +179,11 @@ def tablaKanban(request, id_tipoUs, id_proyecto):
         Retorna:
           HttpResponse
     """
-    tipoUS = get_object_or_404(TipoUSerStory,id=id_tipoUs)
-    estados = tipoUS.estados_kanban.all()
-    userstories = UserStories.objects.filter(id_proyecto = id_proyecto).filter(tipo=tipoUS)
-    contexto = {'tipoUS':tipoUS,'estados':estados ,'userstories':userstories}
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    tipos = proyecto.tipo_us.all()
+    estados = tipos.first().estados_kanban.all()
+    userstories = UserStories.objects.filter(id_proyecto = id_proyecto)
+    contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories}
     return render(request,'UserStories/tabla_kanban.html',contexto)
 
 def cambiarEstado(request,id_us,id_estado):
@@ -197,9 +198,15 @@ def cambiarEstado(request,id_us,id_estado):
     """
     us = get_object_or_404(UserStories,id_us=id_us)
     estado = get_object_or_404(Estados_Kanban,id=id_estado)
+    proyecto = get_object_or_404(Proyecto,id=us.id_proyecto)
+
+    if (not proyecto.scrumMaster == request.user and not id_estado > us.estado.id):
+        messages.error(request,'Solo el scrummaster puede realizar esa operacion')
+        return redirect('tabla_kanban',id_proyecto=proyecto.id)
+
     us.estado = estado
     us.save()
-    return redirect('tabla_kanban',id_tipoUs=us.tipo.id,id_proyecto=us.id_proyecto)
+    return redirect('tabla_kanban',id_proyecto=proyecto.id)
 
 def modificar_tipoUS(request,id,id_tipo):
     """
