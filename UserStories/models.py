@@ -2,11 +2,13 @@ from email.policy import default
 from pydoc import describe
 from pyexpat import model
 from statistics import mode
+from sys import maxsize
+from wsgiref.validate import validator
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from Usuarios.models import Usuario
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from Sprint.models import *
 
 
 
@@ -62,21 +64,6 @@ class TipoUSerStory(models.Model):
 
 
 
-
-
-"""
- Prioridades de User stories
-"""
-
-PRIORIDAD_CHOICES=[
-    ('ALTA','Alta'),
-    ('MEDIA','Media'),
-    ('BAJA','Baja'),
-]
-
-
-
-
 class UserStories(models.Model):
   """
     Modelo que representa a los user stories de un proyecto
@@ -88,13 +75,21 @@ class UserStories(models.Model):
   nombre = models.CharField(max_length=20,unique=True,blank=False)  
   descripcion = models.TextField(max_length=60,blank=True)
   tipo = models.ForeignKey(TipoUSerStory,on_delete=models.CASCADE, null=True)
-  prioridad = models.CharField(max_length=20,choices=PRIORIDAD_CHOICES,blank=False)
   miembro_asignado = models.ForeignKey(Usuario,on_delete=models.CASCADE,null=True)
   comentarios = models.TextField(default='',blank=True)
-  horas_estimadas = models.IntegerField(default=0,blank=False,validators=[MaxValueValidator(100), MinValueValidator(1)])
-  #id_proyecto = models.ForeignKey(Proyecto,on_delete=models.CASCADE,blank=False)
-  #guarda el id del proyecto al que pertenece para filtrar por proyecto
-  estado = models.ForeignKey(Estados_Kanban,on_delete=models.CASCADE, null=True, blank=True)
+  #esfuerzo en horas , se puede dejar en blanco pero es necesario para que entre en algun sprint
+  horas_estimadas = models.IntegerField(default=0,blank=True,validators=[MaxValueValidator(100), MinValueValidator(0)], null=True)
+  #Prioridad de negocio , valores del 1 al 10
+  PN = models.IntegerField(validators = [MaxValueValidator(10),MinValueValidator(1)],blank=False,default = 0)
+  #Prioridad tecnica , valores de 1 al 10
+  PT = models.IntegerField(validators = [MaxValueValidator(10),MinValueValidator(1)],blank = False,default = 0)
+  #Peso asignado si ya fue trabajado anteriormente en un sprint, PS =3 si ya fue trabajado , PS = 0 si todavia no estuvo en un Sprint
+  PS = models.IntegerField(default =0, blank =True)
+  #variable prioridad final , resultante del calculo de la formula : ( ( 0,6 x PN + 0,4 x PT )  + PS
+  estado = models.ForeignKey(Estados_Kanban,on_delete=models.CASCADE,null=True,blank=True)
+  Prioridad = models.DecimalField(default=0, max_digits=5, decimal_places=2,blank=True)
+  en_sprint = models.BooleanField(default=False)
+
   class Meta:
     verbose_name = 'UserStory'
     verbose_name_plural = 'UserStories'
@@ -132,7 +127,9 @@ class UserStories(models.Model):
     if UserStories.objects.filter(tipo=t).exists():
        return True
 
-    return False    
+    return False   
+
+
 
 
 

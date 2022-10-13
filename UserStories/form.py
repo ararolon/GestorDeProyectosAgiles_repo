@@ -1,4 +1,5 @@
 from dataclasses import field, fields
+from enum import Flag
 from pyexpat import model
 from random import choices
 
@@ -94,6 +95,8 @@ class ModificarTipoUSForm(forms.ModelForm):
         self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                                                        queryset= Estados_Kanban.objects.all(),initial=Estados_Kanban.objects.filter(defecto=True),
                                                                        label = "Seleccione los estados para el tablero Kanban")
+
+    
         
     class Meta:
         model = TipoUSerStory

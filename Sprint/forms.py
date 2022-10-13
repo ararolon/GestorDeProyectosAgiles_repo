@@ -51,5 +51,23 @@ class MiembroSprintForm(forms.ModelForm):
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
-        
-        
+
+
+class AsignarUSSprintForm(forms.ModelForm):
+    """
+    Formulario para asignar user stories en un sprint.
+    Se considera que un US debe tener asignado horas de esfuerzo para poder ser asignado a un Sprint.
+    """
+    
+    def __init__(self,proyecto,sprint,*args, **kwargs):
+        super(AsignarUSSprintForm,self).__init__(*args, **kwargs)
+        #Obtiene los US que tengan horas estimadas asignadas , es decir horas estimadas >0 y ordena por prioridad , de mayor a menor
+        self.fields['historias'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                          queryset= UserStories.objects.filter(id_proyecto = proyecto.id).filter(horas_estimadas__gte = 1).order_by('-Prioridad'),
+                                                           label= 'Seleccione los User Stories que seran trabajados en el Sprint',initial=sprint.historias.all())
+
+    class Meta:
+            model = Sprint
+            fields = ['historias']
+
+     
