@@ -2,7 +2,7 @@ from multiprocessing import context
 from django.shortcuts import render, redirect, get_object_or_404
 
 from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
-from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm
+from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto
 # Create your views here.
@@ -200,3 +200,84 @@ def cambiarEstado(request,id_us,id_estado):
     us.estado = estado
     us.save()
     return redirect('tabla_kanban',id_tipoUs=us.tipo.id,id_proyecto=us.id_proyecto)
+
+def modificar_tipoUS(request,id,id_tipo):
+    """
+    Funcion que permite la modificacion del nombre y la descripciond de un User Story
+     Argumentos:
+          request: HttpRequest
+          id : id del proyecto
+          id_tipo :  id del tipo de user story que sera modificado
+        Retorna:
+          HttpResponse
+    """
+
+    proyecto = get_object_or_404(Proyecto,id=id)
+    tipo = TipoUSerStory.objects.get(id=id_tipo)       
+    
+    #un auxiliar para determinar si el tipo de US ya esta asignado
+    aux = UserStories.objects.create(nombre="auxiliar")
+    aux.save()
+    
+    #pregunta si el tipo de US esta siendo usado antes de ser modificado
+    if aux.es_usado(tipo.id):
+        messages.error(request,"El tipo de US no puede modificarse, esta siendo usado")
+        aux.delete()
+        return redirect('listarTipoUS',id=id)        
+    
+    aux.delete()
+
+    if request.method == 'POST':
+        form = ModificarTipoUSForm(request.POST,instance = tipo)
+
+        if form.is_valid():
+            t = form.save()
+            t.save()
+            messages.success(request,"El tipo de US "+tipo.nombre+" se ha modificado satisfactoriamente")
+            return redirect('listarTipoUS',id=id)
+        else:
+            messages.error(request,"El tipo de US no ha sido modificado")
+          
+        contexto = { 'proyecto': proyecto,
+                     'form': form
+                    }
+    else:
+        contexto = { 'proyecto': proyecto,
+                     'form': ModificarTipoUSForm(instance=tipo, initial={'estados_kanban':[a.id for a in tipo.get_estados_kanban()]})
+                    }
+        
+    return render(request,'UserStories/modificar_tipoUS.html',contexto)
+        
+
+def eliminar_tipoUS(request,id,id_tipo):
+    """
+    Vista para eliminar un Tipo de US del proyecto
+    Argumentos:
+    request: HttpRequest
+    id: id del proyectp
+    id_tipo: ide del tipo de user story que sera eliminado del proyecto 
+    
+    Retorno
+        HttpResponse
+    """
+
+    proyecto = get_object_or_404(Proyecto,id=id)
+    tipo = TipoUSerStory.objects.get(id=id_tipo)       
+    #un auxiliar para determinar si el tipo de US ya esta asignado
+    aux = UserStories.objects.create(nombre="auxiliar")
+    aux.save()
+
+    if aux.es_usado(tipo.id):
+        messages.error(request,"El tipo de US no puede eliminarse, esta siendo usado")
+        aux.delete()
+        return redirect('listarTipoUS',id=id)  
+    
+    contexto = {'proyecto':proyecto,'tipoUS':tipo}
+    aux.delete()
+
+    if request.method == 'POST':
+            proyecto.tipo_us.remove(tipo)
+            messages.success(request,"El tipo "+tipo.nombre+" ha sido eliminado satisfactoriamente del proyecto")
+            return redirect('listarTipoUS',id=id)
+    
+    return render(request,'UserStories/eliminar_tipoUS.html',contexto)
