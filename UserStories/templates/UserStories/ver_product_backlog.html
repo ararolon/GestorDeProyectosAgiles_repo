@@ -27,11 +27,30 @@
                     </div>
                     <div class="card-body row">
                         <div class="col-12">
+                            Descripcion : {{us.descripcion}}
+                        </div>
+                        <div class="col-12">
                             Tipo de User Story: {{us.tipo.nombre}}
                         </div>
                         <div class="col-12">
-                            Prioridad : {{us.prioridad}}
+                            Prioridad del Negocio : {{us.PN}}
                         </div>      
+                        <div class="col-12" >
+                            Prioridad Tecnica : {{us.PT}}
+                        </div>
+                        <div class="col-12">
+                            Prioridad de Sprint : {{us.Prioridad}} 
+                        </div>
+                        <div class="col-12">
+                          Horas de esfuerzo : {{us.horas_estimadas}}
+                        </div>
+                        {% if proyecto.scrumMaster == request.user  %}
+                            <div class="row">
+                                <div class="d-flex flex-row-reverse">
+                                    <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar<a>
+                                </div>
+                           </div>
+                        {% endif %}
                     </div>
                 </div>
              {% endfor %}
