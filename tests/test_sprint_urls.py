@@ -33,3 +33,11 @@ class Test_sprint_urls(TestCase):
    def test_cancelarSprint(self):
       url = reverse('cancelarSprint', args=[self.sprint.id])
       self.assertEqual(resolve(url).func, cancelarSprint, "no se pudo cancelar sprint")
+   
+   def test_asignarUS(self):
+      url = reverse('asignarUS', args=[self.sprint.id])
+      self.assertEqual(resolve(url).func,asignar_us, "no se pudo asignar US")
+
+   def test_sprintbacklog(self):
+      url = reverse('sprintbacklog', args=[self.sprint.id])
+      self.assertEqual(resolve(url).func,ver_sprintbacklog, "no se pudo ver el sprint backlog")

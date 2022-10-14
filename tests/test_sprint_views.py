@@ -40,3 +40,17 @@ class Test_sprint_views(TestCase):
         path = reverse('cancelarSprint', args=[self.sprint.id])
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
+    
+
+    def test_asignar_us(self):
+        path = reverse('asignarUS',args=[self.sprint.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200,"Error")
+        self.assertTemplateUsed(response, 'Sprint/asignarUS.html')
+
+    def test_sprint_backlog(self):
+        path =reverse('sprintbacklog',args=[self.sprint.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200,"Error")
+        self.assertTemplateUsed(response, 'Sprint/sprintbacklog.html')
+    

@@ -11,6 +11,18 @@
                <p>{{mensajeError}}</p>
            </div>
        {% endif %}
+  
+       <div class="col-12" style="margin: 10px">
+        
+        {% for h in historias %}
+        <div>
+           <div class="row"> 
+                {{h.nombre}} : prioridad de {{h.Prioridad}}
+           </div>
+        
+        </div>
+       {% endfor %}
+
        <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
            {% csrf_token %}
            <div class="col-12 col-md-10 mx-auto">{{ form|crispy }}</div>

@@ -32,4 +32,7 @@ class Test_urls(TestCase):
   def test_importarTipoUS(self):
     url = reverse('importar_tipoUS', args=[self.proyecto.id])
     self.assertEqual(resolve(url).func, importar_tipoUS,"no se pudo dirigir a el url de importar_tipoUS")
+
+
+  
    
