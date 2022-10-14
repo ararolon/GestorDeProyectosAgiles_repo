@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-from Sprint.forms import AsignarUSSprintForm, MiembroSprintForm, crearSprintForm
+from Sprint.forms import AsignarUSSprintForm, MiembroSprintForm, crearSprintForm, modificarSprintForm
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
@@ -37,31 +37,37 @@ def crearSprint (request,id):
     return render(request,'Sprint/crearSprint.html',context=contexto)    
 
 
-def mostrarSprint(request):
+def modificarSprint(request,id,id_sprint):
     """
-    Metodo para mostrar sprint.
-    Argumentos:
-        request: HttpRequest
-    Retorna:
-        HttpResponse
+    Metodo para modificar el nombre, la descripción y la fecha final de un Sprint
+    param request: request para datos actualizados de un sprint
+    return: contexto para sprint actualizado
     """
-    contexto = {
-        'sprints': [
-            {
-                'id': sprint.id,
-                'id_sprint': sprint.id_sprint, 
-                'nombre_sprint': sprint.nombre_sprint,
-                'fecha_creacion': sprint.fecha_creacion, 
-                'fecha_inicio': sprint.fecha_inicio,
-                'fecha_fin': sprint.fecha_fin,
-                'descripcion': sprint.descripcion,
-                'estado_sprint': sprint.estado_sprint,
-            }
-            for sprint in Sprint.objects.all()
-        ],
-    }
+    
+    proyecto = get_object_or_404(Proyecto,id=id)
+    sprint = Sprint.objects.get(id=id_sprint)
+    
+    if request.method == 'POST':
+        form = modificarSprintForm(request.POST,instance=sprint)        
+        if form.is_valid():
+            s = form.save()
+            s.save()
+            messages.success(request,"El Sprint "+sprint.nombre_sprint+" ha sido modificado satisfactoriamente")
+            return redirect('listarSprint', id=id)
+        else:
+            messages.error(request,"El Sprint no ha sido modificado")
+        
+        contexto = { 
+                    'proyecto': proyecto,
+                    'form': form
+                }
+    else:
+        contexto = {
+                    'proyecto': proyecto,
+                    'form': modificarSprintForm(instance=sprint)
+                }
+    return render(request,'Sprint/modificarSprint.html',contexto)
 
-    return render(request, 'Sprint/mostrarSprint.html', contexto)
 
 def listarSprint(request,id):
     """
@@ -106,30 +112,6 @@ def cancelarSprint(request, id_sprint):
     sprint.fecha_fin = timezone.now()
     sprint.save()
     return redirect('listarSprint',sprint.id_proyecto)
-
-
-def sprint_miembros(request, id_sprint):
-    """
-    Vista que donde el Scrum master puede seleccionar los participantes del proyecto
-    para asignar a un Sprint
-    Argumentos:request: HttpRequest
-    Return: HttpResponse
-    """
-    print('*'*66)
-    print(id_sprint)
-    sprintM = get_object_or_404(Sprint, id=id_sprint)
-    form = MiembroSprintForm(instance=sprintM)
-    if request.method == 'POST':
-        form = MiembroSprintForm( instance=sprintM, data=request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Operación Exitosa')
-            return redirect('mostrarSprint')
-    contexto = {
-        'form': form,
-        'sprintM': sprintM,
-    }
-    return render(request, 'Sprint/sprint_miembros.html', contexto)
 
 
 def asignar_us(request,id_sprint):

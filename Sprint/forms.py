@@ -33,6 +33,30 @@ class crearSprintForm(forms.ModelForm):
         return borrar_datos
 
 
+class modificarSprintForm(forms.ModelForm):
+    """
+    Implementa la clase para ejecutar un formulario de solicitud de datos que son necesarios 
+    para la modificación de un sprint, el formulario permite modificar los campos: 'nombre sprint',
+    'descripcion' y 'fecha fin'
+    """
+    disabled_fields = ('duracion_sprint','fecha_creacion', 'fecha_inicio')
+
+    class Meta:
+        model = Sprint
+        fields = ('nombre_sprint', 'duracion_sprint', 'fecha_creacion', 'fecha_inicio', 'fecha_fin','descripcion')
+
+    # nombre_sprint = forms.CharField(label="Nombre del Sprint", widget=forms.Textarea(attrs={"rows": 1, "cols": 20}))
+    # descripcion = forms.CharField(label="Descripción", widget=forms.Textarea(attrs={"rows": 5, "cols": 20}))
+    # fecha_fin = forms.DateField(label="Fecha de finalización", widget=DateInput(), input_formats=['%Y/%m/%d'])
+
+    def __init__(self,*args, **kwargs):
+        super(modificarSprintForm, self).__init__(*args, **kwargs)
+        self.fields['id_sprint'] = forms.IntegerField(widget=forms.HiddenInput())
+
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
+
+
 class MiembroSprintForm(forms.ModelForm):
     """
     Form que permite asignar miembros del Proyecto a un Sprint
