@@ -14,9 +14,13 @@
             {% csrf_token %}
             <div class=" col-12 text-muted mb-4 font-italic">Ingrese el client_id y el secret para poder conectarse al SSO</div>
             <div class="col-12 col-md-10 mx-auto">{{form|crispy }}</div>
-            <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Guardar Cambios</button>
-            <a href="{% url 'login' %}" class='col-md-5 btn btn-danger bg-color-danger'> Cancelar </a> <hr>
-        </form>    
+           
+            <div style="text-align:center">
+            </br>
+             <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Guardar</button>
+             <a href="{% url 'login' %}" class='col-md-5 btn btn-danger bg-color-danger'> Cancelar </a> <hr>
+            </div>
+          </form>    
 
 
 

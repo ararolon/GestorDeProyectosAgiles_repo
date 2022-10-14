@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-from Sprint.forms import MiembroSprintForm, crearSprintForm
+from Sprint.forms import AsignarUSSprintForm, MiembroSprintForm, crearSprintForm
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
@@ -130,3 +130,39 @@ def sprint_miembros(request, id_sprint):
         'sprintM': sprintM,
     }
     return render(request, 'Sprint/sprint_miembros.html', contexto)
+
+
+def asignar_us(request,id_sprint):
+  """
+  Vista para que un US sea asignado a un sprint
+  Argumentos:
+    request: HttpRequest
+    return: HttpResponse
+  """
+
+  sprint = Sprint.objects.get(id = id_sprint)
+  proyecto = Proyecto.objects.get(id = sprint.id_proyecto)
+  contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto}
+  contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
+
+  if request.method == 'POST':
+        form = AsignarUSSprintForm(proyecto,sprint,instance=proyecto,data=request.POST)
+        if form.is_valid():
+            historias = form.cleaned_data['historias']
+            sprint.historias.set(historias)
+           
+           # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
+            for u in historias :
+                u.en_sprint = True
+                u.save()              
+
+            messages.success(request,"Los user stories han sido asignados exitosamente")
+            return redirect ('listarSprint',id = proyecto.id)
+        else:
+            messages.error(request,'Los user stories no pudieron ser asignados')
+  else:
+         contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
+
+  return render(request,'Sprint/asignarUS.html',contexto)      
+            
+

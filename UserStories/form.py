@@ -1,6 +1,8 @@
 from dataclasses import field, fields
+from enum import Flag
 from pyexpat import model
 from random import choices
+
 from xml.etree.ElementInclude import include
 from django import forms
 from Proyectos.models import Proyecto
@@ -53,15 +55,66 @@ class TiposUSForm(forms.ModelForm):
         """
         super(TiposUSForm, self).__init__(*args, **kwargs)
         self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
+        self.fields['estados_kanban'].required = True
         self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                              queryset= Estados_Kanban.objects.all())
+                                                                       queryset= Estados_Kanban.objects.all(),initial=Estados_Kanban.objects.filter(defecto=True),
+                                                                       label = "Seleccione los estados para el tablero Kanban")
+        
 
     class Meta:
         model = TipoUSerStory
         fields = ['nombre','descripcion','estados_kanban']
+   
+    
+    def clean(self):
 
+        estados = self.cleaned_data['estados_kanban']
+        contador = 0;
+        for e in estados:
+            if (e.nombre == 'Pendiente' or e.nombre == 'En curso' or e.nombre == 'Finalizado'):
+                       contador = contador + 1 
 
+        if contador != 3 :
+            raise forms.ValidationError("No se pudo crear el Tipo de User Story , debe incluirse los estados obligatorios")               
+    
+           
 
+class ModificarTipoUSForm(forms.ModelForm):
+    """
+    Formulario utilizado para modificar un tipo de US , se modifican el nombre y la descripcion.
+    Formulario basado en el modelo TipoUserStory
+    Clase Padre:
+        form.ModelForm
+    """
+    def __init__(self,*args,**kwargs):
+        """
+        Constructor del Formulario.
+        """
+        super(ModificarTipoUSForm, self).__init__(*args, **kwargs)
+        self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
+        self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                                       queryset= Estados_Kanban.objects.all(),initial=Estados_Kanban.objects.filter(defecto=True),
+                                                                       label = "Seleccione los estados para el tablero Kanban")
+
+    
+        
+    class Meta:
+        model = TipoUSerStory
+        fields = ['nombre','descripcion','estados_kanban']
+
+    def clean(self):
+
+        estados = self.cleaned_data['estados_kanban']
+        contador = 0;
+        for e in estados:
+            if (e.nombre == 'Pendiente' or e.nombre == 'En curso' or e.nombre == 'Finalizado'):
+                       contador = contador + 1 
+
+        if contador != 3 :
+            raise forms.ValidationError("No se pudo modificar el Tipo de User Story , debe incluirse los estados obligatorios")               
+    
+           
+        
 class ImportarTipoUSForm(forms.ModelForm):
       """
       Form utilizado para importar tipos de user stories a un proyecto
@@ -70,7 +123,7 @@ class ImportarTipoUSForm(forms.ModelForm):
        
             super(ImportarTipoUSForm, self).__init__(*args, **kwargs)
             self.fields['tipo_us'].label = "Tipos User stories del sistema"
-            self.fields['tipo_us'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple   ,queryset=TipoUSerStory.objects.all())
+            self.fields['tipo_us'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,queryset=TipoUSerStory.objects.all(),initial=proyecto.tipo_us.all())
 
       class Meta :
           model = Proyecto
@@ -87,25 +140,38 @@ class UserStoryForm(forms.ModelForm):
          form.ModelForm        
    """
    def __init__(self,proyecto,*args,**kwargs):
-        """
-        Constructor del Formulario.
-        
-        """
-        PRIORIDAD_CHOICES = [
-        ('ALTA', 'Alta'),
-        ('MEDIA', 'Media'),
-        ('BAJA', 'Baja'),
-        ]
-   
         super(UserStoryForm, self).__init__(*args, **kwargs)
 
-              
-        self.fields['prioridad'].empty_label = 'Seleccionar la prioridad del User Story'
-        self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
         self.fields['tipo']= forms.ModelChoiceField(queryset = proyecto.tipo_us.all())
-        self.fields['horas_estimadas'] = forms.IntegerField(min_value=1,max_value=100)
+        self.fields['PN'] = forms.IntegerField(min_value=1,max_value=10,label='Prioridad de Negocio (1-10)')
+        self.fields['PT'] = forms.IntegerField(min_value=1, max_value=10, label='Prioridad Tecnica (1-10)')
+        self.fields['horas_estimadas'].required = False
+        self.fields['horas_estimadas'] = forms.IntegerField(min_value=0,max_value=100,initial=0)
         
    class Meta:
         model = UserStories
-        fields = ['nombre','descripcion','tipo','prioridad','comentarios','horas_estimadas']
+        fields = ['nombre','descripcion','tipo','PN','PT','comentarios','horas_estimadas']
+
+
+
+
+class ModificarUSForm(forms.ModelForm):
+
+    """
+    Formulario para modificar los datos de un US
+    """
+
+    disabled_fields = ('nombre,descripcion')
+
+    def __init__(self,*args,**kwargs):
+        
+      super(ModificarUSForm, self).__init__(*args, **kwargs)
+      self.fields['nombre'].disabled = True
+      self.fields['descripcion'].disabled = True 
+
+
+    class Meta:
+        model = UserStories
+        fields = ['nombre','descripcion','tipo','PN','PT','comentarios','horas_estimadas']
+
 
