@@ -3,7 +3,7 @@ from re import U
 from django.shortcuts import render, redirect, get_object_or_404
 
 from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
-from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
+from .form import EstadosKanbanForm, ModificarUSForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto
 # Create your views here.
@@ -182,6 +182,9 @@ def tablaKanban(request, id_proyecto):
     """
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     tipos = proyecto.tipo_us.all()
+    if not tipos:
+        messages.error(request,"No hay tipos de User Story creados")
+        return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     estados = tipos.first().estados_kanban.all()
     userstories = UserStories.objects.filter(id_proyecto = id_proyecto)
     contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories}
@@ -289,3 +292,47 @@ def eliminar_tipoUS(request,id,id_tipo):
             return redirect('listarTipoUS',id=id)
     
     return render(request,'UserStories/eliminar_tipoUS.html',contexto)
+
+
+def modificarUS(request,id_proyecto,id):
+    """
+    Vista que permite modificar un US que todavia no se encuentra asignado a un Sprint
+    con esta vista ,se permite ingresar las horas estimadas de un User story
+    Argumentos:
+        id_proyecto : id del proyecto
+        id :  id del US
+    
+    Retorno
+        HttpResponse
+    """
+
+    proyecto = get_object_or_404(Proyecto,id=id_proyecto)
+    us = UserStories.objects.get(id_us=id)
+    
+    # verfica si es que el US se encuentra ya asignado a un sprint 
+    if us.en_sprint == True:
+        messages.error(request,"El  US no puede modificarse, esta siendo usado en un sprint")
+        return redirect('product_backlog',id=id_proyecto)
+
+    else:    
+        
+        if request.method == 'POST':
+            form = ModificarUSForm(request.POST,instance = us)
+
+            if form.is_valid():
+                u = form.save()
+                u.save()
+                messages.success(request,"El US "+u.nombre+" se ha modificado satisfactoriamente")
+                return redirect('product_backlog',id=id_proyecto)
+            else:
+                messages.error(request,"El US no ha sido modificado")
+            
+            contexto = { 'proyecto': proyecto,
+                        'form': form
+                        }
+        else:
+            contexto = { 'proyecto': proyecto,
+                        'form': ModificarUSForm(instance=us)
+                        }
+        
+    return render(request,'UserStories/modificarUS.html',contexto)

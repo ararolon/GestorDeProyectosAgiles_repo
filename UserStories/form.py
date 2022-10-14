@@ -140,27 +140,18 @@ class UserStoryForm(forms.ModelForm):
          form.ModelForm        
    """
    def __init__(self,proyecto,*args,**kwargs):
-        """
-        Constructor del Formulario.
-        
-        """
-        PRIORIDAD_CHOICES = [
-        ('ALTA', 'Alta'),
-        ('MEDIA', 'Media'),
-        ('BAJA', 'Baja'),
-        ]
-   
         super(UserStoryForm, self).__init__(*args, **kwargs)
 
-              
-        self.fields['prioridad'].empty_label = 'Seleccionar la prioridad del User Story'
-        self.fields['prioridad']= forms.ChoiceField(widget=forms.RadioSelect, choices=PRIORIDAD_CHOICES)
         self.fields['tipo']= forms.ModelChoiceField(queryset = proyecto.tipo_us.all())
-        self.fields['horas_estimadas'] = forms.IntegerField(min_value=1,max_value=100)
+        self.fields['PN'] = forms.IntegerField(min_value=1,max_value=10,label='Prioridad de Negocio (1-10)')
+        self.fields['PT'] = forms.IntegerField(min_value=1, max_value=10, label='Prioridad Tecnica (1-10)')
+        self.fields['horas_estimadas'].required = False
+        self.fields['horas_estimadas'] = forms.IntegerField(min_value=0,max_value=100,initial=0)
         
    class Meta:
         model = UserStories
-        fields = ['nombre','descripcion','tipo','prioridad','comentarios','horas_estimadas']
+        fields = ['nombre','descripcion','tipo','PN','PT','comentarios','horas_estimadas']
+
         
 
 class CambiarEstadoUSForm(forms.ModelForm):
@@ -180,3 +171,22 @@ class CambiarEstadoUSForm(forms.ModelForm):
     class Meta:
         model = UserStories
         fields = ['estado']
+
+class ModificarUSForm(forms.ModelForm):
+
+    """
+    Formulario para modificar los datos de un US
+    """
+
+    disabled_fields = ('nombre,descripcion')
+
+    def __init__(self,*args,**kwargs):
+        
+      super(ModificarUSForm, self).__init__(*args, **kwargs)
+      self.fields['nombre'].disabled = True
+      self.fields['descripcion'].disabled = True 
+
+
+    class Meta:
+        model = UserStories
+        fields = ['nombre','descripcion','tipo','PN','PT','comentarios','horas_estimadas']
