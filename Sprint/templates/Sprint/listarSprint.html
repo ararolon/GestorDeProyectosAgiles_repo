@@ -52,7 +52,7 @@
                                         <li class="list-group-item">
                                             {{miembro.miembro}}
                                             {{miembro.capacidad_miembro}}
-                                            {% comment %} href="{% url 'sprint_miembros' sprintM.id_sprint %}" class="ml-3 bg-color-danger border-0">Seleccionar Miembros</a> {% endcomment %}
+                                             <a href="{% url 'asignar_us_miembro' miembro.id %}" class="ml-3 bg-color-danger border-0">Seleccionar Miembros</a> 
                                         </li>
                                     {% endif %}
                                 {% endfor %}

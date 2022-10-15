@@ -12,4 +12,5 @@ urlpatterns = [
     path('AsignarUS/<int:id_sprint>',views.asignar_us,name='asignarUS'),
     path('modificarSprint/<int:id>/<int:id_sprint>', views.modificarSprint, name='modificarSprint'),
     path('asignarMiembroSprint/<int:id_sprint>', views.asignarMiembroSprint, name='asignarMiembroSprint'),
+    path('asignar_us_miembro/<int:id_sprint_miembro>', views.asignarUSMiembro, name='asignar_us_miembro'),    
 ]

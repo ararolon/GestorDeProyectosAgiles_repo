@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-from Sprint.forms import AsignarUSSprintForm, MiembroSprintForm, crearSprintForm, modificarSprintForm
+from Sprint.forms import AsignarUSMiembroForm, AsignarUSSprintForm, MiembroSprintForm, crearSprintForm, modificarSprintForm
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
@@ -179,3 +179,23 @@ def asignar_us(request,id_sprint):
     return render(request,'Sprint/asignarUS.html',contexto)      
             
 
+def asignarUSMiembro(request, id_sprint_miembro):
+    """
+    Vista que donde el Scrum master puede seleccionar el rol a asignar a un usuario dentro del proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    
+    """
+   
+    sprint_miembro = SprintMiembros.objects.get(id=id_sprint_miembro)
+    if request.method == 'POST':
+        form = AsignarUSMiembroForm(sprint_miembro.sprint.id,request.POST, instance=sprint_miembro) 
+        if form.is_valid():
+            us = form.save()
+            
+            messages.success(request,"Se asigno correctamente")
+            return redirect('listarSprint', sprint_miembro.proyecto.id)
+    else:
+        form = AsignarUSMiembroForm(sprint_miembro.sprint.id,instance=sprint_miembro)
+    contexto = {'form': form,'id_proyecto':sprint_miembro.proyecto.id}
+    return render(request, 'Sprint/asignar_us_miembro.html', contexto)

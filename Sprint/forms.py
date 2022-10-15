@@ -70,7 +70,31 @@ class MiembroSprintForm(forms.ModelForm):
         self.fields['miembro'].queryset = Proyecto.objects.get(id=id_proyecto).miembros
         
     
+class AsignarUSMiembroForm(forms.ModelForm):
+    """
+    Formulario para asignar user stories a un miembro en un sprint.
+    Se considera que un US debe tener asignado horas de esfuerzo para poder ser asignado a un Sprint.
+    """
+    disabled_fields = ()
+    disabled_fields = ('miembro',)
+    
+    def __init__(self,id_sprint,*args, **kwargs):
+        super(AsignarUSMiembroForm,self).__init__(*args, **kwargs)
+        self.fields['us_asignado'].queryset = Sprint.objects.get(id=id_sprint).historias
         
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
+
+    class Meta:
+            model = SprintMiembros
+            fields = ['miembro','us_asignado']        
+    
+    # def clean(self):
+    #     datos = super().clean()
+    #     if(SprintMiembros.objects.filter(sprint=self.instance.sprint).filter(miembro=datos["miembro"]).exists()):
+    #         raise forms.ValidationError('No se pudo asignar US')
+    #     return datos
+
 
 class AsignarUSSprintForm(forms.ModelForm):
     """
@@ -89,4 +113,4 @@ class AsignarUSSprintForm(forms.ModelForm):
             model = Sprint
             fields = ['historias']
 
-     
+    
