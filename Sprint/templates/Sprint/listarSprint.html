@@ -18,10 +18,6 @@
                 <div class="card" style="margin:10px">
                     <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
                         <div class="card-header  bg-color-primary">Sprint #{{sprint.id}}
-                            {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
-                            <a href="{% url 'modificarSprint' sprint.id_proyecto sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Modificar Sprint</a>
-                            <a href="{% url 'asignarMiembroSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar Miembros</a>
-                            {% endif %}
                             {% if hayPlanificacion and not hayCurso %}
                                 {% if sprint.estado_sprint == 'En Planificacion' %}
                                 <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Iniciar Sprint</a>
@@ -30,6 +26,15 @@
                             {% if sprint.estado_sprint == 'En Curso' %}
                             <a href="{% url 'cancelarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Cancelar Sprint</a>
                             {% endif %}
+                            {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
+                            <a href="{% url 'modificarSprint' sprint.id_proyecto sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Modificar Sprint</a>
+                            <a href="{% url 'asignarMiembroSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar Miembros</a>
+                            {% endif %}
+                            {% if sprint.estado_sprint == 'En Planificacion' %}
+                            <a href="{% url 'asignarUS' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
+                            {% endif %}
+                            <a href="" class="btn btn-primary ml-3 bg-color-danger border-0">Sprint Backlog</a>
+                            {% comment %} {% url 'sprintbacklog' sprint.id  %} {% endcomment %}
                         </div>
 
                         <div class="card-body row">
@@ -39,20 +44,19 @@
                             <div class="col-12 "><u>Fecha de finalización: </u><p>{{ sprint.fecha_fin }}</p> </div>
                             <div class="col-12 "><u>Descripción: </u><p>{{ sprint.descripcion }}</p> </div>
                             <div class="col-12 "><u>Estado: </u><p>{{ sprint.estado_sprint }}</p> </div>
-                            {% if sprint.estado_sprint == 'En Planificacion' %}
-                            <a href="{% url 'asignarUS' sprint.id %}" class="ml-3 bg-color-danger border-0">Asignar User Stories al Sprint Backlog</a>
-                            {% endif %}
-
                         </div>
                         <div class="card-body">
-                            <h6>Miembros del Sprint:</h6>
+                            <h6><u>Miembros del Sprint:</u></h6>
                             <ul class="list-group list-group-flush">
                                 {% for miembro in sprintMiembros %}
                                     {% if sprint.id == miembro.sprint.id %}
                                         <li class="list-group-item">
-                                            {{miembro.miembro}}
-                                            {{miembro.capacidad_miembro}}
-                                             <a href="{% url 'asignar_us_miembro' miembro.id %}" class="ml-3 bg-color-danger border-0">Seleccionar Miembros</a> 
+                                            - {{miembro.miembro}}
+                                            <h6 class="card-text">Capacidad: {{miembro.capacidad_miembro}}</h6>
+                                            {% if not sprint.estado_sprint == 'Cancelado' %}
+                                                <a href="{% url 'asignar_us_miembro' miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar US</a> 
+                                            {% endif %}
+                                            <h6 class="card-text">User Storie: {{miembro.us_asignado}}</h6>
                                         </li>
                                     {% endif %}
                                 {% endfor %}

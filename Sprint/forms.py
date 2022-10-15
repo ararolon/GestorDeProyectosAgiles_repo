@@ -66,7 +66,7 @@ class MiembroSprintForm(forms.ModelForm):
 
     def __init__(self,id_proyecto,*args, **kwargs):
         super(MiembroSprintForm, self).__init__(*args, **kwargs)
-        # self.fields['miembro'].widget = forms.SelectMultiple()
+        self.fields['miembro'].empty_label = 'Seleccionar Miembro'
         self.fields['miembro'].queryset = Proyecto.objects.get(id=id_proyecto).miembros
         
     
@@ -80,6 +80,7 @@ class AsignarUSMiembroForm(forms.ModelForm):
     
     def __init__(self,id_sprint,*args, **kwargs):
         super(AsignarUSMiembroForm,self).__init__(*args, **kwargs)
+        self.fields['us_asignado'].empty_label = 'Seleccionar US'
         self.fields['us_asignado'].queryset = Sprint.objects.get(id=id_sprint).historias
         
         for field in self.disabled_fields:

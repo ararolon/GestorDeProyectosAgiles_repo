@@ -74,7 +74,7 @@ def asignarMiembroSprint(request,id_sprint):
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
-    print("fgd")
+
     sprint = get_object_or_404(Sprint,id=id_sprint)
     proyecto = get_object_or_404(Proyecto,id=sprint.id_proyecto)
     
@@ -88,7 +88,7 @@ def asignarMiembroSprint(request,id_sprint):
             f.sprint=sprint
             f.proyecto=proyecto
             f.save()          
-            # messages.success(request,"Se ha creado el sprint satisfactoriamente")
+            messages.success(request,"Miembro asignado correctamente")
             return redirect('listarSprint', proyecto.id)
     else:
         form = MiembroSprintForm(proyecto.id)
@@ -181,10 +181,9 @@ def asignar_us(request,id_sprint):
 
 def asignarUSMiembro(request, id_sprint_miembro):
     """
-    Vista que donde el Scrum master puede seleccionar el rol a asignar a un usuario dentro del proyecto
+    Vista en el que se puede seleccionar un US del Sprint Backlog para asignar a un usuario dentro del Sprint
     Argumentos:request: HttpRequest
     Return: HttpResponse
-    
     """
    
     sprint_miembro = SprintMiembros.objects.get(id=id_sprint_miembro)
@@ -192,8 +191,8 @@ def asignarUSMiembro(request, id_sprint_miembro):
         form = AsignarUSMiembroForm(sprint_miembro.sprint.id,request.POST, instance=sprint_miembro) 
         if form.is_valid():
             us = form.save()
-            
-            messages.success(request,"Se asigno correctamente")
+            us.save
+            messages.success(request,"US asignado correctamente")
             return redirect('listarSprint', sprint_miembro.proyecto.id)
     else:
         form = AsignarUSMiembroForm(sprint_miembro.sprint.id,instance=sprint_miembro)
