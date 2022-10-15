@@ -4,10 +4,9 @@ from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
 from Proyectos.models import Proyecto
-from Sprint.models import Sprint,estadoSprint
+from Sprint.models import Sprint, SprintMiembros,estadoSprint
 
 # Create your views here.
-
 
 def crearSprint (request,id):
     """
@@ -31,9 +30,10 @@ def crearSprint (request,id):
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     else:
         form = crearSprintForm(proyecto.id)
-    contexto = {'form': form,
-                'proyecto':proyecto
-                }
+    contexto = {
+        'form': form,
+        'proyecto':proyecto
+    }
     return render(request,'Sprint/crearSprint.html',context=contexto)    
 
 
@@ -52,22 +52,53 @@ def modificarSprint(request,id,id_sprint):
         if form.is_valid():
             s = form.save()
             s.save()
-            messages.success(request,"El Sprint "+sprint.nombre_sprint+" ha sido modificado satisfactoriamente")
+            messages.success(request,"El Sprint ha sido modificado satisfactoriamente")
             return redirect('listarSprint', id=id)
         else:
             messages.error(request,"El Sprint no ha sido modificado")
-        
         contexto = { 
-                    'proyecto': proyecto,
-                    'form': form
-                }
+            'proyecto': proyecto,
+            'form': form
+        }
     else:
         contexto = {
-                    'proyecto': proyecto,
-                    'form': modificarSprintForm(instance=sprint)
-                }
+            'proyecto': proyecto,
+            'form': modificarSprintForm(instance=sprint)
+        }
     return render(request,'Sprint/modificarSprint.html',contexto)
 
+
+def asignarMiembroSprint(request,id_sprint):
+    """
+    Vista para asignar miembros a un Sprint
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    print("fgd")
+    sprint = get_object_or_404(Sprint,id=id_sprint)
+    proyecto = get_object_or_404(Proyecto,id=sprint.id_proyecto)
+    
+    contexto = {'user': request.user,'proyecto':proyecto}
+    contexto['form'] = MiembroSprintForm(proyecto.id)
+
+    if request.method == 'POST':
+        form = MiembroSprintForm(proyecto.id,request.POST)
+        if form.is_valid():
+            f=form.save()  
+            f.sprint=sprint
+            f.proyecto=proyecto
+            f.save()          
+            # messages.success(request,"Se ha creado el sprint satisfactoriamente")
+            return redirect('listarSprint', proyecto.id)
+    else:
+        form = MiembroSprintForm(proyecto.id)
+    contexto = {
+        'form': form,
+        'proyecto':proyecto
+    }
+    return render(request,'Sprint/asignarMiembroSprint.html',context=contexto)    
+
+    
 
 def listarSprint(request,id):
     """
@@ -83,8 +114,8 @@ def listarSprint(request,id):
     sprint = proyecto.sprint.all().order_by('fecha_creacion')
     hayPlanificacion = proyecto.sprint.filter(estado_sprint=estadoSprint.EN_PLANIFICACION).exists()
     hayCurso = proyecto.sprint.filter(estado_sprint=estadoSprint.EN_EJECUCION).exists()
-    contexto = {'proyecto':proyecto,'sprint':sprint,'hayPlanificacion':hayPlanificacion,'hayCurso':hayCurso}
-     
+    sprintMiembros = SprintMiembros.objects.filter(proyecto=proyecto) 
+    contexto = {'sprintMiembros':sprintMiembros,'proyecto':proyecto,'sprint':sprint,'hayPlanificacion':hayPlanificacion,'hayCurso':hayCurso}
     return render(request,'Sprint/listarSprint.html',contexto)
 
 
@@ -115,36 +146,36 @@ def cancelarSprint(request, id_sprint):
 
 
 def asignar_us(request,id_sprint):
-  """
-  Vista para que un US sea asignado a un sprint
-  Argumentos:
-    request: HttpRequest
-    return: HttpResponse
-  """
+    """
+    Vista para que un US sea asignado a un sprint
+    Argumentos:
+        request: HttpRequest
+        return: HttpResponse
+    """
 
-  sprint = Sprint.objects.get(id = id_sprint)
-  proyecto = Proyecto.objects.get(id = sprint.id_proyecto)
-  contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto}
-  contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
+    sprint = Sprint.objects.get(id = id_sprint)
+    proyecto = Proyecto.objects.get(id = sprint.id_proyecto)
+    contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto}
+    contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
 
-  if request.method == 'POST':
-        form = AsignarUSSprintForm(proyecto,sprint,instance=proyecto,data=request.POST)
-        if form.is_valid():
-            historias = form.cleaned_data['historias']
-            sprint.historias.set(historias)
-           
-           # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
-            for u in historias :
-                u.en_sprint = True
-                u.save()              
+    if request.method == 'POST':
+            form = AsignarUSSprintForm(proyecto,sprint,instance=proyecto,data=request.POST)
+            if form.is_valid():
+                historias = form.cleaned_data['historias']
+                sprint.historias.set(historias)
+            
+            # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
+                for u in historias :
+                    u.en_sprint = True
+                    u.save()              
 
-            messages.success(request,"Los user stories han sido asignados exitosamente")
-            return redirect ('listarSprint',id = proyecto.id)
-        else:
-            messages.error(request,'Los user stories no pudieron ser asignados')
-  else:
-         contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
+                messages.success(request,"Los user stories han sido asignados exitosamente")
+                return redirect ('listarSprint',id = proyecto.id)
+            else:
+                messages.error(request,'Los user stories no pudieron ser asignados')
+    else:
+            contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
 
-  return render(request,'Sprint/asignarUS.html',contexto)      
+    return render(request,'Sprint/asignarUS.html',contexto)      
             
 

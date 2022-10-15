@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.utils import timezone
 from UserStories.models import UserStories
@@ -65,10 +66,14 @@ class Sprint(models.Model):
             return False
         return True
 
-    def sprintMiembros(self):
-        """
-        Metodo del modelo Sprint que retorna los miembros de un Sprint
-        """
-        return self.miembros_sprint
-    
-    
+
+class SprintMiembros(models.Model):
+    """
+    Modelo que representa los miembros de un Sprint
+    """
+    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE,null=True) #Sprint en el que esta asignado un miembro
+    miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE,null=True) #Miembro que participa en el sprint
+    capacidad_miembro = models.IntegerField(null=True, blank=False) #Capacidad de trabajo en horas
+    us_asignado = models.ForeignKey(UserStories,on_delete=models.CASCADE,null=True)
+    proyecto = models.ForeignKey('Proyectos.Proyecto', on_delete=models.CASCADE,null=True)
+

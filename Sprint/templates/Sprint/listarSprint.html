@@ -8,7 +8,7 @@
 
     <div class="row">
         <h3 
-            class="col-12 col-md-10">Sprint del Proyecto {{proyecto.nombre}}
+            class="col-12 col-md-10">Sprint del Proyecto "{{proyecto.nombre}}"
         </h3>
     </div>
     <hr>
@@ -20,15 +20,15 @@
                         <div class="card-header  bg-color-primary">Sprint #{{sprint.id}}
                             {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
                             <a href="{% url 'modificarSprint' sprint.id_proyecto sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Modificar Sprint</a>
-                            {% comment %} <a href="{% url 'asignarMiembroSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar Miembros</a> {% endcomment %}
+                            <a href="{% url 'asignarMiembroSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar Miembros</a>
                             {% endif %}
                             {% if hayPlanificacion and not hayCurso %}
                                 {% if sprint.estado_sprint == 'En Planificacion' %}
-                                <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Iniciar Sprint</a>
+                                <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Iniciar Sprint</a>
                                 {% endif %}
                             {% endif %}
                             {% if sprint.estado_sprint == 'En Curso' %}
-                            <a href="{% url 'cancelarSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Cancelar Sprint</a>
+                            <a href="{% url 'cancelarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Cancelar Sprint</a>
                             {% endif %}
                         </div>
 
@@ -44,17 +44,20 @@
                             {% endif %}
 
                         </div>
-
-                        <!-- <div class="card-body">
+                        <div class="card-body">
                             <h6>Miembros del Sprint:</h6>
                             <ul class="list-group list-group-flush">
-                                {% for sprintM in sprintM %}
-                                    <li class="list-group-item">{{sprintM}}
-                                        <a href="{% url 'sprint_miembros' sprintM.id_sprint %}" class="ml-3 bg-color-danger border-0">Seleccionar Miembros</a>
-                                    </li>
+                                {% for miembro in sprintMiembros %}
+                                    {% if sprint.id == miembro.sprint.id %}
+                                        <li class="list-group-item">
+                                            {{miembro.miembro}}
+                                            {{miembro.capacidad_miembro}}
+                                            {% comment %} href="{% url 'sprint_miembros' sprintM.id_sprint %}" class="ml-3 bg-color-danger border-0">Seleccionar Miembros</a> {% endcomment %}
+                                        </li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             {% endfor %}        
