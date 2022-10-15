@@ -37,6 +37,7 @@
                             <div class="col-12 "><u>Fecha de finalización: </u><p>{{ sprint.fecha_fin }}</p> </div>
                             <div class="col-12 "><u>Descripción: </u><p>{{ sprint.descripcion }}</p> </div>
                             <div class="col-12 "><u>Estado: </u><p>{{ sprint.estado_sprint }}</p> </div>
+                            <div class="col-12 "><u>capacidad </u><p>{{ sprint.capacidad_us}}</p> </div>
                             {% if sprint.estado_sprint == 'En Planificacion' %}
                             <a href="{% url 'asignarUS' sprint.id %}" class="ml-3 bg-color-danger border-0">Asignar User Stories al Sprint Backlog</a>
                             {% endif %}

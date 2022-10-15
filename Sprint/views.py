@@ -177,6 +177,8 @@ def asignar_us(request,id_sprint):
            # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
             for u in historias :
                 u.en_sprint = True
+                sprint.capacidad_us = sprint.capacidad_us + u.horas_estimadas
+                sprint.save()
                 u.save()              
 
             messages.success(request,"Los user stories han sido asignados exitosamente")

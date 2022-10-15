@@ -22,17 +22,19 @@
                           </div>
                         </div>
                     </div>
-                    <div class="card-body row">
-                        <div class="col-12 "><u>Descripción: </u><p>{{ tipoUS.descripcion }}</p> 
-                            
-                            <a style="text-decoration: none;" class="" data-bs-toggle="collapse" href="#EstadoKanban" role="button" aria-expanded="false" aria-controls="EstadoKanban">
-                                Ver Estado Kanban
-                            </a>
-                            <div class="collapse" id="EstadoKanban">
-                                        {% for e in tipoUS.estados_kanban.all %}
-                                            <p class="mx-1"><span class="">{{ e.nombre }}</span></p>
-                                        {% endfor %}
-                                
+
+                    <div class="" id="collapse_tipoUS_{{tipoUS.id}}" aria-labelledby="header_tipoUS_{{tipoUS.id}}" data-parent="#listarTipoUS">
+                        <div class="card-body row" >
+                           <div class="col-12 "><u>Descripción: </u><p>{{ tipoUS.descripcion }}</p> 
+                                <a data-toogle="collapse" style="color:blue" onclick="document.getElementById('tipoUS-{{tipoUS.id}}').classList.toggle('show');"
+                                    role="button" aria-expanded="false" aria-controls="tipoUS-{{tipoUS.id}}">Ver Estados Kanban</a>
+                                    <div class="collapse" id="tipoUS-{{tipoUS.id}}"> 
+                                        <div class="col-11 row">
+                                            {% for e in tipoUS.estados_kanban.all %}
+                                                <p class="mx-1"><span class="">{{ e.nombre }}</span></p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
                             </div>
                             <div class="row">
                                 <div class="d-flex flex-row-reverse">
@@ -41,10 +43,10 @@
                                         <a href="{% url 'modificar_tiposUS' proyecto.id  tipoUS.id %}" class="btn btn-outline-primary m-2">Modificar<a>
                                   
                                 </div>
-                            </div>   
-                      </div>
-                    </div>    
-                </div>
+                            </div>  
+                        </div>     
+                    </div>
+                </div>    
             {% endfor %}
         </div>
     </div>

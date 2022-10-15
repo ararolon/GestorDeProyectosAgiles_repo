@@ -18,20 +18,17 @@
                 <div>
                    <div class="row"> 
                         {{t.nombre}}
-                   <div>
-                    <a style="text-decoration: none;" class="" data-bs-toggle="collapse" href="#EstadoKanban" role="button" aria-expanded="false" aria-controls="EstadoKanban">
-                        Ver Estado Kanban
-                    </a>
-                    <div class="collapse" id="EstadoKanban">
-                                {% for e in t.estados_kanban.all %}
-                                    <p class="mx-1"><span class="">{{ e.nombre }}</span></p>
-                                {% endfor %}
-                        
-                    </div>    
-
-                </div>
-             
-
+                   </div>
+                    <a data-toggle="collapse" style="color: blue;"
+                    onclick="document.getElementById('t-{{t.id}}').classList.toggle('show');"
+                    role="button" aria-expanded="false" aria-controls="t-{{t.id}}">Ver Estados Kanban</a>
+                    <div class="collapse" id="t-{{t.id}}">
+                        <div class="col-11 row">
+                            {% for e in t.estados_kanban.all %}
+                                <p class="mx-1"><span class="">{{ e.nombre }}</span></p>
+                            {% endfor %}
+                        </div>
+                    </div>  
                 {% endfor %}
             </div>   
        
