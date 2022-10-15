@@ -6,6 +6,8 @@ from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
 from .form import EstadosKanbanForm, ModificarUSForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto
+from Sprint.models import Sprint
+
 # Create your views here.
 
 """
@@ -186,7 +188,12 @@ def tablaKanban(request, id_proyecto):
         messages.error(request,"No hay tipos de User Story creados")
         return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     estados = tipos.first().estados_kanban.all()
-    userstories = UserStories.objects.filter(id_proyecto = id_proyecto)
+    userstories = []
+    for us in UserStories.objects.filter(id_proyecto = id_proyecto):
+        sprint = Sprint.objects.filter(id_proyecto = id_proyecto, historias = us.id_us).first()
+        if sprint and sprint.estado_sprint == "En Curso":
+            userstories.append(us)
+    # userstories = UserStories.objects.filter(id_proyecto = id_proyecto)
     contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories}
     return render(request,'UserStories/tabla_kanban.html',contexto)
 

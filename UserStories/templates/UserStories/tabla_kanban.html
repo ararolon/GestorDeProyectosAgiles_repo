@@ -5,14 +5,14 @@
 {% block content %}
 
 <div class="row">
-    <h3 
+    <h2 
         class="col-12 col-md-10">Tabla Kanban
-    </h3>
+    </h2>
 </div>
 <hr>
 
 {% for tipo in tipos %}
-<h2>{{tipo.nombre}}</h2>
+<h3>{{tipo.nombre}}</h3>
 <div class="container-fluid pb-5" style="overflow-x: scroll;">
     <div class="row flex-row flex-sm-nowrap py-3">
         {% for estado in tipo.estados_kanban.all|dictsort:"id" %}
