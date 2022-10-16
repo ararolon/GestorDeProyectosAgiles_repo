@@ -13,18 +13,26 @@ from UserStories.views import *
 Test para funciones de views.py UserStories
 """
 
+@pytest.mark.django_db
 class Test_userstories_views(TestCase):
 
     def setUp(self):
         tipo = TipoUSerStory.objects.create(nombre='prueba')
         self.client = Client()
+        self.sprint = Sprint.objects.create(nombre_sprint='test',descripcion='prueba', estado_sprint = "En Curso", capacidad = 10)
+
         self.proyecto = Proyecto.objects.create(nombre='test',descripcion='prueba')
         self.proyecto.tipo_us.add(tipo)
+        self.proyecto.sprint.add(self.sprint)
         self.proyecto.save()
+        
         estado_inicial = Estados_Kanban.objects.create(nombre='inicial')
         self.estado = Estados_Kanban.objects.create(nombre='prueba')
         self.us = UserStories.objects.create(id_proyecto=self.proyecto.id,nombre='prueba', estado= estado_inicial)
-
+        
+        self.sprint.historias.add(self.us)
+        self.sprint.id_proyecto = self.proyecto.id
+        self.sprint.save()
 
     def test_crear_estadokanban(self):
         path = reverse('crear_estado',args=[self.proyecto.id])
