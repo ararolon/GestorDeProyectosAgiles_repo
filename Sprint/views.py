@@ -5,7 +5,7 @@ from django.forms import model_to_dict
 from django.contrib import messages
 from Proyectos.models import Proyecto
 from Sprint.models import Sprint,estadoSprint
-
+from UserStories.models import UserStories
 # Create your views here.
 
 
@@ -164,9 +164,10 @@ def asignar_us(request,id_sprint):
 
   sprint = Sprint.objects.get(id = id_sprint)
   proyecto = Proyecto.objects.get(id = sprint.id_proyecto)
-  contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto}
+  historias = UserStories.objects.filter(id_proyecto = proyecto.id)
+  contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto,'historias': historias}
   contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
-
+  suma = 0
   if request.method == 'POST':
         form = AsignarUSSprintForm(proyecto,sprint,instance=proyecto,data=request.POST)
         if form.is_valid():
@@ -176,7 +177,12 @@ def asignar_us(request,id_sprint):
            # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
             for u in historias :
                 u.en_sprint = True
-                u.save()              
+                print(u.nombre)
+                u.save()
+                suma = suma +  u.horas_estimadas
+                sprint.capacidad_us = suma
+                sprint.save()
+                          
 
             messages.success(request,"Los user stories han sido asignados exitosamente")
             return redirect ('listarSprint',id = proyecto.id)
@@ -187,4 +193,24 @@ def asignar_us(request,id_sprint):
 
   return render(request,'Sprint/asignarUS.html',contexto)      
             
+
+
+def ver_sprintbacklog(request,id):
+    """
+    Vista que permite ver el sprint backlog de un sprint
+
+    Argumentos:
+        request : HttRequest
+        id : id del sprint
+
+    Retorna:
+         HttpResponse    
+    """
+
+    sprint = Sprint.objects.get(id=id)
+    contexto = {'sprint':sprint}  
+
+    
+
+    return render(request,'Sprint/sprintbacklog.html',contexto)
 

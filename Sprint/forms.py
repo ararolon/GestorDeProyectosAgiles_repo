@@ -5,6 +5,7 @@ from UserStories.models import Estados_Kanban
 from Usuarios.models import *
 from Proyectos.models import *
 from Sprint.sprint import sprintProyecto
+from UserStories.models import Estados_Kanban
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 

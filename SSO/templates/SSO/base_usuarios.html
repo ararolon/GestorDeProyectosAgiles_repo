@@ -29,27 +29,27 @@
         </style>
     </head>
     <body>
-
-        <div class="container">
-            {% include 'SSO/NavBar_usuarios.html' %}
-        </br>
-            {% if messages %}
-            {% for message in messages %}
-              {% if message.tags == 'success' %}
+      
+      {% include 'SSO/NavBar_usuarios.html' %}   
+      </br>
+        {% if messages %}
+          {% for message in messages %}
+            {% if message.tags == 'success' %}
               <div class="alert alert-success" role="alert">
-                {{message}}
+                  {{message}}
               </div>
-              {%else%}
+            {%else%}
               <div class="alert alert-danger" role="alert">
                 {{message}}
               </div>
-              {% endif %}
+            {% endif %}
 
-            {% endfor %}
+          {% endfor %}
         {% endif %}
-            {% block content %} 
-            {% endblock %}
-        </div>
+        
+        {% block content %} 
+        {% endblock %}
+       
     
     
         <!-- Option 2: Separate Popper and Bootstrap JS -->
