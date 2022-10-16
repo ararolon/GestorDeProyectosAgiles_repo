@@ -57,7 +57,7 @@ class TiposUSForm(forms.ModelForm):
         self.fields['estados_kanban'].empty_label = 'Seleccionar los estados para tablero Kanban'
         self.fields['estados_kanban'].required = True
         self.fields['estados_kanban'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                                       queryset= Estados_Kanban.objects.all(),initial=Estados_Kanban.objects.filter(defecto=True),
+                                                                       queryset= Estados_Kanban.objects.all().order_by('id'),initial=Estados_Kanban.objects.filter(defecto=True),
                                                                        label = "Seleccione los estados para el tablero Kanban")
         
 
@@ -152,8 +152,25 @@ class UserStoryForm(forms.ModelForm):
         model = UserStories
         fields = ['nombre','descripcion','tipo','PN','PT','comentarios','horas_estimadas']
 
+        
 
-
+class CambiarEstadoUSForm(forms.ModelForm):
+    """
+    Formulario utilizado para cambiar el estado de un user story
+    clase Padre:
+          form.ModelForm        
+    """
+    def __init__(self,proyecto,*args,**kwargs):
+        """
+        Constructor del Formulario.
+        
+        """
+        super(CambiarEstadoUSForm, self).__init__(*args, **kwargs)
+        self.fields['estado']= forms.ModelChoiceField(queryset = proyecto.tipo_us.all().first().estados_kanban.all())
+        
+    class Meta:
+        model = UserStories
+        fields = ['estado']
 
 class ModificarUSForm(forms.ModelForm):
 
@@ -173,5 +190,3 @@ class ModificarUSForm(forms.ModelForm):
     class Meta:
         model = UserStories
         fields = ['nombre','descripcion','tipo','PN','PT','comentarios','horas_estimadas']
-
-

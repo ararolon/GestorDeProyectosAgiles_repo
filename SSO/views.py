@@ -104,10 +104,11 @@ def configurar_sso(request):
     if not Estados_Kanban.objects.filter(nombre='En curso').exists():
         estado = Estados_Kanban.objects.create(nombre='En curso',defecto=True)
         estado.save()
+    if not Estados_Kanban.objects.filter(nombre='Cancelado').exists():
+        estado = Estados_Kanban.objects.create(nombre='Cancelado')
     if not Estados_Kanban.objects.filter(nombre='Finalizado').exists():
-        estado = Estados_Kanban.objects.create(nombre='Finalizado',defecto=True)
+        estado = Estados_Kanban.objects.create(nombre='Finalizado',defecto=True, id=100)
         estado.save()
-
 
     sa = SocialApp.objects.create(name="sso")
     sa.save()

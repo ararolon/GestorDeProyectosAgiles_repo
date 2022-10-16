@@ -1,8 +1,11 @@
 from django import forms
 from Sprint.models import Sprint, SprintMiembros,estadoSprint
 from functools import partial
+from UserStories.models import Estados_Kanban
 from Usuarios.models import *
 from Proyectos.models import *
+from Sprint.sprint import sprintProyecto
+from UserStories.models import Estados_Kanban
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -115,9 +118,9 @@ class AsignarUSSprintForm(forms.ModelForm):
         super(AsignarUSSprintForm,self).__init__(*args, **kwargs)
         #Obtiene los US que tengan horas estimadas asignadas , es decir horas estimadas >0 y ordena por prioridad , de mayor a menor
         self.fields['historias'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                          queryset= UserStories.objects.filter(id_proyecto = proyecto.id).filter(horas_estimadas__gte = 1).order_by('-Prioridad'),
+                                                          queryset= UserStories.objects.filter(id_proyecto = proyecto.id).filter(horas_estimadas__gte = 1).order_by('-Prioridad').exclude(estado= Estados_Kanban.objects.get(nombre='Finalizado')).exclude(estado = Estados_Kanban.objects.get(nombre='Cancelado')),
                                                            label= 'Seleccione los User Stories que seran trabajados en el Sprint',initial=sprint.historias.all())
-
+        
     class Meta:
             model = Sprint
             fields = ['historias']

@@ -2,10 +2,12 @@ from multiprocessing import context
 from re import U
 from django.shortcuts import render, redirect, get_object_or_404
 
-from UserStories.models import TipoUSerStory, UserStories
-from .form import EstadosKanbanForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm,ModificarTipoUSForm,ModificarUSForm
+from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
+from .form import EstadosKanbanForm, ModificarUSForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto
+from Sprint.models import Sprint, estadoSprint
+
 # Create your views here.
 
 """
@@ -91,6 +93,9 @@ def crear_us(request,id):
             us = form.cleaned_data['nombre']
             us = form.save()
             us.id_proyecto = proyecto.id
+            us.estado = us.tipo.estados_kanban.all().first()
+            us.save()
+            us.id_proyecto = proyecto.id
             us.Prioridad = (((0.6)*us.PN)+((0.4)*us.PT)+us.PS)
             us.save()
             messages.success(request,"El User Story "+us.nombre+" ha sido creado satisfactoriamente")
@@ -171,6 +176,52 @@ def listarTipoUS(request,id):
      
     return render(request,'UserStories/listarTipoUS.html',contexto)
 
+def tablaKanban(request, id_proyecto):
+    """
+    Vista que permite visualizar los estados de un user story
+      Argumentos:
+          request: HttpRequest
+          id_tipoUs : id del tipo de user story
+        Retorna:
+          HttpResponse
+    """
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    tipos = proyecto.tipo_us.all()
+    if not tipos:
+        messages.error(request,"No hay tipos de User Story creados")
+        return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
+    estados = tipos.first().estados_kanban.all()
+    sprint = Sprint.objects.filter(id_proyecto=proyecto.id).filter(estado_sprint = "En Curso").first()
+    
+    if not sprint:
+        messages.error(request,"No hay un sprint en Curso")
+        return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
+    userstories = sprint.historias.all()
+    contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories}
+
+    return render(request,'UserStories/tabla_kanban.html',contexto)
+
+def cambiarEstado(request,id_us,id_estado):
+    """
+    Vista que permite cambiar el estado de un user story
+      Argumentos:
+          request: HttpRequest
+          id_us : id del user story
+          id_estado : id del estado
+        Retorna:
+          HttpResponse
+    """
+    us = get_object_or_404(UserStories,id_us=id_us)
+    estado = get_object_or_404(Estados_Kanban,id=id_estado)
+    proyecto = get_object_or_404(Proyecto,id=us.id_proyecto)
+
+    if (not proyecto.scrumMaster == request.user and not id_estado > us.estado.id):
+        messages.error(request,'Solo el scrummaster puede realizar esa operacion')
+        return redirect('tabla_kanban',id_proyecto=proyecto.id)
+
+    us.estado = estado
+    us.save()
+    return redirect('tabla_kanban',id_proyecto=proyecto.id)
 
 def modificar_tipoUS(request,id,id_tipo):
     """
@@ -258,7 +309,6 @@ def modificarUS(request,id_proyecto,id):
     """
     Vista que permite modificar un US que todavia no se encuentra asignado a un Sprint
     con esta vista ,se permite ingresar las horas estimadas de un User story
-
     Argumentos:
         id_proyecto : id del proyecto
         id :  id del US
@@ -297,10 +347,3 @@ def modificarUS(request,id_proyecto,id):
                         }
         
     return render(request,'UserStories/modificarUS.html',contexto)
-        
-
-
-
-
-
-
