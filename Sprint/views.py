@@ -167,7 +167,7 @@ def asignar_us(request,id_sprint):
   historias = UserStories.objects.filter(id_proyecto = proyecto.id)
   contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto,'historias': historias}
   contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
-
+  suma = 0
   if request.method == 'POST':
         form = AsignarUSSprintForm(proyecto,sprint,instance=proyecto,data=request.POST)
         if form.is_valid():
@@ -177,9 +177,12 @@ def asignar_us(request,id_sprint):
            # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
             for u in historias :
                 u.en_sprint = True
-                sprint.capacidad_us = sprint.capacidad_us + u.horas_estimadas
+                print(u.nombre)
+                u.save()
+                suma = suma +  u.horas_estimadas
+                sprint.capacidad_us = suma
                 sprint.save()
-                u.save()              
+                          
 
             messages.success(request,"Los user stories han sido asignados exitosamente")
             return redirect ('listarSprint',id = proyecto.id)
