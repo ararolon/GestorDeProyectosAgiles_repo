@@ -79,25 +79,23 @@ def asignarMiembroSprint(request,id_sprint):
     proyecto = get_object_or_404(Proyecto,id=sprint.id_proyecto)
     
     contexto = {'user': request.user,'proyecto':proyecto}
-    contexto['form'] = MiembroSprintForm(proyecto.id)
-
+    
     if request.method == 'POST':
-        form = MiembroSprintForm(proyecto.id,request.POST)
+        form = MiembroSprintForm(id_sprint,request.POST)
         if form.is_valid():
             f=form.save()  
-            f.sprint=sprint
             f.proyecto=proyecto
             f.save()          
             messages.success(request,"Miembro asignado correctamente")
             return redirect('listarSprint', proyecto.id)
     else:
-        form = MiembroSprintForm(proyecto.id)
+        form = MiembroSprintForm(id_sprint)
     contexto = {
         'form': form,
-        'proyecto':proyecto
+        'proyecto':proyecto,
+        'sprint':sprint
     }
     return render(request,'Sprint/asignarMiembroSprint.html',context=contexto)    
-
     
 
 def listarSprint(request,id):
@@ -191,7 +189,7 @@ def asignarUSMiembro(request, id_sprint_miembro):
         form = AsignarUSMiembroForm(sprint_miembro.sprint.id,request.POST, instance=sprint_miembro) 
         if form.is_valid():
             us = form.save()
-            us.save
+            us.save()
             messages.success(request,"US asignado correctamente")
             return redirect('listarSprint', sprint_miembro.proyecto.id)
     else:

@@ -60,15 +60,23 @@ class MiembroSprintForm(forms.ModelForm):
     """
     class Meta:
         model = SprintMiembros
-        fields = ('miembro','capacidad_miembro')
+        fields = ('miembro','capacidad_miembro','sprint',)
 
     capacidad_miembro = forms.IntegerField(label="Capacidad del usuario en horas", min_value=0)
 
-    def __init__(self,id_proyecto,*args, **kwargs):
+    def __init__(self,id_sprint,*args, **kwargs):
         super(MiembroSprintForm, self).__init__(*args, **kwargs)
+        self.fields['sprint'].initial = id_sprint
+        sprint = Sprint.objects.get(id=id_sprint)
         self.fields['miembro'].empty_label = 'Seleccionar Miembro'
-        self.fields['miembro'].queryset = Proyecto.objects.get(id=id_proyecto).miembros
+        self.fields['miembro'].queryset = Proyecto.objects.get(id=sprint.id_proyecto).miembros
         
+    def clean(self):
+        datos = super().clean()
+        if(SprintMiembros.objects.filter(sprint=datos['sprint']).filter(miembro=datos["miembro"]).exists()):
+            raise forms.ValidationError('El miembro ya ha sido asignado')
+        return datos    
+
     
 class AsignarUSMiembroForm(forms.ModelForm):
     """
@@ -90,12 +98,12 @@ class AsignarUSMiembroForm(forms.ModelForm):
             model = SprintMiembros
             fields = ['miembro','us_asignado']        
     
-    # def clean(self):
-    #     datos = super().clean()
-    #     if(SprintMiembros.objects.filter(sprint=self.instance.sprint).filter(miembro=datos["miembro"]).exists()):
-    #         raise forms.ValidationError('No se pudo asignar US')
-    #     return datos
-
+    def clean(self):
+        datos = super().clean()
+        if(SprintMiembros.objects.filter(us_asignado=datos["us_asignado"]).exists()):
+            raise forms.ValidationError('No se pudo asignar US, ya esta en uso')
+        return datos
+    
 
 class AsignarUSSprintForm(forms.ModelForm):
     """
