@@ -12,7 +12,7 @@ class Test_sprint_views(TestCase):
     def setUp(self):
         self.proyecto = Proyecto.objects.create(nombre='test',id_proyecto='1',descripcion='prueba')
         self.sprint = Sprint.objects.create(nombre_sprint='testSprint', descripcion='testSprint', id_proyecto=self.proyecto.id)
-    
+
     def test_crear_Sprint(self):
         path = reverse('crearSprint',args=[self.proyecto.id])
         response = self.client.get(path)
@@ -25,12 +25,6 @@ class Test_sprint_views(TestCase):
         self.assertEqual(response.status_code, 200,"Error")
         self.assertTemplateUsed(response, 'Sprint/listarSprint.html')
  
-    def test_mostrar_sprint(self):
-        path = reverse('mostrarSprint')
-        response = self.client.get(path)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'Sprint/mostrarSprint.html')   
-
     def test_iniciarSprint(self):
         path = reverse('iniciarSprint', args=[self.sprint.id])
         response = self.client.get(path)
@@ -40,3 +34,21 @@ class Test_sprint_views(TestCase):
         path = reverse('cancelarSprint', args=[self.sprint.id])
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
+
+    def test_modificarSprint(self):
+        path = reverse('modificarSprint',args=[self.proyecto.id,self.sprint.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200,"Error")
+        self.assertTemplateUsed(response, 'Sprint/modificarSprint.html')
+    
+    def test_asignarMiembroSprint(self):
+        path = reverse('asignarMiembroSprint',args=[self.sprint.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200,"Error")
+        self.assertTemplateUsed(response, 'Sprint/asignarMiembroSprint.html')
+
+    def test_asignarUS(self):
+        path = reverse('asignarUS',args=[self.sprint.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200,"Error")
+        self.assertTemplateUsed(response, 'Sprint/asignarUS.html')

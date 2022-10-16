@@ -17,10 +17,6 @@ class Test_sprint_urls(TestCase):
    def test_crearSprint(self):
       url = reverse('crearSprint', args=[self.proyecto.id])
       self.assertEqual(resolve(url).func, crearSprint, "no se pudo crear sprint")
-
-   def test_mostrarSprint(self):
-      url = reverse('mostrarSprint')
-      self.assertEqual(resolve(url).func, mostrarSprint, "no se pudo mostrar sprint")
    
    def test_listarSprint(self):
       url = reverse('listarSprint',args=[self.proyecto.id])
@@ -33,3 +29,16 @@ class Test_sprint_urls(TestCase):
    def test_cancelarSprint(self):
       url = reverse('cancelarSprint', args=[self.sprint.id])
       self.assertEqual(resolve(url).func, cancelarSprint, "no se pudo cancelar sprint")
+   
+   def test_modificarSprint(self):
+      url = reverse('modificarSprint', args=[self.proyecto.id,self.sprint.id])
+      self.assertEqual(resolve(url).func, modificarSprint, "no se pudo modificar sprint")
+   
+   def test_asignarMiembroSprint(self):
+      url = reverse('asignarMiembroSprint', args=[self.sprint.id])
+      self.assertEqual(resolve(url).func, asignarMiembroSprint, "no se pudo asignar miembro al sprint")
+
+   def test_asignarUS(self):
+      url = reverse('asignarUS', args=[self.sprint.id])
+      self.assertEqual(resolve(url).func, asignar_us, "no se pudo asignar US al sprint")
+   
