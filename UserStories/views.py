@@ -95,6 +95,9 @@ def crear_us(request,id):
             us.id_proyecto = proyecto.id
             us.estado = us.tipo.estados_kanban.all().first()
             us.save()
+            us.id_proyecto = proyecto.id
+            us.Prioridad = (((0.6)*us.PN)+((0.4)*us.PT)+us.PS)
+            us.save()
             messages.success(request,"El User Story "+us.nombre+" ha sido creado satisfactoriamente")
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
                 
@@ -189,8 +192,13 @@ def tablaKanban(request, id_proyecto):
         return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     estados = tipos.first().estados_kanban.all()
     sprint = Sprint.objects.filter(id_proyecto=proyecto.id).filter(estado_sprint = "En Curso").first()
+    
+    if not sprint:
+        messages.error(request,"No hay un sprint en Curso")
+        return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     userstories = sprint.historias.all()
     contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories}
+
     return render(request,'UserStories/tabla_kanban.html',contexto)
 
 def cambiarEstado(request,id_us,id_estado):

@@ -13,6 +13,20 @@ rm -rf tests/__pycache__
 rm -rf UserStories/__pycache__
 rm -rf Usuarios/__pycache__
 
+rm -rf .git/migrations
+rm -rf .gitignore/migrations
+rm -rf core/migrations
+rm -rf permisos/migrations
+rm -rf Proyectos/migrations
+rm -rf .pytest_cache/migrations
+rm -rf pytest.ini/migrations
+rm -rf requirements.txt/migrations
+rm -rf Sprint/migrations
+rm -rf SSO/migrations
+rm -rf tests/migrations
+rm -rf UserStories/migrations
+rm -rf Usuarios/migrations
+
 
 mkdir core/migrations
 mkdir permisos/migrations
