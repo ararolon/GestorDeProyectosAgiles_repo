@@ -181,7 +181,7 @@ def tablaKanban(request, id_proyecto):
     Vista que permite visualizar los estados de un user story
       Argumentos:
           request: HttpRequest
-          id_tipoUs : id del tipo de user story
+          id_proyecto : id del proyecto
         Retorna:
           HttpResponse
     """
