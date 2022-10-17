@@ -29,18 +29,18 @@ Usuarios.apps module
    :undoc-members:
    :show-inheritance:
 
-Usuarios.models module
-----------------------
+Usuarios.forms module
+---------------------
 
-.. automodule:: Usuarios.models
+.. automodule:: Usuarios.forms
    :members:
    :undoc-members:
    :show-inheritance:
 
-Usuarios.tests module
----------------------
+Usuarios.models module
+----------------------
 
-.. automodule:: Usuarios.tests
+.. automodule:: Usuarios.models
    :members:
    :undoc-members:
    :show-inheritance:
