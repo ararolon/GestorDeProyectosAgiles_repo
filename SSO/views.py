@@ -12,6 +12,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.urls import reverse
 from django.contrib import messages
 from permisos.models import RolesdeSistema 
+from UserStories.models import Estados_Kanban
 
 from . import decoradores
 
@@ -96,26 +97,18 @@ def configurar_sso(request):
         ]
         rol.asignar_permisos(lista_de_permisos)
     
-    # if not RolesdeSistema.objects.filter(nombre='Product Owner').exists():
-    #     rol = RolesdeSistema.objects.create(nombre='Product Owner', defecto=True)
-    #     rol.permisos.clear()
-    #     lista_de_permisos = [
-    #         '_acceder_al_sistema',
-    #         '_visualizar_roles',
-    #         '_visualizar_proyecto',
-    #         '_visualizar_historial_proyecto',
-    #         '_crear_us',
-    #         '_modificar_us',
-    #         '_modificar_estado_us',
-    #         '_cancelar_us',
-    #         '_consultar_historial_us',
-    #         '_crear_tipos_us',
-    #         '_modificar_tipos_us',
-    #         '_visualizar_kanban',
-    #         '_asignar_us'
-    #     ]
-    #     rol.asignar_permisos(lista_de_permisos)
-
+    #se crean los estados Kanban por defecto en el sistema
+    if not Estados_Kanban.objects.filter(nombre='Pendiente').exists():
+        estado = Estados_Kanban.objects.create(nombre='Pendiente',defecto=True)
+        estado.save()
+    if not Estados_Kanban.objects.filter(nombre='En curso').exists():
+        estado = Estados_Kanban.objects.create(nombre='En curso',defecto=True)
+        estado.save()
+    if not Estados_Kanban.objects.filter(nombre='Cancelado').exists():
+        estado = Estados_Kanban.objects.create(nombre='Cancelado')
+    if not Estados_Kanban.objects.filter(nombre='Finalizado').exists():
+        estado = Estados_Kanban.objects.create(nombre='Finalizado',defecto=True, id=100)
+        estado.save()
 
     sa = SocialApp.objects.create(name="sso")
     sa.save()

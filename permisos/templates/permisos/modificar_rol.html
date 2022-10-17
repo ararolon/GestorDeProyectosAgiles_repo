@@ -33,8 +33,12 @@
     <form method="POST" class="col-12 col-md-8 mx-auto">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type="submit" class="btn btn-primary mr-3 border-0 bg-color-accent" value="Modificar Rol" >
-        <a href="/listarRol" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar Modificacion</a>
+        
+       </br>
+        <div style="text-align:center" >
+            <input type="submit" class="btn btn-primary col-8 col-md-5 mx-auto" value="Modificar" >
+            <a href="/listarRol" class="btn btn-danger col-8 col-md-5 mx-auto">Cancelar</a>
+        </div>
     </form>
 
 </div>

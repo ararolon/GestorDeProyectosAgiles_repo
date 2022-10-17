@@ -15,4 +15,9 @@ urlpatterns = [
     path('importarTipoUS/<int:id>',views.importar_tipoUS,name='importar_tipoUS'),
     path('productBacklog/<int:id>',views.ver_product_backlog,name='product_backlog'),
     path('listarTipoUS/<int:id>',views.listarTipoUS,name='listarTipoUS'),
+    path('tabla_kanban/<int:id_proyecto>',views.tablaKanban,name='tabla_kanban'),
+    path('cambiarEstado/<int:id_us>/estado/<int:id_estado>',views.cambiarEstado,name='cambiarEstado'),
+    path('modificarTipoUS/<int:id>/<int:id_tipo>/',views.modificar_tipoUS,name='modificar_tiposUS'),
+    path('eliminarTiposUS/<int:id>/<int:id_tipo>/',views.eliminar_tipoUS,name='eliminar_tipoUS'),
+    path('modificarUS/<int:id_proyecto>/<int:id>/',views.modificarUS,name='modificar_us'),
 ]

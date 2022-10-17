@@ -167,7 +167,7 @@ def importarRol(request, id_proyecto):
         form = ImportarRolForm( instance=proyecto, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Los miembros han sido asignado al proyecto')
+            messages.success(request, 'Los roles han sido importados satisfactoriamente')
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     contexto = {
         'form': form,

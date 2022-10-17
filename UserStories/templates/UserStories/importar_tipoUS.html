@@ -18,18 +18,17 @@
                 <div>
                    <div class="row"> 
                         {{t.nombre}}
-                   <div>
-                  <div class="row">
-                    {% for e in t.estados_kanban.all%}
-                      <li>
-                          {{e.nombre}}
-                      </li>
-                    {% endfor %}  
-                  </div>
-
-                </div>
-             
-
+                   </div>
+                    <a data-toggle="collapse" style="color: blue;"
+                    onclick="document.getElementById('t-{{t.id}}').classList.toggle('show');"
+                    role="button" aria-expanded="false" aria-controls="t-{{t.id}}">Ver Estados Kanban</a>
+                    <div class="collapse" id="t-{{t.id}}">
+                        <div class="col-11 row">
+                            {% for e in t.estados_kanban.all %}
+                                <p class="mx-1"><span class="">{{ e.nombre }}</span></p>
+                            {% endfor %}
+                        </div>
+                    </div>  
                 {% endfor %}
             </div>   
        
@@ -39,8 +38,10 @@
             {% csrf_token %}
             {{ form|crispy }}
         </br>
-            <button class="btn btn-primary bg-color-accent col-5" type="submit">Importar</button>
-            <a href="{% url 'mostrarProyecto' proyecto.id %}" class="btn btn-danger col-5">Cancelar</a>
+            <div style="text-align:center">
+                <button class="btn btn-primary bg-color-accent col-5" type="submit">Importar</button>
+                <a href="{% url 'mostrarProyecto' proyecto.id %}" class="btn btn-danger col-5">Cancelar</a>
+            </div>       
         </form>
     </div>
 {% endblock %}

@@ -1,10 +1,10 @@
 {% extends 'SSO/base_usuarios.html' %}
 {% load crispy_forms_tags%}
-{%  load static %}
-{% block title %}Nuevo Sprint{% endblock %}
+{% load static %}
+{% block title %}Modificar Sprint{% endblock %}
 {% block content %}
    <div class="container mt-3">
-       <h3>Crear Sprint</h3><hr>
+       <h3>Modificar Sprint {{mensajeError}}</h3><hr>
        {%  if mensajeError %}
            <div class="alert alert-danger" role="alert">
                <h4 class="alert-heading">Error</h4>
@@ -16,8 +16,8 @@
            <div class="col-12 col-md-10 mx-auto">{{ form|crispy }}</div>
         </br>
            <div style="text-align:center" >
-                <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Crear Sprint</button>
-                <a href="{% url 'mostrarProyecto' proyecto.id %}" class="btn btn-danger col-5">Cancelar</a>
+                <input type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto" value="Modificar Sprint" >
+                <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-danger col-5">Cancelar</a>
            </div>
        </form>
    </div>

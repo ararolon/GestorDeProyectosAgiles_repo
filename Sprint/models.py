@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from django.utils import timezone
 from UserStories.models import UserStories
@@ -34,9 +35,11 @@ class Sprint(models.Model):
     estado_sprint = models.CharField(max_length=20, choices=estadoSprint.choices, 
                     default=estadoSprint.EN_PLANIFICACION) #El estado por defecto al empezar es En Planificacion
     id_proyecto = models.IntegerField(null=True)
-    miembros_sprint = models.ManyToManyField(Usuario, related_name='set_miembros_sprint')
+    # miembros_sprint = models.ManyToManyField(Usuario, related_name='set_miembros_sprint')
     capacidad = models.IntegerField(verbose_name='Capacidad en horas', null=True, blank=False)
-    
+    capacidad_us = models.IntegerField(default=0,blank=False)
+    capacidad_equipo = models.IntegerField(default=0,blank=False)
+
     def __str__(self):
         return self.nombre_sprint
 
@@ -46,6 +49,13 @@ class Sprint(models.Model):
         else:
             self.estado_sprint = estadoSprint.CANCELADO
         return True
+    
+    def tiene_miembro(self):
+        """
+        Metodo del modelo de Sprint que retorna un booleano en caso
+        que el sprint no tenga miembros asignados.
+        """
+        return SprintMiembros.objects.filter(sprint=self.id).exists()
 
     def validar(self):
         """
@@ -65,10 +75,14 @@ class Sprint(models.Model):
             return False
         return True
 
-    def sprintMiembros(self):
-        """
-        Metodo del modelo Sprint que retorna los miembros de un Sprint
-        """
-        return self.miembros_sprint
-    
-    
+
+class SprintMiembros(models.Model):
+    """
+    Modelo que representa los miembros de un Sprint
+    """
+    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE,null=True) #Sprint en el que esta asignado un miembro
+    miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE,null=True) #Miembro que participa en el sprint
+    capacidad_miembro = models.IntegerField(null=True, blank=False) #Capacidad de trabajo en horas
+    us_asignado = models.ForeignKey(UserStories,on_delete=models.CASCADE,null=True)
+    proyecto = models.ForeignKey('Proyectos.Proyecto', on_delete=models.CASCADE,null=True)
+

@@ -1,12 +1,10 @@
-<nav class="navbar navbar-expand-lg " style="background-color:#196d46 ">
+<nav class="navbar navbar-expand-lg" style="background-color:#196d46 ">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}"  style="color: white;">
+      <a class="navbar-brand" href="{% url 'home' %}" style="color: white;">
         Gestor de Proyectos
-      </a> 
-      {# referencia a home en views.py#}
-      
+      </a>  
       <div class="collapse navbar-collapse" id="navbarNavDropdown" style= "position:absolute; left:500px;">
-        
+  
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
@@ -27,6 +25,7 @@
           {% endif %}
             <button type="submit" class="btn btn-danger" style="color: white">Cerrar Sesión</button>
           </form>
-      </div>
+      </div>          
     </div>  
-  </nav>
+    
+</nav>
