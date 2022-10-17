@@ -80,12 +80,23 @@ def asignarMiembroSprint(request,id_sprint):
     
     contexto = {'user': request.user,'proyecto':proyecto}
     
+    suma = 0
     if request.method == 'POST':
         form = MiembroSprintForm(id_sprint,request.POST)
         if form.is_valid():
             f=form.save()  
             f.proyecto=proyecto
-            f.save()          
+            f.save()
+
+            capacidadM = SprintMiembros.objects.filter(sprint=sprint)
+                
+            for i in capacidadM:
+                suma = suma + i.capacidad_miembro
+                sprint.capacidad_equipo = suma
+            
+            sprint.capacidad = sprint.capacidad_equipo*sprint.duracion_sprint
+            sprint.save()    
+            
             messages.success(request,"Miembro asignado correctamente")
             return redirect('listarSprint', proyecto.id)
     else:
@@ -95,6 +106,7 @@ def asignarMiembroSprint(request,id_sprint):
         'proyecto':proyecto,
         'sprint':sprint
     }
+            
     return render(request,'Sprint/asignarMiembroSprint.html',context=contexto)    
     
 
@@ -221,15 +233,16 @@ def asignar_us(request,id_sprint):
            # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
             for u in historias :
                 u.en_sprint = True
-                print(u.nombre)
                 u.save()
                 suma = suma +  u.horas_estimadas
                 sprint.capacidad_us = suma
                 sprint.save()
-                          
-
-            messages.success(request,"Los user stories han sido asignados exitosamente")
-            return redirect ('listarSprint',id = proyecto.id)
+             
+            if sprint.capacidad_us > sprint.capacidad:
+                messages.error(request,'Supera la capacidad de este sprint')
+            else:
+                messages.success(request,"Los user stories han sido asignados exitosamente")
+                return redirect ('listarSprint',id = proyecto.id)
         else:
             messages.error(request,'Los user stories no pudieron ser asignados')
   else:

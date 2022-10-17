@@ -38,7 +38,8 @@ class Sprint(models.Model):
     # miembros_sprint = models.ManyToManyField(Usuario, related_name='set_miembros_sprint')
     capacidad = models.IntegerField(verbose_name='Capacidad en horas', null=True, blank=False)
     capacidad_us = models.IntegerField(default=0,blank=False)
-    
+    capacidad_equipo = models.IntegerField(default=0,blank=False)
+
     def __str__(self):
         return self.nombre_sprint
 
@@ -48,6 +49,13 @@ class Sprint(models.Model):
         else:
             self.estado_sprint = estadoSprint.CANCELADO
         return True
+    
+    def tiene_miembro(self):
+        """
+        Metodo del modelo de Sprint que retorna un booleano en caso
+        que el sprint no tenga miembros asignados.
+        """
+        return SprintMiembros.objects.filter(sprint=self.id).exists()
 
     def validar(self):
         """

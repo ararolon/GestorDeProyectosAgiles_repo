@@ -30,7 +30,7 @@
                             <a href="{% url 'modificarSprint' sprint.id_proyecto sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Modificar Sprint</a>
                             <a href="{% url 'asignarMiembroSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar Miembros</a>
                             {% endif %}
-                            {% if sprint.estado_sprint == 'En Planificacion' %}
+                            {% if sprint.estado_sprint == 'En Planificacion' and sprint.tiene_miembro %}
                             <a href="{% url 'asignarUS' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
                             {% endif %}
                             <a href="{% url 'sprintbacklog' sprint.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">Sprint Backlog</a>
