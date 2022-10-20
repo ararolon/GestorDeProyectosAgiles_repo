@@ -14,8 +14,13 @@
         <h2> Sprint Backlog  {{sprint.nombre_sprint}}</h2>
         <hr>
     </br>
-    </div>
-         <div class="">
+        <div>
+            {% if sprint.estado_sprint == 'En Planificacion' and proyecto.scrumMaster == request.user %}
+            <a href="{% url 'asignarUS' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
+            {% endif %}
+        </div>
+
+         <div class="col-10 mx-auto">
              {% for s in sprint.historias.all  %}
                 <div class="card" style="margin: 10px">
                     <div class="card-header bg-color-primary">
