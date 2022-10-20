@@ -99,7 +99,7 @@ def crear_us(request,id):
             us.Prioridad = (((0.6)*us.PN)+((0.4)*us.PT)+us.PS)
             us.save()
             messages.success(request,"El User Story "+us.nombre+" ha sido creado satisfactoriamente")
-            return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
+            return redirect('product_backlog',id=proyecto.id)
                 
         else:
             messages.error(request,"El tipo de US no pudo ser creado, ya existe en el sistema")
