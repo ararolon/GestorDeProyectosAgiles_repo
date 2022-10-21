@@ -11,6 +11,43 @@
 </div>
 <hr>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cargar horas</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {% csrf_token %}
+            <div class="form-group" hidden>
+              <label id="usId" for="usId" class="col-form-label">ID UserStory:</label>
+              <input type="text" readonly class="form-control" id="usId" name="usId">
+            </div>
+            <div class="form-group" hidden>
+                <label id="estadoId" for="estadoId" class="col-form-label">ID Estado:</label>
+                <input type="text" readonly value="4" class="form-control" id="estadoId" name="estadoId">
+              </div>
+            <div class="form-group">
+              <label for="horas" class="col-form-label">Horas trabajadas:</label>
+              <input type="number" class="form-control" id="horas" name="horas" required>
+            </div>
+            <div class="form-group">
+              <label for="descripcion" class="col-form-label">Descripcion:</label>
+              <textarea class="form-control" id="descripcion"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 {% for tipo in tipos %}
 <h3>{{tipo.nombre}}</h3>
 <div class="container-fluid pb-5" style="overflow-x: scroll;">
@@ -38,7 +75,7 @@
                                             <div class="row">
                                                 {% for estado in tipo.estados_kanban.all %} 
                                                     {% if not userstory.estado == estado %}
-                                                        <a href="{% url 'cambiarEstado' userstory.id_us estado.id %}" class="ml-3 bg-color-danger border-0">{{estado}}</a>
+                                                        <a data-usId="{{userstory.id_us}}" data-estadoId="{{estado.id}}" href="#" class="ml-3 bg-color-danger border-0"  data-toggle="modal" data-target="#exampleModal">{{estado}}</a>
                                                     {% endif %}
                                                 {% endfor %}
                                             </div>
@@ -55,4 +92,19 @@
     </div>
 </div>
 {% endfor %}
+<script>
+$('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    console.log(button)
+    var usId = button[0].dataset.usid // Extract info from data-* attributes
+    var estadoId = button[0].dataset.estadoid
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  console.log(usId)
+  modal.find('.modal-body input#usId').val(usId)
+  modal.find('.modal-body input#estadoId').val(estadoId)
+    
+})
+</script>
 {% endblock %}
