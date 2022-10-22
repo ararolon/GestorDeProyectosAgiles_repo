@@ -5,6 +5,44 @@
 {% block title %}Proyectos de Sistema {% endblock %}
 
 {% block content %}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cancelar Proyecto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">
+            {% csrf_token %}
+            <!-- <div class="form-group" hidden>
+              <label id="usId" for="usId" class="col-form-label">ID UserStory:</label>
+              <input type="text" readonly class="form-control" id="usId" name="usId">
+            </div>
+            <div class="form-group" hidden>
+                <label id="estadoId" for="estadoId" class="col-form-label">ID Estado:</label>
+                <input type="text" readonly value="4" class="form-control" id="estadoId" name="estadoId">
+              </div>
+            <div class="form-group">
+              <label for="horas" class="col-form-label">Horas trabajadas:</label>
+              <input type="number" class="form-control" id="horas" name="horas" required>
+            </div> -->
+            <div class="form-group">
+              <label for="descripcion" class="col-form-label">Esta seguro que quiere cancelar el Proyecto #{{proyecto.id}} ?</label>
+              <!-- <textarea class="form-control" id="descripcion"></textarea> -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <a href="{% url 'cancelarProyecto' proyecto.id %}" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar Proyecto</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<h3>Proyecto #{{proyecto.id}}</h3>
     {% if not proyecto.estado == 'Cancelado' %}
         <div class="row mb-3" style="margin: 10px;">
             <div class="col flex-justify-center">
@@ -45,7 +83,7 @@
                 <a href="{% url 'iniciarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Iniciar Proyecto</a>
                 {% endif %}
                 {% if proyecto.estado == 'En Curso' %}
-                <a href="{% url 'cancelarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Cancelar Proyecto</a>
+                <a href="#" class="ml-3 bg-color-danger border-0"  data-toggle="modal" data-target="#exampleModal">Cancelar Proyecto</a>
                 {% endif %}
             </div>
         {% endif %}
