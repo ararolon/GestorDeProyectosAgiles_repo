@@ -3,34 +3,61 @@
 {%  load static %}
 {% block title %}Asignar User Stories{% endblock %}
 {% block content %}
-   <div class="container mt-3">
-       <h3>Asignar User Stories</h3><hr>
-       {%  if mensajeError %}
-           <div class="alert alert-danger" role="alert">
-               <h4 class="alert-heading">Error</h4>
-               <p>{{mensajeError}}</p>
-           </div>
-       {% endif %}
   
-       <div class="col-12" style="margin: 10px">
-        
-        {% for h in historias %}
-        <div>
-           <div class="row"> 
-                {{h.nombre}} : prioridad de {{h.Prioridad}}
-           </div>
-        
-        </div>
-       {% endfor %}
-
-       <form method="POST" class="col-12 col-md-8 mx-auto border rounded bg-white p-4">
-           {% csrf_token %}
-           <div class="col-12 col-md-10 mx-auto">{{ form|crispy }}</div>
+<div>
+    
+    <div class="container mt-3">
+        <h2 > Asignar USer Stories al Sprint </h2>
+        <hr>
         </br>
-           <div style="text-align:center" >
-                <button type="submit" class="btn btn-primary bg-color-accent col-8 col-md-5 mx-auto">Asignar</button>
-                <a onclick="window.history.back()" class="btn btn-danger col-5">Cancelar</a>
-           </div>
-       </form>
-   </div>
+    </div>
+
+
+    <div class="table-responsive">
+        
+       <table class="table table-bordered">
+           <thead>
+               <tr>
+               <th scope="col">Nombre</th>
+               <th scope="col">Descripcion</th>
+               <th scope="col">Tipo</th>
+               <th scope="col">Horas_estimadas</th>
+               <th scope="col">Prioridad</th>
+               <th scope="col">Asignar</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                {% for h in historias %}          
+                    <tr>
+                    <th scope="row">{{h.nombre}}</th>
+                    <td scope="row">{{h.descripcion}}</td>
+                    <td scope="row">{{h.tipo}}</td>
+                    <td scope="row">{{h.horas_estimadas}}</td>
+                    <td scope="row">{{h.Prioridad}}</td>
+                    <td scope="row">  
+                        <form method="post">
+                            {% csrf_token %}
+                            {% if h.en_sprint == False %}
+                              <a   href="{% url 'asignarUS' h.nombre  sprint.id %}"    class="btn btn-primary" style="color: white">Asignar</a>
+                              <a       class="btn btn-danger disabled" style="color: white">Quitar</a>
+                            {% endif %}
+                            
+                            {% if h.en_sprint == True %}
+                              <a class="btn btn-primary disabled" style="color: white">Asignar</a>
+                              <a  href="{% url 'desasignar' h.nombre sprint.id %}"  class="btn btn-danger" style="color: white">Quitar</a>
+                            {% endif%}
+                            </form>
+                    </td>
+                    </tr>
+                    <tr>
+               {% endfor %}        
+            </tbody>
+        </table>
+    </div>
+     
+
+</div>
+       
+   
 {% endblock %}

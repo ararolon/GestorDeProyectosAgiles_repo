@@ -57,6 +57,13 @@ class Sprint(models.Model):
         """
         return SprintMiembros.objects.filter(sprint=self.id).exists()
 
+    def tiene_miembro(self):
+        """
+        Metodo del modelo de Sprint que retorna un booleano en caso
+        que el sprint no tenga miembros asignados.
+        """
+        return SprintMiembros.objects.filter(sprint=self.id).exists()
+
     def validar(self):
         """
         Metodo del modelo de Sprint que retorna un booleano en caso
@@ -82,7 +89,7 @@ class SprintMiembros(models.Model):
     """
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE,null=True) #Sprint en el que esta asignado un miembro
     miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE,null=True) #Miembro que participa en el sprint
-    capacidad_miembro = models.IntegerField(null=True, blank=False) #Capacidad de trabajo en horas
+    capacidad_miembro = models.IntegerField(default = 0, blank=True) #Capacidad de trabajo en horas
     us_asignado = models.ForeignKey(UserStories,on_delete=models.CASCADE,null=True)
     proyecto = models.ForeignKey('Proyectos.Proyecto', on_delete=models.CASCADE,null=True)
 
