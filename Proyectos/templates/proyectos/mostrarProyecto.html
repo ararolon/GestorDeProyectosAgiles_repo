@@ -17,22 +17,17 @@
         <div class="modal-body">
           <form method="POST">
             {% csrf_token %}
-            <!-- <div class="form-group" hidden>
-              <label id="usId" for="usId" class="col-form-label">ID UserStory:</label>
-              <input type="text" readonly class="form-control" id="usId" name="usId">
-            </div>
-            <div class="form-group" hidden>
-                <label id="estadoId" for="estadoId" class="col-form-label">ID Estado:</label>
-                <input type="text" readonly value="4" class="form-control" id="estadoId" name="estadoId">
-              </div>
-            <div class="form-group">
-              <label for="horas" class="col-form-label">Horas trabajadas:</label>
-              <input type="number" class="form-control" id="horas" name="horas" required>
-            </div> -->
             <div class="form-group">
               <label for="descripcion" class="col-form-label">Esta seguro que quiere cancelar el Proyecto #{{proyecto.id}} ?</label>
-              <!-- <textarea class="form-control" id="descripcion"></textarea> -->
             </div>
+            <div class="form-group">
+              <label for="descripcion" class="col-form-label">Descripcion: </label>
+              <textarea class="form-control" id="descripcion"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="descripcion" class="col-form-label">Fecha: </label>
+                <input type="date" class="form-control" id="descripcion"></input>
+              </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
               <a href="{% url 'cancelarProyecto' proyecto.id %}" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar Proyecto</a>
