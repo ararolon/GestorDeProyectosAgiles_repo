@@ -36,7 +36,7 @@ class Sprint(models.Model):
                     default=estadoSprint.EN_PLANIFICACION) #El estado por defecto al empezar es En Planificacion
     id_proyecto = models.IntegerField(null=True)
     # miembros_sprint = models.ManyToManyField(Usuario, related_name='set_miembros_sprint')
-    capacidad = models.IntegerField(verbose_name='Capacidad en horas',default = 0, blank=True)
+    capacidad = models.IntegerField(verbose_name='Capacidad en horas',default = 0, blank=True,null=True)
     capacidad_us = models.IntegerField(default=0,blank=True)
     
     def __str__(self):

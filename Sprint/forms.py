@@ -80,12 +80,12 @@ class MiembroSprintForm(forms.ModelForm):
             raise forms.ValidationError('El miembro ya ha sido asignado')
         return datos    
 
-    
+
 class AsignarUSMiembroForm(forms.ModelForm):
-    """
-    Formulario para asignar user stories a un miembro en un sprint.
-    Se considera que un US debe tener asignado horas de esfuerzo para poder ser asignado a un Sprint.
-    """
+    
+   # Formulario para asignar user stories a un miembro en un sprint.
+    #Se considera que un US debe tener asignado horas de esfuerzo para poder ser asignado a un Sprint.
+    
     disabled_fields = ()
     disabled_fields = ('miembro',)
     
@@ -106,13 +106,13 @@ class AsignarUSMiembroForm(forms.ModelForm):
         if(SprintMiembros.objects.filter(us_asignado=datos["us_asignado"]).exists()):
             raise forms.ValidationError('No se pudo asignar US, ya esta en uso')
         return datos
-    
+"""
 
 class AsignarUSSprintForm(forms.ModelForm):
-    """
-    Formulario para asignar user stories en un sprint.
-    Se considera que un US debe tener asignado horas de esfuerzo para poder ser asignado a un Sprint.
-    """
+    
+    #Formulario para asignar user stories en un sprint.
+    #Se considera que un US debe tener asignado horas de esfuerzo para poder ser asignado a un Sprint.
+    
     
     def __init__(self,proyecto,sprint,*args, **kwargs):
         super(AsignarUSSprintForm,self).__init__(*args, **kwargs)
@@ -125,4 +125,4 @@ class AsignarUSSprintForm(forms.ModelForm):
             model = Sprint
             fields = ['historias']
 
-    
+"""   
