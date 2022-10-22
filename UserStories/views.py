@@ -197,7 +197,7 @@ def tablaKanban(request, id_proyecto):
         messages.error(request,"No hay un sprint en Curso")
         return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     userstories = sprint.historias.all()
-    contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories}
+    contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories, 'proyectoActual':proyecto.id}
     if request.method == "POST":
         id_us = request.POST['usId']
         id_estado = request.POST['estadoId']

@@ -118,7 +118,7 @@ class AsignarUSSprintForm(forms.ModelForm):
         super(AsignarUSSprintForm,self).__init__(*args, **kwargs)
         #Obtiene los US que tengan horas estimadas asignadas , es decir horas estimadas >0 y ordena por prioridad , de mayor a menor
         self.fields['historias'] = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                          queryset= UserStories.objects.filter(id_proyecto = proyecto.id).filter(horas_estimadas__gte = 1).order_by('-Prioridad').exclude(estado= Estados_Kanban.objects.get(nombre='Finalizado')).exclude(estado = Estados_Kanban.objects.get(nombre='Cancelado')),
+                                                          queryset= UserStories.objects.filter(id_proyecto = proyecto.id).filter(horas_estimadas__gte = 1).order_by('-Prioridad').exclude(estado= Estados_Kanban.objects.get(nombre='Finalizado')),
                                                            label= 'Seleccione los User Stories que seran trabajados en el Sprint',initial=sprint.historias.all())
         
     class Meta:
