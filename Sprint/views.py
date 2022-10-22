@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-from Sprint.forms import AsignarUSMiembroForm, AsignarUSSprintForm, MiembroSprintForm, crearSprintForm, modificarSprintForm
+from Sprint.forms import AsignarUSMiembroForm, MiembroSprintForm, crearSprintForm, modificarSprintForm
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
@@ -107,8 +107,7 @@ def asignarMiembroSprint(request,id_sprint):
         'sprint':sprint
     }
             
-    return render(request,'Sprint/asignarMiembroSprint.html',context=contexto)    
-    
+    return render(request,'Sprint/asignarMiembroSprint.html',context=contexto) 
 
 def listarSprint(request,id):
     """
@@ -154,41 +153,7 @@ def cancelarSprint(request, id_sprint):
     sprint.save()
     return redirect('listarSprint',sprint.id_proyecto)
 
-
-def asignar_us(request,id_sprint):
-    """
-    Vista para que un US sea asignado a un sprint
-    Argumentos:
-        request: HttpRequest
-        return: HttpResponse
-    """
-
-    sprint = Sprint.objects.get(id = id_sprint)
-    proyecto = Proyecto.objects.get(id = sprint.id_proyecto)
-    contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto}
-    contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
-
-    if request.method == 'POST':
-            form = AsignarUSSprintForm(proyecto,sprint,instance=proyecto,data=request.POST)
-            if form.is_valid():
-                historias = form.cleaned_data['historias']
-                sprint.historias.set(historias)
             
-            # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
-                for u in historias :
-                    u.en_sprint = True
-                    u.save()              
-
-                messages.success(request,"Los user stories han sido asignados exitosamente")
-                return redirect ('listarSprint',id = proyecto.id)
-            else:
-                messages.error(request,'Los user stories no pudieron ser asignados')
-    else:
-            contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
-
-    return render(request,'Sprint/asignarUS.html',contexto)      
-            
-
 def asignarUSMiembro(request, id_sprint_miembro):
     """
     Vista en el que se puede seleccionar un US del Sprint Backlog para asignar a un usuario dentro del Sprint
@@ -210,9 +175,10 @@ def asignarUSMiembro(request, id_sprint_miembro):
     return render(request, 'Sprint/asignar_us_miembro.html', contexto)
 
 
-def asignar_us(request,id_sprint):
+
+def index_asignar(request,id_sprint):
   """
-  Vista para que un US sea asignado a un sprint
+  Vista que muestra todos los us del proyecto para ser asignados al sprint
   Argumentos:
     request: HttpRequest
     return: HttpResponse
@@ -220,36 +186,80 @@ def asignar_us(request,id_sprint):
 
   sprint = Sprint.objects.get(id = id_sprint)
   proyecto = Proyecto.objects.get(id = sprint.id_proyecto)
-  historias = UserStories.objects.filter(id_proyecto = proyecto.id)
-  contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto,'historias': historias}
-  contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
+  historias = UserStories.objects.filter(id_proyecto = proyecto.id).order_by('-Prioridad')
   suma = 0
-  if request.method == 'POST':
-        form = AsignarUSSprintForm(proyecto,sprint,instance=proyecto,data=request.POST)
-        if form.is_valid():
-            historias = form.cleaned_data['historias']
-            sprint.historias.set(historias)
-           
-           # marca los user stories asignados con la bandera para indicar que se encuentran en el sprint 
-            for u in historias :
-                u.en_sprint = True
-                u.save()
-                suma = suma +  u.horas_estimadas
-                sprint.capacidad_us = suma
-                sprint.save()
-             
-            if sprint.capacidad_us > sprint.capacidad:
-                messages.error(request,'Supera la capacidad de este sprint')
-            else:
-                messages.success(request,"Los user stories han sido asignados exitosamente")
-                return redirect ('listarSprint',id = proyecto.id)
-        else:
-            messages.error(request,'Los user stories no pudieron ser asignados')
-  else:
-         contexto['form'] = AsignarUSSprintForm(proyecto,sprint)
-
+  contexto = {'user': request.user,'sprint':sprint,'proyecto':proyecto,'historias': historias,'suma':suma}
+ 
   return render(request,'Sprint/asignarUS.html',contexto)      
             
+
+def asignar_us(request,nombre,id_sprint):
+  """
+   Vista para que un US sea asignado a un sprint
+    Argumentos:
+    request: HttpRequest
+    nombre : nombre del US
+    id_sprint: id del sprint 
+
+    return: HttpResponse
+  """
+  us = get_object_or_404(UserStories,nombre=nombre)
+  sprint = get_object_or_404(Sprint,id=id_sprint)
+  suma = 0
+  sprint.capacidad_us = 0
+  sprint.save()
+  
+
+  for s in sprint.historias.all() :
+        suma = suma +  s.horas_estimadas
+        sprint.capacidad_us = suma
+        sprint.save()
+
+
+  sprint.capacidad_us = sprint.capacidad_us + us.horas_estimadas
+  sprint.save()
+  print("horas:",sprint.capacidad_us)
+  print("capacidad",sprint.capacidad)
+
+  if not sprint.capacidad_us > sprint.capacidad:
+        us.en_sprint = True
+        us.save()
+        sprint.historias.add(us)
+        sprint.save()
+        messages.success(request,"Los user story asignado exitosamente")
+    
+  else:
+          messages.error(request,'Supera la capacidad de este sprint')
+
+  return redirect('indexasignar',id_sprint=id_sprint)
+
+
+def desasignar_us(request,nombre,id_sprint):
+    """
+    Vista que permite quitar un US del sprint backlog
+    Argumentos:
+    request: HttpRequest
+    nombre : nombre del US
+    id_sprint: id del sprint 
+
+    return: HttpResponse
+    """
+
+    us = get_object_or_404(UserStories,nombre=nombre)
+    us.en_sprint = False
+    us.save()
+    sprint = get_object_or_404(Sprint,id=id_sprint)
+
+    sprint.historias.remove(us)
+    sprint.save()
+    messages.success(request,"User storie desasignado exitosamente")
+
+    return redirect('indexasignar',id_sprint=id_sprint)
+
+
+
+
+
 
 
 def ver_sprintbacklog(request,id):
