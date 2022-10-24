@@ -19,7 +19,7 @@
                     <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
                         <div class="card-header  bg-color-primary">Sprint #{{sprint.id}}
                             {% if hayPlanificacion and not hayCurso %}
-                                {% if sprint.estado_sprint == 'En Planificacion' %}
+                                {% if sprint.estado_sprint == 'En Planificacion' and sprint.tiene_miembro %}
                                 <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Iniciar Sprint</a>
                                 {% endif %}
                             {% endif %}
@@ -39,6 +39,7 @@
                             <div class="col-12 "><u>Fecha de inicio: </u><p>{{ sprint.fecha_inicio }}</p> </div>
                             <div class="col-12 "><u>Fecha de finalización: </u><p>{{ sprint.fecha_fin }}</p> </div>
                             <div class="col-12 "><u>Descripción: </u><p>{{ sprint.descripcion }}</p> </div>
+                            <div class="col-12 "><u>Capacidad del Sprint: </u><p>{{ sprint.capacidad }} horas</p> </div>
                             <div class="col-12 "><u>Estado: </u><p>{{ sprint.estado_sprint }}</p> </div>
                         </div>
                         <div class="card-body">
@@ -48,9 +49,9 @@
                                     {% if sprint.id == miembro.sprint.id %}
                                         <li class="list-group-item">
                                             - {{miembro.miembro}}
-                                            {% if not sprint.estado_sprint == 'Cancelado' %}
+                                            {% comment %} {% if not sprint.estado_sprint == 'Cancelado' %}
                                                 <a href="{% url 'asignar_us_miembro' miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar US</a> 
-                                            {% endif %}
+                                            {% endif %}  {% endcomment %}
                                             <h6 class="card-text">Capacidad: {{miembro.capacidad_miembro}}</h6>
                                             <h6 class="card-text">User Storie: {{miembro.us_asignado}}</h6>
                                         </li>
@@ -64,11 +65,11 @@
         </div>    
     </div>
     </br> 
-    <div class="col-10 mx-auto">
-        <svg onclick="window.history.back()" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-        </svg>  
+    <a href="{% url 'mostrarProyecto' proyecto.id %}">
+        <svg  width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+        </svg>
         </br>
         <h6>Volver</h6> 
-    </div>
+    </a>
 {% endblock %}
