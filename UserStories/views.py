@@ -197,7 +197,32 @@ def tablaKanban(request, id_proyecto):
         messages.error(request,"No hay un sprint en Curso")
         return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     userstories = sprint.historias.all()
-    contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories}
+    contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories, 'proyectoActual':proyecto.id}
+    if request.method == "POST":
+        id_us = request.POST['usId']
+        id_estado = request.POST['estadoId']
+        horas = request.POST['horas']
+
+        us = get_object_or_404(UserStories,id_us=id_us)
+        estado = get_object_or_404(Estados_Kanban,id=id_estado)
+        proyecto = get_object_or_404(Proyecto,id=us.id_proyecto)
+
+        if (not proyecto.scrumMaster == request.user and not id_estado > us.estado.id):
+            messages.error(request,'Solo el scrummaster puede realizar esa operacion')
+            return redirect('tabla_kanban',id_proyecto=proyecto.id)
+        if (horas == ""):
+            messages.error(request,'No puede quedar vacio el campo de horas')
+            return redirect('tabla_kanban',id_proyecto=proyecto.id)
+        # horas trabajas mayor a horas de esfuerzo
+        if (int(horas) > us.horas_estimadas):
+            messages.error(request,'No puede ingresar mas horas, horas trabajabas no puede ser mayor a horas de esfuerzo')
+            return redirect('tabla_kanban',id_proyecto=proyecto.id)
+
+        us.estado = estado
+        us.horas_estimadas -= int(horas)
+        us.save()
+        return redirect('tabla_kanban',id_proyecto=proyecto.id)
+        
 
     return render(request,'UserStories/tabla_kanban.html',contexto)
 

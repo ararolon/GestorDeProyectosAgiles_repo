@@ -18,7 +18,7 @@
                 onclick="document.getElementById('rol-{{rol.id}}').classList.toggle('show');"
                 role="button" aria-expanded="false" aria-controls="rol-{{rol.id}}">Ver permisos</a>
             <div class="collapse" id="rol-{{rol.id}}">
-                <div class="col-11 row">
+                <div class="col-6 row">
                     {% for permiso in rol.permisos.all %}
                     <!-- django permission name -->
                         <p class="mx-1"><span class="">{{ permiso.name }}</span></p>
@@ -33,7 +33,7 @@
         </br>
 
             <button class="btn btn-primary bg-color-accent col-5" type="submit">Importar</button>
-            <a onclick="window.history.back()" class="btn btn-danger col-5">Cancelar</a>
+            <a onclick="window.history.back()" class="btn btn-danger col-5" style="color:white">Cancelar</a>
         </form>
     </div>
 {% endblock %}
