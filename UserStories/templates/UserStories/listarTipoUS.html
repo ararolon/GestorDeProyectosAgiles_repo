@@ -37,10 +37,11 @@
                                     </div>
                             </div>
                             <div class="d-flex flex-row-reverse row w-100">
-                                
+                            {% if proyecto.scrumMaster == request.user %}
+
                                 <a href="{% url 'eliminar_tipoUS' proyecto.id tipoUS.id %}" class="btn btn-outline-danger m-2">Eliminar<a>
                                 <a href="{% url 'modificar_tiposUS' proyecto.id  tipoUS.id %}" class="btn btn-outline-primary m-2">Modificar<a>
-
+                            {% endif %}
                             </div>  
                         </div>     
                     </div>

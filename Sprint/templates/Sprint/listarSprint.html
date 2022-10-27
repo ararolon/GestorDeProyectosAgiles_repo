@@ -14,29 +14,31 @@
     <hr>
     <div id="lista_sprint" class="">
         <div class="my-4">
-        {% if proyecto.estado == 'Cancelado' %}
             {% for sprint in sprint %}
                 <div class="card" style="margin:10px">
                     <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
                         <div class="card-header  bg-color-primary">Sprint #{{sprint.id}}
-                            {% if hayPlanificacion and not hayCurso %}
-                                {% if sprint.estado_sprint == 'En Planificacion' %}
-                                <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Iniciar Sprint</a>
+                            {% if proyecto.scrumMaster == request.user %}
+                                {% if hayPlanificacion and not hayCurso %}
+                                    {% if sprint.estado_sprint == 'En Planificacion' %}
+                                    <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Iniciar Sprint</a>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            {% if sprint.estado_sprint == 'En Curso' %}
-                            <a href="{% url 'cancelarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Cancelar Sprint</a>
-                            {% endif %}
-                            {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
-                            <a href="{% url 'modificarSprint' sprint.id_proyecto sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Modificar Sprint</a>
-                            <a href="{% url 'asignarMiembroSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar Miembros</a>
-                            {% endif %}
-                            {% if sprint.estado_sprint == 'En Planificacion' and sprint.tiene_miembro %}
-                            <a href="{% url 'asignarUS' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
-                            {% endif %}
-                            <a href="{% url 'sprintbacklog' sprint.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">Sprint Backlog</a>
+                                {% if sprint.estado_sprint == 'En Curso' %}
+                                <a href="{% url 'cancelarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Cancelar Sprint</a>
+                                {% endif %}
+                                {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
+                                <a href="{% url 'modificarSprint' sprint.id_proyecto sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Modificar Sprint</a>
+                                <a href="{% url 'asignarMiembroSprint' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar Miembros</a>
+                                {% endif %}
+                                {% if sprint.estado_sprint == 'En Planificacion' and sprint.tiene_miembro %}
+                                <a href="{% url 'asignarUS' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
+                                {% endif %}
+                                <a href="{% url 'sprintbacklog' sprint.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">Sprint Backlog</a>
+                            {% endif %}  
+                                
                         </div>
-
+                    
                         <div class="card-body row">
                             <div class="col-12 "><u>Nombre: </u><p>{{ sprint.nombre_sprint }}</p> </div>
                             <div class="col-12 "><u>Fecha de creación: </u><p>{{ sprint.fecha_creacion }}</p> </div>
@@ -52,8 +54,10 @@
                                     {% if sprint.id == miembro.sprint.id %}
                                         <li class="list-group-item">
                                             - {{miembro.miembro}}
-                                            {% if not sprint.estado_sprint == 'Cancelado' %}
-                                                <a href="{% url 'asignar_us_miembro' miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar US</a> 
+                                            {% if proyecto.scrumMaster == request.user %}
+                                                {% if not sprint.estado_sprint == 'Cancelado' %}
+                                                    <a href="{% url 'asignar_us_miembro' miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar US</a> 
+                                                {% endif %}
                                             {% endif %}
                                             <h6 class="card-text">Capacidad: {{miembro.capacidad_miembro}}</h6>
                                             <h6 class="card-text">User Storie: {{miembro.us_asignado}}</h6>
@@ -65,7 +69,7 @@
                     </div>
                 </div>
             {% endfor %} 
-        {% endif %}       
+       
         </div>    
     </div>
     </br> 
