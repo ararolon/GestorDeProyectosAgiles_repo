@@ -14,6 +14,7 @@
     <hr>
     <div id="lista_sprint" class="">
         <div class="my-4">
+        {% if proyecto.estado == 'Cancelado' %}
             {% for sprint in sprint %}
                 <div class="card" style="margin:10px">
                     <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
@@ -63,7 +64,8 @@
                         </div>
                     </div>
                 </div>
-            {% endfor %}        
+            {% endfor %} 
+        {% endif %}       
         </div>    
     </div>
     </br> 

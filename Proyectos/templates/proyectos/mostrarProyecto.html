@@ -71,6 +71,18 @@
         {% endif %}  
     {% endif %}
 
+    {% if proyecto.estado == 'Cancelado' %}
+        <div class="row mb-3" style="margin: 10px;">
+            <div class="col flex-justify-center">
+                {% if proyecto.scrumMaster == request.user %}
+                <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+                <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
+                <a href="{% url 'product_backlog' proyecto.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">ProductBacklog</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}  
+
     <div class="card my-4" style="margin: 18px;">
         {% if proyecto.scrumMaster == request.user %}
             <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}}
