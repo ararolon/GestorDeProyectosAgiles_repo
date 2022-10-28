@@ -8,8 +8,6 @@
 
 {# body #}
 {% block content %}
-
-<div>
     <div>
         <h2> User Stories del Proyecto </h2>
         <hr>
@@ -24,6 +22,39 @@
          </div>
          <div class="col-10 mx-auto">
              {% for us in us  %}
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Cancelar User Story</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="descripcion" class="col-form-label">Esta seguro que quiere cancelar el User Story {{us.nombre}} ?</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descripcion" class="col-form-label">Descripcion: </label>
+                                        <textarea class="form-control" id="descripcion"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descripcion" class="col-form-label">Fecha: </label>
+                                        <input type="date" class="form-control" id="descripcion"></input>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <a href="{% url 'cancelarUS' us.id_us %}" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar US</a>
+                                    </div>
+                                </form>
+                           </div>
+                      </div>
+                  </div>
+               </div>
+             
                 <div class="card" style="margin: 10px">
                     <div class="card-header bg-color-primary">
                         <div class="row">
@@ -55,8 +86,13 @@
                             Horas Trabajadas : {{s.horas_trabajadas}}
                         </div>
                         {% if proyecto.scrumMaster == request.user  %}
-                            <div class="row d-flex flex-row-reverse w-100"> 
-                                    <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar</a>
+                            <div class="row">
+                                <div class="d-flex flex-row-reverse">
+                                    {% if us.estado != 'Cancelado' %}
+                                        <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar<a>
+                                        <a href="#" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#exampleModal">Cancelar</a>    
+                                    {% endif %}
+                                </div>
                            </div>
                         {% endif %}
                     </div>

@@ -223,6 +223,7 @@ def asignar_us(request,nombre,id_sprint):
 
   if not sprint.capacidad_us > sprint.capacidad:
         us.en_sprint = True
+        us.PS = us.PS + 3 # se agrega la capacidad de US dentro del sprint
         us.save()
         sprint.historias.add(us)
         sprint.save()
