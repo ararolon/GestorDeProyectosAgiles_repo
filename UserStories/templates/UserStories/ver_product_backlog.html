@@ -83,7 +83,7 @@
                           Horas de esfuerzo : {{us.horas_estimadas}}
                         </div>
                         {% if proyecto.scrumMaster == request.user  %}
-                            <div class="row">
+                            <div class="col-12">
                                 <div class="d-flex flex-row-reverse">
                                     {% if us.estado != 'Cancelado' %}
                                         <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar<a>
