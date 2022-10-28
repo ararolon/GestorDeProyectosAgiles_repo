@@ -20,4 +20,5 @@ urlpatterns = [
     path('modificarTipoUS/<int:id>/<int:id_tipo>/',views.modificar_tipoUS,name='modificar_tiposUS'),
     path('eliminarTiposUS/<int:id>/<int:id_tipo>/',views.eliminar_tipoUS,name='eliminar_tipoUS'),
     path('modificarUS/<int:id_proyecto>/<int:id>/',views.modificarUS,name='modificar_us'),
+    path('cancelarUS/<int:id>/',views.cancelar_US,name='cancelarUS'),
 ]

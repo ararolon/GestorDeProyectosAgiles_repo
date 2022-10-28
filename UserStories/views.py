@@ -347,3 +347,22 @@ def modificarUS(request,id_proyecto,id):
                         }
         
     return render(request,'UserStories/modificarUS.html',contexto)
+
+
+def cancelar_US(self,id):
+  """
+    Funcion que permite cancelar un US
+
+     Argumentos:
+        id :  id del US
+    
+    Retorno
+        HttpResponse
+
+  """
+
+  us = get_object_or_404(UserStories,id_us=id)
+  us.estado = "Cancelado"
+  us.save()
+
+  return redirect('product_backlog',id = us.id_proyecto)
