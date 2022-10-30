@@ -1,4 +1,5 @@
 from email.policy import default
+from hashlib import blake2b
 from pydoc import describe
 from pyexpat import model
 from statistics import mode
@@ -9,6 +10,7 @@ from django.contrib.postgres.fields import ArrayField
 from Usuarios.models import Usuario
 from django.core.validators import MaxValueValidator, MinValueValidator
 from Sprint.models import *
+from simple_history.models import HistoricalRecords
 
 
 
@@ -90,7 +92,10 @@ class UserStories(models.Model):
   Prioridad = models.DecimalField(default=0, max_digits=5, decimal_places=2,blank=True)
   en_sprint = models.BooleanField(default=False)
   horas_trabajadas = models.IntegerField(default=0,blank=True,validators=[MaxValueValidator(100), MinValueValidator(0)], null=True)
-
+  history = HistoricalRecords()
+  actividad = models.CharField(max_length=50, blank=True, null=True)
+  horas = models.IntegerField(default=0,blank=True)
+  
   class Meta:
     verbose_name = 'UserStory'
     verbose_name_plural = 'UserStories'
