@@ -219,7 +219,7 @@ def tablaKanban(request, id_proyecto):
             return redirect('tabla_kanban',id_proyecto=proyecto.id)
 
         us.estado = estado
-        us.horas_estimadas -= int(horas)
+        us.horas_trabajadas += int(horas)
         us.save()
         return redirect('tabla_kanban',id_proyecto=proyecto.id)
         

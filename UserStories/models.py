@@ -89,6 +89,7 @@ class UserStories(models.Model):
   estado = models.ForeignKey(Estados_Kanban,on_delete=models.CASCADE,null=True,blank=True)
   Prioridad = models.DecimalField(default=0, max_digits=5, decimal_places=2,blank=True)
   en_sprint = models.BooleanField(default=False)
+  horas_trabajadas = models.IntegerField(default=0,blank=True,validators=[MaxValueValidator(100), MinValueValidator(0)], null=True)
 
   class Meta:
     verbose_name = 'UserStory'

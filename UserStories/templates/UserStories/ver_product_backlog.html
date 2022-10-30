@@ -45,6 +45,9 @@
                         <div class="col-12">
                           Horas de esfuerzo : {{us.horas_estimadas}}
                         </div>
+                        <div class="col-12">
+                            Horas Trabajadas : {{s.horas_trabajadas}}
+                        </div>
                         {% if proyecto.scrumMaster == request.user  %}
                             <div class="row d-flex flex-row-reverse w-100"> 
                                     <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar</a>
