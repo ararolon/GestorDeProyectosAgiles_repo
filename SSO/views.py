@@ -100,13 +100,16 @@ def configurar_sso(request):
     #se crean los estados Kanban por defecto en el sistema
     if not Estados_Kanban.objects.filter(nombre='Pendiente').exists():
         estado = Estados_Kanban.objects.create(nombre='Pendiente',defecto=True)
-        estado.save()
     if not Estados_Kanban.objects.filter(nombre='En curso').exists():
         estado = Estados_Kanban.objects.create(nombre='En curso',defecto=True)
-        estado.save()
+    
     if not Estados_Kanban.objects.filter(nombre='Finalizado').exists():
         estado = Estados_Kanban.objects.create(nombre='Finalizado',defecto=True, id=100)
-        estado.save()
+        
+
+    if not Estados_Kanban.objects.filter(nombre='Cancelado').exists():
+        estado = Estados_Kanban.objects.create(nombre='Cancelado',defecto=True, id=99)
+        
 
     sa = SocialApp.objects.create(name="sso")
     sa.save()

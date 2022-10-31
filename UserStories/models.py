@@ -3,6 +3,7 @@ from pydoc import describe
 from pyexpat import model
 from statistics import mode
 from sys import maxsize
+from unittest.util import _MAX_LENGTH
 from wsgiref.validate import validator
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -88,6 +89,7 @@ class UserStories(models.Model):
   #variable prioridad final , resultante del calculo de la formula : ( ( 0,6 x PN + 0,4 x PT )  + PS
   estado = models.ForeignKey(Estados_Kanban,on_delete=models.CASCADE,null=True,blank=True)
   Prioridad = models.DecimalField(default=0, max_digits=5, decimal_places=2,blank=True)
+  motivo_cancelacion = models.TextField(max_length=60,blank=True)
   en_sprint = models.BooleanField(default=False)
   horas_trabajadas = models.IntegerField(default=0,blank=True,validators=[MaxValueValidator(100), MinValueValidator(0)], null=True)
 
@@ -97,7 +99,6 @@ class UserStories(models.Model):
      
   def __str__(self):
     return self.nombre
-
   def get_miembro_asignado(self):
     """
     Funcion que obtiene el miembro asignado al user story
