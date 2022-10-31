@@ -28,29 +28,31 @@
                 
             </thead>
             <tbody>
-                {% for h in historias %}          
-                    <tr>
-                    <th scope="row">{{h.nombre}}</th>
-                    <td scope="row">{{h.descripcion}}</td>
-                    <td scope="row">{{h.tipo}}</td>
-                    <td scope="row">{{h.horas_estimadas}}</td>
-                    <td scope="row">{{h.Prioridad}}</td>
-                    <td scope="row">  
-                        <form method="post">
-                            {% csrf_token %}
-                            {% if h.en_sprint == False %}
-                              <a   href="{% url 'asignarUS' h.nombre  sprint.id %}"    class="btn btn-primary" style="color: white">Asignar</a>
-                              <a       class="btn btn-danger disabled" style="color: white">Quitar</a>
-                            {% endif %}
-                            
-                            {% if h.en_sprint == True %}
-                              <a class="btn btn-primary disabled" style="color: white">Asignar</a>
-                              <a  href="{% url 'desasignar' h.nombre sprint.id %}"  class="btn btn-danger" style="color: white">Quitar</a>
-                            {% endif%}
-                            </form>
-                    </td>
-                    </tr>
-                    <tr>
+                {% for h in historias %}
+                   {% if h.estado.nombre != 'Cancelado' %}          
+                        <tr>
+                        <th scope="row">{{h.nombre}}</th>
+                        <td scope="row">{{h.descripcion}}</td>
+                        <td scope="row">{{h.tipo}}</td>
+                        <td scope="row">{{h.horas_estimadas}}</td>
+                        <td scope="row">{{h.Prioridad}}</td>
+                        <td scope="row">  
+                            <form method="post">
+                                {% csrf_token %}
+                                {% if h.en_sprint == False %}
+                                <a  href="{% url 'asignarUS' h.nombre  sprint.id %}"    class="btn btn-primary" style="color: white">Asignar</a>
+                                <a  class="btn btn-danger disabled" style="color: white">Quitar</a>
+                                {% endif %}
+                                
+                                {% if h.en_sprint == True %}
+                                <a class="btn btn-primary disabled" style="color: white">Asignar</a>
+                                <a  href="{% url 'desasignar' h.nombre sprint.id %}"  class="btn btn-danger" style="color: white">Quitar</a>
+                                {% endif%}
+                                </form>
+                        </td>
+                        </tr>
+                        <tr>
+                    {% endif %}         
                {% endfor %}        
             </tbody>
         </table>

@@ -155,7 +155,7 @@ def ver_product_backlog(request,id):
    
     proyecto = get_object_or_404(Proyecto,id=id)
     us = list(UserStories.objects.filter(id_proyecto = proyecto.id))
-    contexto = {'proyecto':proyecto,'us':us}
+    contexto = {'proyecto':proyecto,'us':us,}
      
     return render(request,'UserStories/ver_product_backlog.html',contexto)
 
@@ -387,7 +387,8 @@ def cancelar_US(self,id):
   """
 
   us = get_object_or_404(UserStories,id_us=id)
-  us.estado = "Cancelado"
+  estado = Estados_Kanban.objects.get(nombre="Cancelado")
+  us.estado= estado
   us.save()
 
   return redirect('product_backlog',id = us.id_proyecto)
