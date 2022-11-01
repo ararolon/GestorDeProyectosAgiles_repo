@@ -195,10 +195,18 @@ def cancelarProyecto(request, id_proyecto):
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
-    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
-    proyecto.estado = 'Cancelado'
-    proyecto.save()
-    return redirect('mostrarProyecto', id_proyecto=id_proyecto)
+   
+
+    if request.method == "POST":
+        motivo = request.POST['motivo']
+
+        proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+        proyecto.estado = 'Cancelado'
+        proyecto.motivo = motivo
+        proyecto.save()
+        return redirect('mostrarProyecto', id_proyecto=id_proyecto)
+    
+    # return render(request,'Proyectos/mostrarProyecto.html',contexto)
 
 def mostrarProyecto(request, id_proyecto):
     """
