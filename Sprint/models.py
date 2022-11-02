@@ -35,7 +35,7 @@ class Sprint(models.Model):
     estado_sprint = models.CharField(max_length=20, choices=estadoSprint.choices, 
                     default=estadoSprint.EN_PLANIFICACION) #El estado por defecto al empezar es En Planificacion
     id_proyecto = models.IntegerField(null=True)
-    # miembros_sprint = models.ManyToManyField(Usuario, related_name='set_miembros_sprint')
+    # miembros_sprint = models.ManyToManyField(Usuario, blank=True)
     capacidad = models.IntegerField(verbose_name='Capacidad en horas',default = 0, blank=True,null=True)
     capacidad_us = models.IntegerField(default=0,blank=False)
     capacidad_equipo = models.IntegerField(default=0,blank=False)
@@ -56,6 +56,13 @@ class Sprint(models.Model):
         que el sprint no tenga miembros asignados.
         """
         return SprintMiembros.objects.filter(sprint=self.id).exists()
+
+    def tiene_us(self):
+        """
+        Metodo del modelo de Sprint que retorna un booleano en caso
+        que el sprint no tenga user stories asignados.
+        """
+        return self.historias.exists()
 
     def validar(self):
         """
