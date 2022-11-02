@@ -19,7 +19,7 @@
                     <div id="collapse_sprint_{{ id_sprint }}" class="" aria-labelledby="header_sprint_{{ id_sprint }}" data-parent="#lista_sprint">
                         <div class="card-header  bg-color-primary">Sprint #{{sprint.id}}
                             {% if hayPlanificacion and not hayCurso %}
-                                {% if sprint.estado_sprint == 'En Planificacion' %}
+                                {% if sprint.estado_sprint == 'En Planificacion' and sprint.tiene_miembro and sprint.tiene_us %}
                                 <a href="{% url 'iniciarSprint' sprint.id %}" class="btn btn-outline-dark m-2">Iniciar Sprint</a>
                                 {% endif %}
                             {% endif %}
@@ -39,7 +39,9 @@
                             <div class="col-12 "><u>Fecha de inicio: </u><p>{{ sprint.fecha_inicio }}</p> </div>
                             <div class="col-12 "><u>Fecha de finalización: </u><p>{{ sprint.fecha_fin }}</p> </div>
                             <div class="col-12 "><u>Descripción: </u><p>{{ sprint.descripcion }}</p> </div>
+                            <div class="col-12 "><u>Capacidad del Sprint: </u><p>{{ sprint.capacidad }} horas</p> </div>
                             <div class="col-12 "><u>Estado: </u><p>{{ sprint.estado_sprint }}</p> </div>
+                            <div class="col-12 "><u>Capacidad del Equipo: </u><p>{{ sprint.capacidad_equipo }} horas</p> </div>
                         </div>
                         <div class="card-body">
                             <h6><u>Miembros del Sprint:</u></h6>

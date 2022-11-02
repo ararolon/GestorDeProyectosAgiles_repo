@@ -18,9 +18,14 @@
             {% if sprint.estado_sprint == 'En Planificacion' %}
             <a href="{% url 'indexasignar' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
             {% endif %}
+            <div class="col-10 mx-auto">
+            {% if sprint.estado_sprint == 'En Planificacion' %}
+            <a href="{% url 'indexasignar' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
+            {% endif %}
         </div>
 
-         <div class="col-10 mx-auto">
+
+         <div class="col-10 mx-autocol-10 mx-auto">
              {% for s in sprint.historias.all  %}
                 <div class="card" style="margin: 10px">
                     <div class="card-header bg-color-primary">
