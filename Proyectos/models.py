@@ -34,6 +34,19 @@ class RolUsuario(models.Model):
  
 
 
+class historia(models.Model):
+    """
+     Objeto donde se guardaran los mensajes de los eventos de un proyecto 
+     que forman parte del historial del proyecto
+    """
+
+    id_proyecto = models.IntegerField(null=True)
+    evento = models.TextField(max_length=200, blank=True)
+
+    def __str__(self):
+        return self.evento
+
+
 class Proyecto(models.Model):
     """
         Modelo para la clase de Proyecto con los campos necesarios para el mismo
@@ -51,6 +64,7 @@ class Proyecto(models.Model):
     usuario_roles = models.ManyToManyField(RolUsuario)
     tipo_us = models.ManyToManyField(TipoUSerStory)
     sprint = models.ManyToManyField(Sprint) 
+    historial = models.ManyToManyField(historia)
 
     #id_sprints = models.ManyToManyField(Sprint, blank=True) -->preguntar
     #tipoUS = models.CharField(max_length=100, verbose_name="Tipos de US") -->preguntar bien como hacer y como se llama en esta clase

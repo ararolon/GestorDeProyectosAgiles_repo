@@ -32,14 +32,14 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST">
+                                <form method="post" action="{% url 'cancelarUS' us.id_us%}">
                                     {% csrf_token %}
                                     <div class="form-group">
                                         <label for="descripcion" class="col-form-label">Esta seguro que quiere cancelar el User Story {{us.nombre}} ?</label>
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion" class="col-form-label">Descripcion: </label>
-                                        <textarea class="form-control" id="descripcion"></textarea>
+                                        <textarea name="motivo_cancelacion" class="form-control" id="descripcion"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion" class="col-form-label">Fecha: </label>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                        <a href="{% url 'cancelarUS' us.id_us   %}" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar US</a>
+                                        <button type="submit" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar US</button>
                                     </div>
                                 </form>
                            </div>
@@ -84,6 +84,15 @@
                             <div class="col-12">
                             Horas de esfuerzo : {{us.horas_estimadas}}
                             </div>
+                            {% if us.estado.nombre == 'Cancelado' %}
+                              <div class="col-12">
+                                    Motivo de cancelacion : {{us.motivo_cancelacion}}
+
+                              </div>
+
+                            {% endif %}
+                            
+
                             {% if proyecto.scrumMaster == request.user  %}
                                 <div class="col-12">
                                     <div class="d-flex flex-row-reverse">

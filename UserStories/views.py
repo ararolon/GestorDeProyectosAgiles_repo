@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
 from .form import EstadosKanbanForm, ModificarUSForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
 from django.contrib import messages
-from Proyectos.models import Proyecto
+from Proyectos.models import Proyecto, historia
 from Sprint.models import Sprint, estadoSprint
 
 # Create your views here.
@@ -32,9 +32,16 @@ def crear_estadokanban(request,id):
    if request.method == 'POST':
         form = EstadosKanbanForm(request.POST)
         if form.is_valid():
+            e = form.cleaned_data['nombre']
+            h = historia.objects.create(id_proyecto = id)
+            evento = str(proyecto.fecha_de_inicio)+" - "+str(request.user) + " creó el estado kanban " + e + " para el proyecto "
+            h.evento = evento
+            h.save()
             estado = form.save()
             estado.save()
             messages.success(request,"El estado "+estado.nombre+ " ha sido creado satisfactoriamente")
+            proyecto.historial.add(h)
+            proyecto.save()
             return redirect('crear_tipoUS',id=id)
         else:
             contexto['mensajeError'] = 'El estado ya existe'
@@ -374,7 +381,7 @@ def modificarUS(request,id_proyecto,id):
     return render(request,'UserStories/modificarUS.html',contexto)
 
 
-def cancelar_US(self,id):
+def cancelar_US(request,id):
   """
     Funcion que permite cancelar un US
 
@@ -386,9 +393,12 @@ def cancelar_US(self,id):
 
   """
 
-  us = get_object_or_404(UserStories,id_us=id)
-  estado = Estados_Kanban.objects.get(nombre="Cancelado")
-  us.estado= estado
-  us.save()
-
-  return redirect('product_backlog',id = us.id_proyecto)
+  if request.method == 'POST':
+        motivo = request.POST['motivo_cancelacion']
+        
+        us = get_object_or_404(UserStories,id_us=id)
+        estado = Estados_Kanban.objects.get(nombre="Cancelado")      
+        us.estado= estado
+        us.motivo_cancelacion = motivo
+        us.save()
+        return redirect('product_backlog',id = us.id_proyecto)

@@ -1,11 +1,10 @@
 from urllib import request
 from django.shortcuts import render, redirect,reverse, get_object_or_404
 from Proyectos.forms import AsignarMiembroForm, AsignarRolForm, ImportarRolForm, crearproyectoForm
-from Proyectos.models import Proyecto, RolUsuario
+from Proyectos.models import Proyecto, RolUsuario, historia
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
-
 from Usuarios.models import Usuario
 from permisos.models import RolesdeSistema
 # Create your views here.
@@ -27,6 +26,13 @@ def crearProyecto (request):
             proyecto.fecha_de_inicio = timezone.now()
             proyecto.save()
             messages.success(request,"Se ha creado el proyecto satisfactoriamente")
+            evento = str(proyecto.fecha_de_inicio)+" - "+str(request.user) + " creó el proyecto " + proyecto.nombre
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            h.evento = evento
+            h.save()
+            proyecto.historial.add(h)
+            proyecto.save()
+
             return redirect('home')
     else:
          form = crearproyectoForm()
@@ -117,8 +123,19 @@ def asignar_miembro(request, id_proyecto):
     if request.method == 'POST':
         form = AsignarMiembroForm( instance=proyecto, data=request.POST)
         if form.is_valid():
+            miembros = form.cleaned_data['miembros']
+            print(miembros)
             form.save()
             messages.success(request, 'Los miembros han sido asignado al proyecto')
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            for m in miembros :
+                h = historia.objects.create(id_proyecto = proyecto.id)
+                evento = str(proyecto.fecha_de_inicio)+" - "+str(request.user) + " asignó a " + str(m) + " al proyecto "
+                h.evento = evento
+                h.save()
+                proyecto.historial.add(h)
+                proyecto.save()
+                
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     contexto = {
         'form': form,
@@ -220,4 +237,23 @@ def mostrarProyecto(request, id_proyecto):
     }
     return render(request, 'proyectos/mostrarProyecto.html', contexto)
 
-    
+
+def ver_historial(request,id):
+   """
+    Vista que permite visualizar el historial del proyecto
+       Argumentos:
+        request: HttpRequest
+        id : id del proyecto
+       Return: HttpResponse    
+   """
+   proyecto = get_object_or_404(Proyecto, id=id)
+   contexto = {'proyecto':proyecto}
+
+   return render(request,'proyectos/historial.html',contexto)
+
+
+
+
+
+
+
