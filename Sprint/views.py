@@ -7,6 +7,8 @@ from Proyectos.models import Proyecto
 from Sprint.models import Sprint,estadoSprint, SprintMiembros
 from UserStories.models import UserStories
 # Create your views here.
+from datetime import datetime
+from Proyectos.models import historia
 
 def crearSprint (request,id):
     """
@@ -25,8 +27,16 @@ def crearSprint (request,id):
             sprint.id_proyecto = proyecto.id
             sprint.save()
             proyecto.sprint.add(sprint) 
-            
             messages.success(request,"Se ha creado el sprint satisfactoriamente")
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            now = datetime.now()
+            dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            evento = dt_string+","+str(request.user) + " creó el "+str(sprint)
+            h.evento = evento
+            h.save()
+            proyecto.historial.add(h)
+            proyecto.save()
+               
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     else:
         form = crearSprintForm(proyecto.id)
@@ -138,6 +148,7 @@ def iniciarSprint(request, id_sprint):
     sprint.estado_sprint = 'En Curso'
     sprint.fecha_inicio = timezone.now()
     sprint.save()
+
     return redirect('listarSprint',sprint.id_proyecto)
 
 
