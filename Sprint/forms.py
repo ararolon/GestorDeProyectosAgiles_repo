@@ -80,32 +80,6 @@ class MiembroSprintForm(forms.ModelForm):
             raise forms.ValidationError('El miembro ya ha sido asignado')
         return datos    
 
-
-class AsignarUSMiembroForm(forms.ModelForm):
-    
-   # Formulario para asignar user stories a un miembro en un sprint.
-    #Se considera que un US debe tener asignado horas de esfuerzo para poder ser asignado a un Sprint.
-    
-    disabled_fields = ()
-    disabled_fields = ('miembro',)
-    
-    def __init__(self,id_sprint,*args, **kwargs):
-        super(AsignarUSMiembroForm,self).__init__(*args, **kwargs)
-        self.fields['us_asignado'].empty_label = 'Seleccionar US'
-        self.fields['us_asignado'].queryset = Sprint.objects.get(id=id_sprint).historias
-        
-        for field in self.disabled_fields:
-            self.fields[field].disabled = True
-
-    class Meta:
-            model = SprintMiembros
-            fields = ['miembro','us_asignado']        
-    
-    def clean(self):
-        datos = super().clean()
-        if(SprintMiembros.objects.filter(us_asignado=datos["us_asignado"]).exists()):
-            raise forms.ValidationError('No se pudo asignar US, ya esta en uso')
-        return datos
 """
 
 class AsignarUSSprintForm(forms.ModelForm):

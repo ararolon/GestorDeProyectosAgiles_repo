@@ -18,10 +18,6 @@
             {% if sprint.estado_sprint == 'En Planificacion' %}
             <a href="{% url 'indexasignar' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
             {% endif %}
-            <div class="col-10 mx-auto">
-            {% if sprint.estado_sprint == 'En Planificacion' %}
-            <a href="{% url 'indexasignar' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
-            {% endif %}
         </div>
 
 
