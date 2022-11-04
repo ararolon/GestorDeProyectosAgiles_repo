@@ -277,10 +277,17 @@ def ver_sprintbacklog(request,id):
 
 
 def asignarHistoria(request, id_sprint):
+    """
+    Vista en el que se puede selecionar miembros del Sprint y asignarlos a user stories
+    
+    Argumentos:
+        request : HttRequest
+        id : id del sprint
 
-    print("entro")
-    print(request.POST)
-
+    Retorna:
+         HttpResponse
+    """
+    
     user_id = int(request.POST.get('user_id')[0])
     id_us = int(request.POST['usId'][0])
     us = UserStories.objects.get(id_us=id_us)
