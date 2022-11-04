@@ -270,7 +270,7 @@ def cancelarProyecto(request, id_proyecto):
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
-
+    
     return redirect('mostrarProyecto', id_proyecto=id_proyecto)
 
 def mostrarProyecto(request, id_proyecto):

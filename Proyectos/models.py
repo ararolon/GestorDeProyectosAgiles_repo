@@ -65,6 +65,7 @@ class Proyecto(models.Model):
     tipo_us = models.ManyToManyField(TipoUSerStory)
     sprint = models.ManyToManyField(Sprint) 
     historial = models.ManyToManyField(historia)
+    motivo = models.CharField(max_length=200, blank=True)
 
     #id_sprints = models.ManyToManyField(Sprint, blank=True) -->preguntar
     #tipoUS = models.CharField(max_length=100, verbose_name="Tipos de US") -->preguntar bien como hacer y como se llama en esta clase

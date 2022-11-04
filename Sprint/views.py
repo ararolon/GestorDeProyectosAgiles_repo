@@ -6,6 +6,7 @@ from django.contrib import messages
 from Proyectos.models import Proyecto
 from Sprint.models import Sprint,estadoSprint, SprintMiembros
 from UserStories.models import UserStories
+from Usuarios.models import Usuario
 # Create your views here.
 from datetime import datetime
 from Proyectos.models import historia
@@ -285,11 +286,23 @@ def ver_sprintbacklog(request,id):
     Retorna:
          HttpResponse    
     """
-
     sprint = Sprint.objects.get(id=id)
-    contexto = {'sprint':sprint}  
-
-    
+    proyecto = Proyecto.objects.get(id=sprint.id_proyecto)
+    contexto = {'sprint':sprint, 'miembros':proyecto.miembros.all(), 'id':id}
 
     return render(request,'Sprint/sprintbacklog.html',contexto)
 
+def asignarHistoria(request, id_sprint):
+
+    print("entro")
+    print(request.POST)
+
+    user_id = int(request.POST.get('user_id')[0])
+    id_us = int(request.POST['usId'][0])
+    us = UserStories.objects.get(id_us=id_us)
+    user = Usuario.objects.get(id=user_id)
+    us.miembro_asignado = user
+    us.save()
+    print(us)
+
+    return redirect('sprintbacklog', id = id_sprint)

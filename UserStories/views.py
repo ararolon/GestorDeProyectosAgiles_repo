@@ -235,9 +235,10 @@ def tablaKanban(request, id_proyecto):
     userstories = sprint.historias.all()
     contexto = {'tipos':tipos,'estados':estados ,'userstories':userstories, 'proyectoActual':proyecto.id}
     if request.method == "POST":
-        id_us = request.POST['usId']
-        id_estado = request.POST['estadoId']
+        id_us = int(request.POST['usId'])
+        id_estado = int(request.POST['estadoId'])
         horas = request.POST['horas']
+        actividad = request.POST['actividad']
 
         us = get_object_or_404(UserStories,id_us=id_us)
         estado = get_object_or_404(Estados_Kanban,id=id_estado)
@@ -255,7 +256,10 @@ def tablaKanban(request, id_proyecto):
             return redirect('tabla_kanban',id_proyecto=proyecto.id)
 
         us.estado = estado
+        us.horas = horas
         us.horas_trabajadas += int(horas)
+        us.actividad = actividad
+        us.responsable = request.user
         us.save()
         return redirect('tabla_kanban',id_proyecto=proyecto.id)
         

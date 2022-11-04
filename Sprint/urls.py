@@ -16,6 +16,7 @@ urlpatterns = [
     path('asignar_us_miembro/<int:id_sprint_miembro>', views.asignarUSMiembro, name='asignar_us_miembro'),    
     path('SprintBacklog/<int:id>',views.ver_sprintbacklog,name='sprintbacklog'),
     path('QuitarUS/<str:nombre>/<int:id_sprint>',views.desasignar_us,name='desasignar'),
+    path('asignarHistoria/<int:id_sprint>', views.asignarHistoria, name="asignarHistoria"),
 ]
 
 
