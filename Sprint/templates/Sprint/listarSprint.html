@@ -53,11 +53,6 @@
                                     {% if sprint.id == miembro.sprint.id %}
                                         <li class="list-group-item">
                                             - {{miembro.miembro}}
-                                            {% if proyecto.scrumMaster == request.user %}
-                                                {% if not sprint.estado_sprint == 'Cancelado' %}
-                                                    <a href="{% url 'asignar_us_miembro' miembro.id %}" class="ml-3 bg-color-danger border-0">Asignar US</a> 
-                                                {% endif %}
-                                            {% endif %}
                                             <h6 class="card-text">Capacidad: {{miembro.capacidad_miembro}}</h6>
                                             <h6 class="card-text">User Storie: {{miembro.us_asignado}}</h6>
                                         </li>
