@@ -172,13 +172,13 @@ def iniciarSprint(request, id_sprint):
     sprint.estado_sprint = 'En Curso'
     sprint.fecha_inicio = timezone.now()
     sprint.save()
+    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
     h = historia.objects.create(id_proyecto = proyecto.id)
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " inicio el "+str(sprint)
     h.evento = evento
     h.save()
-    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
     proyecto.historial.add(h)
     proyecto.save()
 
@@ -196,13 +196,13 @@ def cancelarSprint(request):
     sprint.estado_sprint = 'Cancelado'
     sprint.fecha_fin = timezone.now()
     sprint.save()
+    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
     h = historia.objects.create(id_proyecto = proyecto.id)
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " cancelo el "+str(sprint)
     h.evento = evento
     h.save()
-    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
     proyecto.historial.add(h)
     proyecto.save()
     return redirect('listarSprint',sprint.id_proyecto)
@@ -219,6 +219,15 @@ def finalizarSprint(request):
     sprint.estado_sprint = 'Finalizado'
     sprint.fecha_fin = timezone.now()
     sprint.save()
+    proyecto = get_object_or_404(Proyecto,id=sprint.id_proyecto)
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " finalizo el "+str(sprint)
+    h.evento = evento
+    h.save()
+    proyecto.historial.add(h)
+    proyecto.save()
     return redirect('listarSprint',sprint.id_proyecto)            
 
 

@@ -76,3 +76,8 @@ class Test_proyecto_views(TestCase):
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
         # 302 found porque se redirige a la página de mostrarProyecto
+
+    def test_visualizar_historial(self):
+        path = reverse('historial', args=[self.proyecto.id])
+        response = self.client.get(path)
+        self.assertEqual(response.status_code,200)

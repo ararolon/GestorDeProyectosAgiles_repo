@@ -81,3 +81,8 @@ class Test_userstories_views(TestCase):
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
         # 302 found porque se redirige a la página de tabla_kanban
+    
+    def test_modificar(self):
+        path = reverse('modificar_us', args=[self.proyecto.id,self.us.id_us]) 
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200)
