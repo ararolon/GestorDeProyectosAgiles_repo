@@ -35,8 +35,8 @@ class Sprint(models.Model):
     estado_sprint = models.CharField(max_length=20, choices=estadoSprint.choices, 
                     default=estadoSprint.EN_PLANIFICACION) #El estado por defecto al empezar es En Planificacion
     id_proyecto = models.IntegerField(null=True)
-    # miembros_sprint = models.ManyToManyField(Usuario, related_name='set_miembros_sprint')
-    capacidad = models.IntegerField(verbose_name='Capacidad en horas', null=True, blank=False)
+    # miembros_sprint = models.ManyToManyField(Usuario, blank=True)
+    capacidad = models.IntegerField(verbose_name='Capacidad en horas',default = 0, blank=True,null=True)
     capacidad_us = models.IntegerField(default=0,blank=False)
     capacidad_equipo = models.IntegerField(default=0,blank=False)
 
@@ -56,6 +56,13 @@ class Sprint(models.Model):
         que el sprint no tenga miembros asignados.
         """
         return SprintMiembros.objects.filter(sprint=self.id).exists()
+
+    def tiene_us(self):
+        """
+        Metodo del modelo de Sprint que retorna un booleano en caso
+        que el sprint no tenga user stories asignados.
+        """
+        return self.historias.exists()
 
     def validar(self):
         """
@@ -82,7 +89,7 @@ class SprintMiembros(models.Model):
     """
     sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE,null=True) #Sprint en el que esta asignado un miembro
     miembro = models.ForeignKey(Usuario, on_delete=models.CASCADE,null=True) #Miembro que participa en el sprint
-    capacidad_miembro = models.IntegerField(null=True, blank=False) #Capacidad de trabajo en horas
+    capacidad_miembro = models.IntegerField(default = 0, blank=True) #Capacidad de trabajo en horas
     us_asignado = models.ForeignKey(UserStories,on_delete=models.CASCADE,null=True)
     proyecto = models.ForeignKey('Proyectos.Proyecto', on_delete=models.CASCADE,null=True)
 

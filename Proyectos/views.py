@@ -1,13 +1,13 @@
 from urllib import request
 from django.shortcuts import render, redirect,reverse, get_object_or_404
 from Proyectos.forms import AsignarMiembroForm, AsignarRolForm, ImportarRolForm, crearproyectoForm
-from Proyectos.models import Proyecto, RolUsuario
+from Proyectos.models import Proyecto, RolUsuario, historia
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
-
 from Usuarios.models import Usuario
 from permisos.models import RolesdeSistema
+from datetime import datetime
 # Create your views here.
 
 
@@ -27,6 +27,15 @@ def crearProyecto (request):
             proyecto.fecha_de_inicio = timezone.now()
             proyecto.save()
             messages.success(request,"Se ha creado el proyecto satisfactoriamente")
+            now = datetime.now()
+            dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            evento = dt_string+","+str(request.user) + " creó el proyecto " + proyecto.nombre
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            h.evento = evento
+            h.save()
+            proyecto.historial.add(h)
+            proyecto.save()
+
             return redirect('home')
     else:
          form = crearproyectoForm()
@@ -117,8 +126,21 @@ def asignar_miembro(request, id_proyecto):
     if request.method == 'POST':
         form = AsignarMiembroForm( instance=proyecto, data=request.POST)
         if form.is_valid():
+            miembros = form.cleaned_data['miembros']
             form.save()
             messages.success(request, 'Los miembros han sido asignado al proyecto')
+            h = historia.objects.create(id_proyecto = proyecto.id)
+
+            for m in miembros :
+                h = historia.objects.create(id_proyecto = proyecto.id)
+                now = datetime.now()
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                evento = dt_string+","+str(request.user) + " asignó a " + str(m) + " al proyecto "
+                h.evento = evento
+                h.save()
+                proyecto.historial.add(h)
+                proyecto.save()
+                
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     contexto = {
         'form': form,
@@ -139,16 +161,39 @@ def asignarRol(request, id_proyecto, id_usuario):
     if request.method == 'POST':
         form = AsignarRolForm(id_proyecto, id_usuario, request.POST, instance=usuario_rol) 
         if form.is_valid():
+            roles = form.cleaned_data['roles']
             usuario_rol = form.save()
             usuario = Usuario.objects.get(id=id_usuario)
             usuario_rol.miembro = usuario
             usuario_rol.save()
             proyecto.usuario_roles.add(usuario_rol)
             messages.success(request,"Se asigno correctamente")
+            for r in roles :
+                h = historia.objects.create(id_proyecto = proyecto.id)
+                now = datetime.now()
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                evento = dt_string+","+str(request.user) + " asignó el rol" + str(r) + " al miembro " + str(usuario)
+                h.evento = evento
+                h.save()
+                proyecto.historial.add(h)
+                proyecto.save()
+                
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     else:
         if usuario_rol:
             form = AsignarRolForm(id_proyecto, id_usuario, instance=usuario_rol)
+            data = []
+            usuario = Usuario.objects.get(id=id_usuario)
+            data = usuario_rol
+            for r in  data.roles.all(): 
+                h = historia.objects.create(id_proyecto = proyecto.id)
+                now = datetime.now()
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                evento = dt_string+","+str(request.user) + " quitó el rol" + str(r) + " al miembro " + str(usuario)
+                h.evento = evento
+                h.save()
+                proyecto.historial.add(h)
+                proyecto.save()
         else:
             form = AsignarRolForm(id_proyecto, id_usuario, )
     contexto = {'form': form}
@@ -166,8 +211,18 @@ def importarRol(request, id_proyecto):
     if request.method == 'POST':
         form = ImportarRolForm( instance=proyecto, data=request.POST)
         if form.is_valid():
+            roles = form.cleaned_data['roles']
             form.save()
             messages.success(request, 'Los roles han sido importados satisfactoriamente')
+            for r in roles :
+                h = historia.objects.create(id_proyecto = proyecto.id)
+                now = datetime.now()
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                evento = dt_string+","+str(request.user) + " importó  el rol " + str(r) + " al proyecto "
+                h.evento = evento
+                h.save()
+                proyecto.historial.add(h)
+                proyecto.save()
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     contexto = {
         'form': form,
@@ -186,6 +241,17 @@ def iniciarProyecto(request, id_proyecto):
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     proyecto.estado = 'En Curso'
     proyecto.save()
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " inició " + "el proyecto "
+    h.evento = evento
+    h.save()
+    proyecto.historial.add(h)
+    proyecto.save()
+    
+
+
     return redirect('mostrarProyecto', id_proyecto=id_proyecto)
 
 
@@ -195,9 +261,23 @@ def cancelarProyecto(request, id_proyecto):
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
+
+    if request.method == "POST":
+        motivo = request.POST['motivo']
+
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     proyecto.estado = 'Cancelado'
+    proyecto.motivo = motivo
     proyecto.save()
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " canceló el proyecto "
+    h.evento = evento
+    h.save()
+    proyecto.historial.add(h)
+    proyecto.save()
+    
     return redirect('mostrarProyecto', id_proyecto=id_proyecto)
 
 def mostrarProyecto(request, id_proyecto):
@@ -220,4 +300,23 @@ def mostrarProyecto(request, id_proyecto):
     }
     return render(request, 'proyectos/mostrarProyecto.html', contexto)
 
-    
+
+def ver_historial(request,id):
+   """
+    Vista que permite visualizar el historial del proyecto
+       Argumentos:
+        request: HttpRequest
+        id : id del proyecto
+       Return: HttpResponse    
+   """
+   proyecto = get_object_or_404(Proyecto, id=id)
+   contexto = {'proyecto':proyecto}
+
+   return render(request,'proyectos/historial.html',contexto)
+
+
+
+
+
+
+

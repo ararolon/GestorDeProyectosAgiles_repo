@@ -1,5 +1,6 @@
 {% extends 'SSO/base_usuarios.html' %}
 {% load auth_extras %}
+{% load tz %}
 
 {# se carga head #}
 {% block title %}
@@ -9,19 +10,68 @@
 {# body #}
 {% block content %}
 
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Miembros</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="{% url 'asignarHistoria' id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label id="user_id" for="user_id" class="col-form-label">Usuario:</label>
+                    <select class="form-select" aria-label="Default select example" name="user_id">
+                        <option selected>Seleccionar Miembro</option>
+                        {% for miembro in miembros %}
+                            <option value="{{miembro.id}}">{{miembro}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" >
+                    <label id="usId" for="usId" class="col-form-label">ID US:
+                        <input type="text" readonly value="4" class="form-control" id="usId" name="usId">
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Aceptar</button>
+                </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
 <div>
     <div>
         <h2> Sprint Backlog  {{sprint.nombre_sprint}}</h2>
         <hr>
     </br>
-    </div>
-         <div class="col-10 mx-auto">
+        <div class="col-10 mx-auto">
+            {% if sprint.estado_sprint == 'En Planificacion' %}
+            <a href="{% url 'indexasignar' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
+            {% endif %}
+        </div>
+
+
+         <div class="col-10 mx-autocol-10 mx-auto">
              {% for s in sprint.historias.all  %}
                 <div class="card" style="margin: 10px">
                     <div class="card-header bg-color-primary">
                         <div class="row">
                             <div class="col-auto mr-auto">
                                  {{s.nombre}}
+                            </div>
+                            <div class="col-auto mr-0">
+                                {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
+                                    <button type="button" class="btn btn-success btn-sm">{{s.estado}}</button>
+                                    <a class="btn btn-primary ml-3 btn-sm" style="color: rgb(243, 247, 245)" data-toggle="modal" data-target="#exampleModal" data-usId="{{s.id_us}}">Asignar </a>
+                                    <a class="btn btn-primary ml-3 btn-sm" style="color: rgb(243, 247, 245)" data-toggle="modal" data-target="#exampleModal" data-usId="{{s.id_us}}">Reasignar </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -44,15 +94,53 @@
                         <div class="col-12">
                           Horas de esfuerzo : {{s.horas_estimadas}}
                         </div>
+                        <div class="col-12">
+                            Horas Trabajadas : {{s.horas_trabajadas}}
+                        </div>
+                        {% if s.miembro_asignado %}
+                            <div class="col-12">
+                                Miembro : {{s.miembro_asignado}}
+                            </div>
+                        {% endif %}
+                        <div class="col-12">
+                            <br>
+                            <a class="btn btn-primary" data-toggle="collapse" style="color: rgb(240, 240, 247);"
+                            onclick="document.getElementById('t-{{s.pk}}').classList.toggle('show');"
+                            role="button" aria-expanded="false" aria-controls="t-{{s.pk}}">Ver Historial</a>
+                            <div class="collapse" id="t-{{s.pk}}">
+                                <div class="col-11 row">
+                                    {% for h in s.history.all %}
+                                        {% if h.actividad %}
+                                            {% localtime on %}
+                                            <p>{{h.history_date}} - {{h.history_user}} cambió el estado a {{h.estado}}, registró {{h.horas}} horas en actividad: {{h.actividad}}</p>
+                                            {% endlocaltime %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
              {% endfor %}
           </div>
         </br> 
-    <svg onclick="window.history.back()" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-    </svg>
-    </br>
-    <h6>Volver</h6> 
+        <a href="{% url 'listarSprint' sprint.id_proyecto %}">
+            <svg  width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+            </svg>
+            </br>
+            <h6>Volver</h6> 
+        </a>
+       
 
+        <script>
+            $('#exampleModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var usId = button[0].dataset.usid // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+              // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+              var modal = $(this)
+              modal.find('.modal-body input#usId').val(usId)
+            })
+        </script>
 {% endblock %}

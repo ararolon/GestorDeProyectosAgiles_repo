@@ -9,11 +9,11 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('Sprint', '0002_initial'),
         ('UserStories', '0002_initial'),
-        ('Proyectos', '0002_initial'),
         ('permisos', '0001_initial'),
         ('Usuarios', '0001_initial'),
+        ('Sprint', '0002_initial'),
+        ('Proyectos', '0002_initial'),
     ]
 
     operations = [

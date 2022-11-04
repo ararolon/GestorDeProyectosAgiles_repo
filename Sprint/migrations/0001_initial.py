@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             name='SprintMiembros',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('capacidad_miembro', models.IntegerField(null=True)),
+                ('capacidad_miembro', models.IntegerField(blank=True, default=0)),
             ],
         ),
     ]

@@ -12,7 +12,7 @@
             <hr class="col-10">
             <h5 class="col-12 my-3">El Rol a eliminar cuenta con los siguientes permisos:</h5>
             {% for pp in rol.permisos.all %}
-                <p class="col-10 mx-auto">{{ pp.name }}</p>
+                <p class="">{{ pp.name }}</p>
             {% endfor %}
             <form method="POST" class="col-auto mx-auto">
                 {% csrf_token %}

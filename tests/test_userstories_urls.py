@@ -44,3 +44,8 @@ class Test_urls(TestCase):
   def test_cambiarEstado(self):
     url = reverse('cambiarEstado', args=[self.us.id_us, self.estado.id]) 
     self.assertEqual(resolve(url).func, cambiarEstado,"no se pudo dirigir a el url de cambiarEstado")
+  
+  def test_modificar_us(self):
+    url = reverse('modificar_us', args=[self.proyecto.id,self.us.id_us]) 
+    self.assertEqual(resolve(url).func, modificarUS,"no se pudo dirigir a el url de cambiarEstado")
+  

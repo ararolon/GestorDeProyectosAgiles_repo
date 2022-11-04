@@ -5,6 +5,39 @@
 {% block title %}Proyectos de Sistema {% endblock %}
 
 {% block content %}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cancelar Proyecto</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="{% url 'cancelarProyecto' proyecto.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="descripcion" class="col-form-label">Esta seguro que quiere cancelar el Proyecto #{{proyecto.id}} ?</label>
+            </div>
+            <div class="form-group">
+              <label for="descripcion" class="col-form-label">Descripcion: </label>
+              <textarea name="motivo" class="form-control" id="descripcion"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="descripcion" class="col-form-label">Fecha: </label>
+                <input type="date" class="form-control" id="descripcion"></input>
+              </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar Proyecto</button>
+            </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<h3>Proyecto #{{proyecto.id}}</h3>
     {% if not proyecto.estado == 'Cancelado' %}
         <div class="row mb-3" style="margin: 10px;">
             <div class="col flex-justify-center">
@@ -20,13 +53,13 @@
                     {% if proyecto.scrumMaster == request.user %}
                     <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
                     <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+                    <a href="{% url 'historial' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Historial de Proyecto</a>
                     {% endif %}
                 </div>
             </div>
             <div class="row" style="margin: 10px;">
                 <div class="col flex-justify-center">
                     {% if proyecto.scrumMaster == request.user %}
-                    <a href="{% url 'crear_us' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear user story</a>
                     <a href="{% url 'crear_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear tipo de user story</a>
                     <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
                     <a href="{% url 'importar_tipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Importar tipo de US</a>
@@ -38,6 +71,17 @@
         {% endif %}  
     {% endif %}
 
+    {% if proyecto.estado == 'Cancelado' %}
+        <div class="row mb-3" style="margin: 10px;">
+            <div class="col flex-justify-center">
+                <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
+                <a href="{% url 'listarTipoUS' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Listar tipo de US</a>
+                <a href="{% url 'product_backlog' proyecto.id  %}" class="btn btn-primary ml-3 bg-color-danger border-0">ProductBacklog</a>
+                <a href="{% url 'historial' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Historial de Proyecto</a>
+            </div>
+        </div>
+    {% endif %}  
+
     <div class="card my-4" style="margin: 18px;">
         {% if proyecto.scrumMaster == request.user %}
             <div class="card-header  bg-color-primary">Proyecto #{{proyecto.id}}
@@ -45,7 +89,7 @@
                 <a href="{% url 'iniciarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Iniciar Proyecto</a>
                 {% endif %}
                 {% if proyecto.estado == 'En Curso' %}
-                <a href="{% url 'cancelarProyecto' proyecto.id %}" class="ml-3 bg-color-danger border-0">Cancelar Proyecto</a>
+                <a href="#" class="ml-3 bg-color-danger border-0"  data-toggle="modal" data-target="#exampleModal">Cancelar Proyecto</a>
                 {% endif %}
             </div>
         {% endif %}
@@ -73,18 +117,22 @@
                                 {% endif %}
                             {% endfor %} 
                         {% endfor %}
-                    </li>                    
+                    </li>
+                    {% if proyecto.estado == 'Cancelado' %}
+                        <h6 class="card-title">Motivo de Cancelacion: {{proyecto.motivo}}</h6> 
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>
     </div>
     </br> 
-    <div style="margin: 18px;">
-        <svg onclick="window.history.back()" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+    
+    <a href="{% url 'listarProyectosUser' %}">
+        <svg  width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
         </svg>
         </br>
         <h6>Volver</h6> 
-    </div>
+    </a>
         
 {% endblock %}
