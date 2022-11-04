@@ -227,7 +227,7 @@ def asignar_us(request,nombre,id_sprint):
         us.save()
         sprint.historias.add(us)
         sprint.save()
-        messages.success(request,"Los user story asignado exitosamente")
+        messages.success(request,"User story asignado exitosamente")
     
   else:
           messages.error(request,'Supera la capacidad de este sprint')
@@ -274,6 +274,7 @@ def ver_sprintbacklog(request,id):
     contexto = {'sprint':sprint, 'miembros':proyecto.miembros.all(), 'id':id}
 
     return render(request,'Sprint/sprintbacklog.html',contexto)
+
 
 def asignarHistoria(request, id_sprint):
 
