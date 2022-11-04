@@ -347,6 +347,7 @@ def ver_sprintbacklog(request,id):
 
     return render(request,'Sprint/sprintbacklog.html',contexto)
 
+
 def asignarHistoria(request, id_sprint):
     """
     vista que permite asignar un US a un miembro del proyecto asignado a un sprint
