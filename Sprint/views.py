@@ -147,12 +147,13 @@ def iniciarSprint(request, id_sprint):
     return redirect('listarSprint',sprint.id_proyecto)
 
 
-def cancelarSprint(request, id_sprint):
+def cancelarSprint(request):
     """
     Vista donde el Scrum master puede cancelar un sprint
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
+    id_sprint = int(request.POST.get('sprintId')[0])
     sprint = get_object_or_404(Sprint, id=id_sprint)
     sprint.estado_sprint = 'Cancelado'
     sprint.fecha_fin = timezone.now()
@@ -160,12 +161,13 @@ def cancelarSprint(request, id_sprint):
     return redirect('listarSprint',sprint.id_proyecto)
 
 
-def finalizarSprint(request, id_sprint):
+def finalizarSprint(request):
     """
     Vista donde el Scrum master puede finalizar un sprint
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
+    id_sprint = int(request.POST.get('sprintId')[0])
     sprint = get_object_or_404(Sprint, id=id_sprint)
     sprint.estado_sprint = 'Finalizado'
     sprint.fecha_fin = timezone.now()

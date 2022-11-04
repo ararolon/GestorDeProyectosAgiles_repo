@@ -15,10 +15,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" action="{% url 'cancelarSprint' %}">
                 {% csrf_token %}
+
+                <div class="form-group" hidden>
+                    <label id="sprintId" for="sprintId" class="col-form-label">ID Sprint:</label>
+                    <input type="text" readonly class="form-control" id="sprintId" name="sprintId">
+                </div>
                 <div class="form-group">
-                    <label for="descripcion" class="col-form-label">¿Esta seguro que quiere cancelar el Sprint #{{id_sprint}}?</label>
+                    <label for="descripcion" class="col-form-label">¿Esta seguro que quiere cancelar este Sprint?</label>
                 </div>
                 <div class="form-group">
                     <label for="descripcion" class="col-form-label">Descripción: </label>
@@ -30,7 +35,7 @@
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    {% comment %} <a href="{% url 'cancelarSprint' id_sprint %}" class="btn btn-danger ml-3 bg-color-danger border-0">Cancelar Sprint</a> {% endcomment %}
+                    <button type="submit" class="btn btn-primary">Cancelar</button>
                 </div>
                 </form>
             </div>
@@ -48,14 +53,18 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" action="{% url 'finalizarSprint' %}">
                 {% csrf_token %}
+                <div class="form-group" hidden>
+                    <label id="sprintId" for="sprintId" class="col-form-label">ID Sprint:</label>
+                    <input type="text" readonly class="form-control" id="sprintId" name="sprintId">
+                </div>
                 <div class="form-group">
-                    <label for="descripcion" class="col-form-label">¿Esta seguro que quiere finalizar el Sprint #{{id_sprint}}?</label>
+                    <label for="descripcion" class="col-form-label">¿Esta seguro que quiere finalizar este Sprint?</label>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    {% comment %} <a href="{% url 'finalizarSprint' id_sprint %}" class="btn btn-danger ml-3 bg-color-danger border-0">Finalizar Sprint</a> {% endcomment %}
+                    <button type="submit" class="btn btn-primary">Finalizar</button>
                 </div>
                 </form>
             </div>
@@ -81,8 +90,8 @@
                                 {% endif %}
                             {% endif %}
                             {% if sprint.estado_sprint == 'En Curso' %}
-                            <a href="#" class="btn btn-outline-dark m-2"  data-toggle="modal" data-target="#exampleModal">Cancelar Sprint</a>
-                            <a href="#" class="btn btn-outline-dark m-2"  data-toggle="modal" data-target="#exampleModal2">Finalizar Sprint</a>
+                                <a href="#" class="btn btn-outline-dark m-2" data-sprintId="{{sprint.pk}}"  data-toggle="modal" data-target="#exampleModal">Cancelar Sprint</a>
+                                <a href="#" class="btn btn-outline-dark m-2" data-sprintId="{{sprint.pk}}" data-toggle="modal" data-target="#exampleModal2" >Finalizar Sprint</a>
                             {% endif %}
                             {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
                             <a href="{% url 'modificarSprint' sprint.id_proyecto sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Modificar Sprint</a>
@@ -129,4 +138,29 @@
     </br>
     <h6>Volver</h6> 
 </a>
+
+<script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        console.log(button)
+        var sprintId = button[0].dataset.sprintid // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      console.log(sprintId)
+      modal.find('.modal-body input#sprintId').val(sprintId)
+        
+    })
+    $('#exampleModal2').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        console.log(button)
+        var sprintId = button[0].dataset.sprintid // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      console.log(sprintId)
+      modal.find('.modal-body input#sprintId').val(sprintId)
+        
+    })
+    </script>
 {% endblock %}
