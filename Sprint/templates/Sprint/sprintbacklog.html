@@ -1,5 +1,6 @@
 {% extends 'SSO/base_usuarios.html' %}
 {% load auth_extras %}
+{% load tz %}
 
 {# se carga head #}
 {% block title %}
@@ -97,6 +98,23 @@
                                 Miembro : {{s.miembro_asignado}}
                             </div>
                         {% endif %}
+                        <div class="col-12">
+                            <br>
+                            <a class="btn btn-primary" data-toggle="collapse" style="color: rgb(240, 240, 247);"
+                            onclick="document.getElementById('t-{{s.pk}}').classList.toggle('show');"
+                            role="button" aria-expanded="false" aria-controls="t-{{s.pk}}">Ver Historial</a>
+                            <div class="collapse" id="t-{{s.pk}}">
+                                <div class="col-11 row">
+                                    {% for h in s.history.all %}
+                                        {% if h.actividad %}
+                                            {% localtime on %}
+                                            <p>{{h.history_date}} - {{h.history_user}} cambió el estado a {{h.estado}}, registró {{h.horas}} horas en actividad: {{h.actividad}}</p>
+                                            {% endlocaltime %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
              {% endfor %}
