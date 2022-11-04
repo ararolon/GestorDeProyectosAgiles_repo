@@ -2,7 +2,7 @@ import pytest
 from django.test import TestCase
 from django.urls import reverse, resolve
 from Proyectos.models import Proyecto
-from Proyectos.views import crearProyecto
+from Proyectos.views import crearProyecto, ver_historial
 from Proyectos.views import listarProyectosUser
 from Proyectos.views import listarProyectos
 from Proyectos.views import asignar_miembro
@@ -64,3 +64,7 @@ class Test_proyecto_urls(TestCase):
     def test_mostrarProyectoAdmin(self):
         url = reverse('mostrarProyectoAdmin', args=[self.proyecto.id])
         self.assertEqual(resolve(url).func, mostrarProyectoAdmin)
+
+    def test_visualizar_historial(self):
+        url = reverse('historial', args=[self.proyecto.id])
+        self.assertEqual(resolve(url).func,ver_historial)

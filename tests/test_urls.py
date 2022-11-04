@@ -25,4 +25,5 @@ class Test_urls(SimpleTestCase):
   def test_configurar_sso(self):
     url = reverse('configurar_sso')
     self.assertEqual(resolve(url).func,configurar_sso)
-   
+
+       
