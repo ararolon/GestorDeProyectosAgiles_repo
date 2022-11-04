@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,reverse, get_object_or_404
-from Sprint.forms import AsignarUSMiembroForm, MiembroSprintForm, crearSprintForm, modificarSprintForm
+from Sprint.forms import MiembroSprintForm, crearSprintForm, modificarSprintForm
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
@@ -146,13 +146,19 @@ def listarSprint(request,id):
         Retorna:
           HttpResponse
     """
-   
     proyecto = get_object_or_404(Proyecto,id=id)
-    sprint = proyecto.sprint.all().order_by('fecha_creacion')
+    sprint = proyecto.sprint.all().order_by('-fecha_creacion')
     hayPlanificacion = proyecto.sprint.filter(estado_sprint=estadoSprint.EN_PLANIFICACION).exists()
     hayCurso = proyecto.sprint.filter(estado_sprint=estadoSprint.EN_EJECUCION).exists()
     sprintMiembros = SprintMiembros.objects.filter(proyecto=proyecto) 
-    contexto = {'sprintMiembros':sprintMiembros,'proyecto':proyecto,'sprint':sprint,'hayPlanificacion':hayPlanificacion,'hayCurso':hayCurso}
+    
+    contexto = {
+        'sprintMiembros':sprintMiembros,
+        'sprint':sprint,
+        'proyecto':proyecto,
+        'hayPlanificacion':hayPlanificacion,
+        'hayCurso':hayCurso,
+    }
     return render(request,'Sprint/listarSprint.html',contexto)
 
 
@@ -179,12 +185,13 @@ def iniciarSprint(request, id_sprint):
     return redirect('listarSprint',sprint.id_proyecto)
 
 
-def cancelarSprint(request, id_sprint):
+def cancelarSprint(request):
     """
     Vista donde el Scrum master puede cancelar un sprint
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
+    id_sprint = int(request.POST.get('sprintId')[0])
     sprint = get_object_or_404(Sprint, id=id_sprint)
     sprint.estado_sprint = 'Cancelado'
     sprint.fecha_fin = timezone.now()
@@ -200,27 +207,19 @@ def cancelarSprint(request, id_sprint):
     proyecto.save()
     return redirect('listarSprint',sprint.id_proyecto)
 
-            
-def asignarUSMiembro(request, id_sprint_miembro):
+
+def finalizarSprint(request):
     """
-    Vista en el que se puede seleccionar un US del Sprint Backlog para asignar a un usuario dentro del Sprint
+    Vista donde el Scrum master puede finalizar un sprint
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
-   
-    sprint_miembro = SprintMiembros.objects.get(id=id_sprint_miembro)
-    if request.method == 'POST':
-        form = AsignarUSMiembroForm(sprint_miembro.sprint.id,request.POST, instance=sprint_miembro) 
-        if form.is_valid():
-            us = form.save()
-            us.save()
-            messages.success(request,"US asignado correctamente")
-            return redirect('listarSprint', sprint_miembro.proyecto.id)
-    else:
-        form = AsignarUSMiembroForm(sprint_miembro.sprint.id,instance=sprint_miembro)
-    contexto = {'form': form,'id_proyecto':sprint_miembro.proyecto.id}
-    return render(request, 'Sprint/asignar_us_miembro.html', contexto)
-
+    id_sprint = int(request.POST.get('sprintId')[0])
+    sprint = get_object_or_404(Sprint, id=id_sprint)
+    sprint.estado_sprint = 'Finalizado'
+    sprint.fecha_fin = timezone.now()
+    sprint.save()
+    return redirect('listarSprint',sprint.id_proyecto)            
 
 
 def index_asignar(request,id_sprint):
@@ -320,11 +319,6 @@ def desasignar_us(request,nombre,id_sprint):
     proyecto.historial.add(h)
     proyecto.save()
     return redirect('indexasignar',id_sprint=id_sprint)
-
-
-
-
-
 
 
 def ver_sprintbacklog(request,id):
