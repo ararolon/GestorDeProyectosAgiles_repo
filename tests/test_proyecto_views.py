@@ -73,6 +73,7 @@ class Test_proyecto_views(TestCase):
 
     def test_cancelarProyecto(self):
         path = reverse('cancelarProyecto', args=[self.proyecto.id])
-        response = self.client.get(path)
+        # pass motivo as a post data
+        response = self.client.post(path,data={'motivo': 'test'})
         self.assertEqual(response.status_code, 302)
         # 302 found porque se redirige a la página de mostrarProyecto

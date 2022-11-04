@@ -29,8 +29,12 @@ class Test_sprint_urls(TestCase):
       self.assertEqual(resolve(url).func, iniciarSprint, "no se pudo iniciar sprint")
 
    def test_cancelarSprint(self):
-      url = reverse('cancelarSprint', args=[self.sprint.id])
+      url = reverse('cancelarSprint')
       self.assertEqual(resolve(url).func, cancelarSprint, "no se pudo cancelar sprint")
+
+   def test_finalizarSprint(self):
+      url = reverse('finalizarSprint')
+      self.assertEqual(resolve(url).func, finalizarSprint, "no se pudo finalizar sprint")   
    
    def test_asignarUS(self):
       url = reverse('asignarUS', args=[self.US.nombre,self.sprint.id])
@@ -55,3 +59,4 @@ class Test_sprint_urls(TestCase):
    def test_index_asignar(self):
       url = reverse('indexasignar',args=[self.sprint.id])
       self.assertEqual(resolve(url).func,index_asignar,"No se puede ver la pagina")
+
