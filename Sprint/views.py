@@ -64,6 +64,14 @@ def modificarSprint(request,id,id_sprint):
             s = form.save()
             s.save()
             messages.success(request,"El Sprint ha sido modificado satisfactoriamente")
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            now = datetime.now()
+            dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            evento = dt_string+","+str(request.user) + " modifico el "+str(s)
+            h.evento = evento
+            h.save()
+            proyecto.historial.add(h)
+            proyecto.save()
             return redirect('listarSprint', id=id)
         else:
             messages.error(request,"El Sprint no ha sido modificado")
@@ -95,6 +103,7 @@ def asignarMiembroSprint(request,id_sprint):
     if request.method == 'POST':
         form = MiembroSprintForm(id_sprint,request.POST)
         if form.is_valid():
+            miembro = form.cleaned_data['miembro']
             f=form.save()  
             f.proyecto=proyecto
             f.save()
@@ -109,6 +118,14 @@ def asignarMiembroSprint(request,id_sprint):
             sprint.save()    
             
             messages.success(request,"Miembro asignado correctamente")
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            now = datetime.now()
+            dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+            evento = dt_string+","+str(request.user) + " asignó al miembro  "+str(miembro)+" al "+str(sprint) 
+            h.evento = evento
+            h.save()
+            proyecto.historial.add(h)
+            proyecto.save()
             return redirect('listarSprint', proyecto.id)
     else:
         form = MiembroSprintForm(id_sprint)
@@ -149,6 +166,15 @@ def iniciarSprint(request, id_sprint):
     sprint.estado_sprint = 'En Curso'
     sprint.fecha_inicio = timezone.now()
     sprint.save()
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " inicio el "+str(sprint)
+    h.evento = evento
+    h.save()
+    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
+    proyecto.historial.add(h)
+    proyecto.save()
 
     return redirect('listarSprint',sprint.id_proyecto)
 
@@ -163,6 +189,15 @@ def cancelarSprint(request, id_sprint):
     sprint.estado_sprint = 'Cancelado'
     sprint.fecha_fin = timezone.now()
     sprint.save()
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " cancelo el "+str(sprint)
+    h.evento = evento
+    h.save()
+    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
+    proyecto.historial.add(h)
+    proyecto.save()
     return redirect('listarSprint',sprint.id_proyecto)
 
             
@@ -240,6 +275,15 @@ def asignar_us(request,nombre,id_sprint):
         sprint.historias.add(us)
         sprint.save()
         messages.success(request,"Los user story asignado exitosamente")
+        proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
+        h = historia.objects.create(id_proyecto = proyecto.id)
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        evento = dt_string+","+str(request.user) + " asigno el user story "+str(us)+" al "+str(sprint)
+        h.evento = evento
+        h.save()
+        proyecto.historial.add(h)
+        proyecto.save()
     
   else:
           messages.error(request,'Supera la capacidad de este sprint')
@@ -266,7 +310,15 @@ def desasignar_us(request,nombre,id_sprint):
     sprint.historias.remove(us)
     sprint.save()
     messages.success(request,"User storie desasignado exitosamente")
-
+    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " desasigno el user story "+str(us)+" del "+str(sprint)
+    h.evento = evento
+    h.save()
+    proyecto.historial.add(h)
+    proyecto.save()
     return redirect('indexasignar',id_sprint=id_sprint)
 
 
@@ -293,9 +345,14 @@ def ver_sprintbacklog(request,id):
     return render(request,'Sprint/sprintbacklog.html',contexto)
 
 def asignarHistoria(request, id_sprint):
-
-    print("entro")
-    print(request.POST)
+    """
+    vista que permite asignar un US a un miembro del proyecto asignado a un sprint
+        Argumentos:
+                request: Objeto HttpRequest
+                id_sprint : id del sprint
+        Retorna:
+            HttpResponse
+    """
 
     user_id = int(request.POST.get('user_id')[0])
     id_us = int(request.POST['usId'][0])
@@ -303,6 +360,15 @@ def asignarHistoria(request, id_sprint):
     user = Usuario.objects.get(id=user_id)
     us.miembro_asignado = user
     us.save()
-    print(us)
+    sprint = Sprint.objects.get(id=id_sprint)
+    proyecto = get_object_or_404(Proyecto,id = sprint.id_proyecto)
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " asigno el user story "+str(us)+" al miembro "+str(user)+" en el "+str(sprint)
+    h.evento = evento
+    h.save()
+    proyecto.historial.add(h)
+    proyecto.save()
 
     return redirect('sprintbacklog', id = id_sprint)

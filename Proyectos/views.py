@@ -250,6 +250,8 @@ def iniciarProyecto(request, id_proyecto):
     proyecto.historial.add(h)
     proyecto.save()
     
+
+
     return redirect('mostrarProyecto', id_proyecto=id_proyecto)
 
 
@@ -259,8 +261,13 @@ def cancelarProyecto(request, id_proyecto):
     Argumentos:request: HttpRequest
     Return: HttpResponse
     """
+
+    if request.method == "POST":
+        motivo = request.POST['motivo']
+
     proyecto = get_object_or_404(Proyecto, id=id_proyecto)
     proyecto.estado = 'Cancelado'
+    proyecto.motivo = motivo
     proyecto.save()
     h = historia.objects.create(id_proyecto = proyecto.id)
     now = datetime.now()
