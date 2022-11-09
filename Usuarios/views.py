@@ -6,7 +6,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User,Group, Permission
 from Usuarios.forms import AsignarRolForm
-from Usuarios.models import Usuario
+from Usuarios.models import Usuario,Notificaciones
 from django.contrib import messages
 """
 Vistas exclusivas del administrador del sistema sobre los usuarios
@@ -118,6 +118,26 @@ def asignar_rol_usuario(request,id):
   contexto = {'usuario':usuario, 'user':request.user, 'form':form}
 
   return render(request,'Usuarios/asignar_rol.html',contexto)
+
+
+def ver_notificaciones(request,username):
+  """
+   Vista que permite ver las notificaciones de un usuario
+  
+  Argumentos:
+    request : HttpRequest object
+    username : El username del usuario con el cual se filtraran las notificaciones
+  
+  Retorna:
+      HttpResponse
+  """
+
+  user =  get_object_or_404(Usuario,username=username)
+  notificaciones = Notificaciones.objects.filter(usuario=user)
+  #contador = Notificaciones.objects.filter(usuario=user).count()
+
+  return render(request,'Usuarios/notificaciones.html',context={'notificaciones':notificaciones})
+
 
 
 

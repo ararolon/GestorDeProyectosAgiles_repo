@@ -6,10 +6,28 @@ from django.contrib import messages
 from Proyectos.models import Proyecto
 from Sprint.models import Sprint,estadoSprint, SprintMiembros
 from UserStories.models import UserStories
-from Usuarios.models import Usuario
+from Usuarios.models import Usuario,Notificaciones
 # Create your views here.
 from datetime import datetime
 from Proyectos.models import historia
+
+
+def notificacion(mensaje,usuario,proyecto):
+  
+  """
+  Funcion donde se crean los objetos para las notificaciones
+   Arguementos:
+      mensaje : lo que se guardara como notificacion
+      usuario : el usuario que recibira la notificacion 
+      proyecto : el nombre del proyecto asociado a la notificacion
+  """
+
+  N = Notificaciones.objects.create(usuario=usuario,mensaje=mensaje)
+  N.proyecto = proyecto
+  N.save()
+
+
+
 
 def crearSprint (request,id):
     """
@@ -29,15 +47,18 @@ def crearSprint (request,id):
             sprint.save()
             proyecto.sprint.add(sprint) 
             messages.success(request,"Se ha creado el sprint satisfactoriamente")
+            mensaje = str(request.user)+ "ha creado el "+str(sprint.nombre)
             h = historia.objects.create(id_proyecto = proyecto.id)
             now = datetime.now()
             dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-            evento = dt_string+","+str(request.user) + " creó el "+str(sprint)
+            evento = dt_string+","+str(request.user) + " creó el sprint  "+str(sprint)
             h.evento = evento
             h.save()
             proyecto.historial.add(h)
             proyecto.save()
-               
+            for m in proyecto.miembros.all():
+                notificacion(mensaje,m,proyecto.nombre)
+
             return render(request, 'proyectos/mostrarProyecto.html', {'proyecto':proyecto})
     else:
         form = crearSprintForm(proyecto.id)
@@ -122,10 +143,12 @@ def asignarMiembroSprint(request,id_sprint):
             now = datetime.now()
             dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
             evento = dt_string+","+str(request.user) + " asignó al miembro  "+str(miembro)+" al "+str(sprint) 
+            mensaje =  str(request.user)+" te ha asignado al "+str(sprint.nombre)
             h.evento = evento
             h.save()
             proyecto.historial.add(h)
             proyecto.save()
+            notificacion(mensaje,miembro,proyecto.nombre)
             return redirect('listarSprint', proyecto.id)
     else:
         form = MiembroSprintForm(id_sprint)
@@ -177,10 +200,12 @@ def iniciarSprint(request, id_sprint):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " inicio el "+str(sprint)
+    mensaje = "El " +str(sprint.nombre)+ " ha iniciado"
     h.evento = evento
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
+    messages.success("El sprint ha iniciado satisfactoriamente")
 
     return redirect('listarSprint',sprint.id_proyecto)
 
@@ -205,6 +230,7 @@ def cancelarSprint(request):
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
+    messages.success("El sprint ha sido cancelado")
     return redirect('listarSprint',sprint.id_proyecto)
 
 
@@ -224,10 +250,12 @@ def finalizarSprint(request):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " finalizo el "+str(sprint)
+    mensaje = str(request.user)+ "ha finalizado el "+str(sprint.nombre)
     h.evento = evento
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
+    messages.success("El sprint ha finalizado exitosamente")
     return redirect('listarSprint',sprint.id_proyecto)            
 
 
@@ -370,9 +398,11 @@ def asignarHistoria(request, id_sprint):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " asigno el user story "+str(us)+" al miembro "+str(user)+" en el "+str(sprint)
+    mensaje = str(request.user)+ "te ha asignado el US "+str(us.nombre)
     h.evento = evento
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
-
+    messages.success("US asignado correctamente")
+    notificacion(mensaje,user,proyecto.nombre)
     return redirect('sprintbacklog', id = id_sprint)

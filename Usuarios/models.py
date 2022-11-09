@@ -114,7 +114,20 @@ class Usuario(User):
         self.groups.remove(grupo)
         
 
-       
+class Notificaciones(models.Model):
+    """
+    Modelo para la implementacion de notificaciones para los usuarios del sistema
+    """
+    leido = models.BooleanField(default=False)
+    mensaje = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    proyecto = models.TextField()
+    usuario = models.ForeignKey(Usuario,on_delete = models.CASCADE)
+   
+
+    def __str__(self):
+        return self.mensaje
+ 
           
 
 

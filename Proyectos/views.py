@@ -5,10 +5,27 @@ from Proyectos.models import Proyecto, RolUsuario, historia
 from django.utils import timezone
 from django.forms import model_to_dict
 from django.contrib import messages
-from Usuarios.models import Usuario
+from Usuarios.models import Usuario, Notificaciones
 from permisos.models import RolesdeSistema
 from datetime import datetime
 # Create your views here.
+
+def notificacion(mensaje,usuario,proyecto):
+  
+  """
+  Funcion donde se crean los objetos para las notificaciones
+   Arguementos:
+      mensaje : lo que se guardara como notificacion
+      usuario : el usuario que recibira la notificacion 
+      proyecto : el nombre del proyecto asociado a la notificacion
+  """
+
+  N = Notificaciones.objects.create(usuario=usuario,mensaje=mensaje)
+  N.proyecto = proyecto
+  N.save()
+
+
+
 
 
 
@@ -35,7 +52,9 @@ def crearProyecto (request):
             h.save()
             proyecto.historial.add(h)
             proyecto.save()
-
+            # para notificar al scrum master 
+            mensaje = str(request.user)+" te ha asignado como scrum master del proyecto: "+str(proyecto.nombre)
+            notificacion(mensaje,proyecto.scrumMaster,proyecto.nombre)
             return redirect('home')
     else:
          form = crearproyectoForm()
@@ -130,7 +149,7 @@ def asignar_miembro(request, id_proyecto):
             form.save()
             messages.success(request, 'Los miembros han sido asignado al proyecto')
             h = historia.objects.create(id_proyecto = proyecto.id)
-
+            mensaje = str(request.user)+" te ha asignado como miembro del proyecto: "+str(proyecto.nombre)
             for m in miembros :
                 h = historia.objects.create(id_proyecto = proyecto.id)
                 now = datetime.now()
@@ -140,6 +159,7 @@ def asignar_miembro(request, id_proyecto):
                 h.save()
                 proyecto.historial.add(h)
                 proyecto.save()
+                notificacion(mensaje,m,proyecto.nombre)
                 
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     contexto = {
@@ -168,15 +188,18 @@ def asignarRol(request, id_proyecto, id_usuario):
             usuario_rol.save()
             proyecto.usuario_roles.add(usuario_rol)
             messages.success(request,"Se asigno correctamente")
+            
             for r in roles :
                 h = historia.objects.create(id_proyecto = proyecto.id)
                 now = datetime.now()
                 dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
                 evento = dt_string+","+str(request.user) + " asignó el rol" + str(r) + " al miembro " + str(usuario)
+                mensaje = str(request.user)+" te ha asignado el rol de "+str(r)
                 h.evento = evento
                 h.save()
                 proyecto.historial.add(h)
                 proyecto.save()
+                notificacion(mensaje,usuario,proyecto.nombre)
                 
             return redirect('mostrarProyecto', id_proyecto=id_proyecto)
     else:
@@ -190,10 +213,12 @@ def asignarRol(request, id_proyecto, id_usuario):
                 now = datetime.now()
                 dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
                 evento = dt_string+","+str(request.user) + " quitó el rol" + str(r) + " al miembro " + str(usuario)
+                mensaje = "Se te ha quitado el rol de "+str(r)
                 h.evento = evento
                 h.save()
                 proyecto.historial.add(h)
                 proyecto.save()
+                notificacion(mensaje,usuario,proyecto.nombre)
         else:
             form = AsignarRolForm(id_proyecto, id_usuario, )
     contexto = {'form': form}
@@ -249,6 +274,7 @@ def iniciarProyecto(request, id_proyecto):
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
+    messages.success(request, 'Proyecto iniciado satisfactoriamente')
     
 
 
@@ -273,11 +299,16 @@ def cancelarProyecto(request, id_proyecto):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " canceló el proyecto "
+    mensaje = "El proyecto ha sido cancelado"
     h.evento = evento
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
+    #para que llegue a todos los miembros del proyecto
+    for m in proyecto.miembros.all() :
+        notificacion(mensaje,m,proyecto.nombre)
     
+    messages.success(request, 'Proyecto cancelado satisfactoriamente')
     return redirect('mostrarProyecto', id_proyecto=id_proyecto)
 
 def mostrarProyecto(request, id_proyecto):
