@@ -343,7 +343,7 @@ def ver_sprintbacklog(request,id):
     """
     sprint = Sprint.objects.get(id=id)
     proyecto = Proyecto.objects.get(id=sprint.id_proyecto)
-    contexto = {'sprint':sprint, 'miembros':proyecto.miembros.all(), 'id':id}
+    contexto = {'sprint':sprint, 'miembros':proyecto.miembros.all(), 'id':id, 'proyecto':proyecto,}
 
     return render(request,'Sprint/sprintbacklog.html',contexto)
 
