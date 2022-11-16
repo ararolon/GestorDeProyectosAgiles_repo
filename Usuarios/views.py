@@ -3,6 +3,7 @@ from sre_constants import GROUPREF_EXISTS
 from tokenize import group
 from unicodedata import name
 from django.shortcuts import render,redirect,get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User,Group, Permission
 from Usuarios.forms import AsignarRolForm
@@ -134,11 +135,6 @@ def ver_notificaciones(request,username):
 
   user =  get_object_or_404(Usuario,username=username)
   notificaciones = Notificaciones.objects.filter(usuario=user)
-  #contador = Notificaciones.objects.filter(usuario=user).count()
-
-  return render(request,'Usuarios/notificaciones.html',context={'notificaciones':notificaciones})
-
-
-
-
-
+  
+  data = list(notificaciones.values())
+  return JsonResponse(data, safe=False)

@@ -15,11 +15,12 @@
  
     <div class="notifications" id="box">
         <h2>Notificaciones</h2>
-          <div class="notifications-item">
-              <div class="text">
-                  <h4><a href="{% url 'notificaciones' request.user.username %}"> Ver todas las notificaciones</a></h4>
-              </div>
-          </div>
+        <div class="notifications-box"></div>
+        <div class="notifications-item">
+            <div class="text">
+                <h4><a id="notification-url" href="{% url 'notificaciones' request.user.username %}"> Ver todas las notificaciones</a></h4>
+            </div>
+        </div>
     </div>
     <a href="{% url 'account_logout' %}" class="btn btn-danger text-white" >Cerrar Sesión</a>
   </div>
@@ -45,29 +46,42 @@
 
 <script>
   $(document).ready(function(){
+    var down = false;
+    
+    $('#bell').click(function(e){
+        var color = $(this).text();
+        if(down){
             
+            $('#box').css('height','0px');
+            $('#box').css('opacity','0');
+            down = false;
+        }else{
             
+            $('#box').css('height','auto');
+            $('#box').css('opacity','1');
+            down = true;
             
+        }
+    });
+
+	const url = document.querySelector("#notification-url").href
+	setTimeout(() => {
+		fetch(url)
+			.then(data => data.json())
+			.then(data => {
+				for (let notificacion of data) {
+					const el = document.createElement("div")
+					el.className = "notifications-item"
+					el.innerHTML = `<div class="text">
+						<h4>${notificacion.mensaje}</h4>
+						<p>${notificacion.proyecto}</p>
+					</div>
+					`
+					// append to first child
+					document.querySelector(".notifications-box").appendChild(el)
+				}
+			})
+	}, 1000);
         
-            var down = false;
-            
-            $('#bell').click(function(e){
-              
-                var color = $(this).text();
-                if(down){
-                    
-                    $('#box').css('height','0px');
-                    $('#box').css('opacity','0');
-                    down = false;
-                }else{
-                    
-                    $('#box').css('height','auto');
-                    $('#box').css('opacity','1');
-                    down = true;
-                    
-                }
-                
-            });
-                
-                });
+  });
 </script>
