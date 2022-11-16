@@ -19,6 +19,7 @@ urlpatterns = [
     path('asignarRol/<int:id_proyecto>/miembro/<int:id_usuario>', views.asignarRol, name='asignarRol'),
     path('iniciarProyecto/<int:id_proyecto>', views.iniciarProyecto, name='iniciarProyecto'),
     path('cancelarProyecto/<int:id_proyecto>', views.cancelarProyecto, name='cancelarProyecto'),
-    path('historial/<int:id>',views.ver_historial,name='historial')   
+    path('historial/<int:id>',views.ver_historial,name='historial'), 
+    path('finalizarProyecto/<int:id_proyecto>', views.finalizarProyecto, name='finalizarProyecto'),
 
 ]
