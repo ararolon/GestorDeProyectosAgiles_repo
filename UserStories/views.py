@@ -35,8 +35,9 @@ def crear_estadokanban(request,id):
         form = EstadosKanbanForm(request.POST)
         if form.is_valid():
             e = form.cleaned_data['nombre']
-            h = historia.objects.create(id_proyecto = id)
-            evento = str(timezone.now)+","+str(request.user) + " creó el estado kanban " + e + " para el proyecto "
+            fecha = datetime.now()
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            evento = str(fecha.day)+"/"+str(fecha.month)+"/"+str(fecha.year)+" "+str(fecha.hour)+":"+str(fecha.minute)+":"+str(fecha.second)+","+str(request.user) + " creó el estado kanban " + e + " para el proyecto "
             h.evento = evento
             h.save()
             estado = form.save()

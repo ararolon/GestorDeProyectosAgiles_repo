@@ -349,7 +349,7 @@ def ver_historial(request,id):
 
    eventos =  proyecto.historial.all().order_by('-id')
 
-   contexto = {'evento':eventos}
+   contexto = {'evento':eventos,'proyecto':proyecto}
 
    return render(request,'proyectos/historial.html',contexto)
 

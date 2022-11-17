@@ -47,7 +47,7 @@ def crearSprint (request,id):
             sprint.save()
             proyecto.sprint.add(sprint) 
             messages.success(request,"Se ha creado el sprint satisfactoriamente")
-            mensaje = str(request.user)+ "ha creado el "+str(sprint.nombre)
+            mensaje = str(request.user)+ "ha creado el "+str(sprint.nombre_sprint)
             h = historia.objects.create(id_proyecto = proyecto.id)
             now = datetime.now()
             dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -143,7 +143,7 @@ def asignarMiembroSprint(request,id_sprint):
             now = datetime.now()
             dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
             evento = dt_string+","+str(request.user) + " asignó al miembro  "+str(miembro)+" al "+str(sprint) 
-            mensaje =  str(request.user)+" te ha asignado al "+str(sprint.nombre)
+            mensaje =  str(request.user)+" te ha asignado al "+str(sprint.nombre_sprint)
             h.evento = evento
             h.save()
             proyecto.historial.add(h)
@@ -200,12 +200,12 @@ def iniciarSprint(request, id_sprint):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " inicio el "+str(sprint)
-    mensaje = "El " +str(sprint.nombre)+ " ha iniciado"
+    mensaje = "El " +str(sprint.nombre_sprint)+ " ha iniciado"
     h.evento = evento
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
-    messages.success("El sprint ha iniciado satisfactoriamente")
+    messages.success(request,"El sprint ha iniciado satisfactoriamente")
 
     return redirect('listarSprint',sprint.id_proyecto)
 
@@ -250,7 +250,7 @@ def finalizarSprint(request):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " finalizo el "+str(sprint)
-    mensaje = str(request.user)+ "ha finalizado el "+str(sprint.nombre)
+    mensaje = str(request.user)+ "ha finalizado el "+str(sprint.nombre_sprint)
     h.evento = evento
     h.save()
     proyecto.historial.add(h)
