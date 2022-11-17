@@ -1470,11 +1470,6 @@
     },
     {
       "model": "UserStories.estados_kanban",
-      "pk": 99,
-      "fields": { "nombre": "Cancelado", "defecto": true }
-    },
-    {
-      "model": "UserStories.estados_kanban",
       "pk": 100,
       "fields": { "nombre": "Finalizado", "defecto": true }
     },
