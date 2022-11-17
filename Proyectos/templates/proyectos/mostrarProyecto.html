@@ -119,10 +119,10 @@
                             {% endfor %} 
                         {% endfor %}
                     </li>
-                    {% if proyecto.estado == 'Cancelado' %}
-                        <h6 class="card-title">Motivo de Cancelacion: {{proyecto.motivo}}</h6> 
-                    {% endif %}
                 {% endfor %}
+                {% if proyecto.estado == 'Cancelado' %}
+                    <h6 class="card-title">Motivo de Cancelacion: {{proyecto.motivo}}</h6> 
+                {% endif %}
             </ul>
         </div>
     </div>
