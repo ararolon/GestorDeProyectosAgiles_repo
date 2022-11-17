@@ -43,12 +43,16 @@ def eliminar_usuario(request,id):
 
   """
     
-  usuario = get_object_or_404(User,pk=id)
-
+  usuario = get_object_or_404(Usuario,pk=id)
+  
   if request.method =="POST":
+    if usuario.miembro_en_uso() == False :
       usuario.delete()
       messages.success(request,"El usuario ha sido eliminado")
       return redirect('index_eliminar')
+    else:
+        messages.error(request,"El usuario no puede eliminarse , es parte de un proyecto en el sistema")
+        return redirect('index_eliminar')
   else:
       return render(request,'Usuarios/eliminar.html',{'usuario':usuario})    
 
@@ -123,14 +127,15 @@ def asignar_rol_usuario(request,id):
 
 def ver_notificaciones(request,username):
   """
-   Vista que permite ver las notificaciones de un usuario
+   Vista que permite ver obtener todas las notificaciones de un usuario
+   y mostrar en la barra de navegacion 
   
   Argumentos:
     request : HttpRequest object
     username : El username del usuario con el cual se filtraran las notificaciones
   
   Retorna:
-      HttpResponse
+      JsonResponse 
   """
 
   user =  get_object_or_404(Usuario,username=username)
@@ -138,3 +143,27 @@ def ver_notificaciones(request,username):
   
   data = list(notificaciones.values())
   return JsonResponse(data, safe=False)
+
+
+def listar_notificaciones(request,username):
+  """
+   Vista que permite ver todas las notificaciones de un usuario 
+
+   Argumento:
+        request : HttpRequest object
+        username : El username del usuario con el cual se filtraran las notificaciones
+    
+    Return
+        HttpResponse
+  """
+
+  user =  get_object_or_404(Usuario,username=username)
+  notificaciones = Notificaciones.objects.filter(usuario=user).order_by('-timestamp')
+  contexto = {'notificaciones':notificaciones}
+
+  return render(request,'Usuarios/notificaciones.html',contexto)
+
+
+  
+   
+

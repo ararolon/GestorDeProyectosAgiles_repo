@@ -18,8 +18,9 @@
         <div class="notifications-box"></div>
         <div class="notifications-item">
             <div class="text">
-                <h4><a id="notification-url" href="{% url 'notificaciones' request.user.username %}"> Ver todas las notificaciones</a></h4>
-            </div>
+                <h4><a  id="notification-url" href="{% url 'notificaciones' request.user.username %}" hidden > Ver todas las notificaciones</a></h4>
+                <h4><a  id="notification-url" href="{% url 'lista_notis' request.user.username %}"> Ver todas las notificaciones</a></h4>
+              </div>
         </div>
     </div>
     <a href="{% url 'account_logout' %}" class="btn btn-danger text-white" >Cerrar Sesión</a>

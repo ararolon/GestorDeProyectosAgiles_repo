@@ -40,9 +40,12 @@ def crearProyecto (request):
     if request.method == 'POST':
         form = crearproyectoForm(request.POST)
         if form.is_valid():
+            user = form.cleaned_data['scrumMaster']
             proyecto = form.save(commit=False)
             proyecto.fecha_de_inicio = timezone.now()
             proyecto.save()
+            rol = RolesdeSistema.objects.get(nombre='Scrum Master')
+            user.asignar_rol_a_usuario(rol.id)
             messages.success(request,"Se ha creado el proyecto satisfactoriamente")
             now = datetime.now()
             dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -341,7 +344,12 @@ def ver_historial(request,id):
        Return: HttpResponse    
    """
    proyecto = get_object_or_404(Proyecto, id=id)
-   contexto = {'proyecto':proyecto}
+
+   eventos = []
+
+   eventos =  proyecto.historial.all().order_by('-id')
+
+   contexto = {'evento':eventos}
 
    return render(request,'proyectos/historial.html',contexto)
 

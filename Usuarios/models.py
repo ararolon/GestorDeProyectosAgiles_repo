@@ -13,6 +13,7 @@ from permisos.models import RolesdeSistema
 
 class Usuario(User):
     """
+
         Modelo utilizado para obtener los usuarios del sistema
         el modelo extiende del modelo User de Django
         modelo proxy
@@ -112,7 +113,20 @@ class Usuario(User):
         rol = RolesdeSistema.objects.get(id = rol_id)
         grupo = Group.objects.get(name = rol.nombre)
         self.groups.remove(grupo)
+
+
+    
+    def miembro_en_uso(self):
+ 
+       """
+          Funcion que pregunta si un miembro pertenece o no a un proyecto.
+          Si el usuario tiene mas de un rol , se encuentra en un proyecto
+       """
         
+       if self.groups.count() > 1:
+               return True  
+       return False    
+     
 
 class Notificaciones(models.Model):
     """

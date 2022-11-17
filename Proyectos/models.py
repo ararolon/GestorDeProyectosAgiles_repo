@@ -96,6 +96,7 @@ class Proyecto(models.Model):
             self.estado = estadoProyecto.CANCELADO
         return True
 
+    
 
 
 

@@ -403,6 +403,6 @@ def asignarHistoria(request, id_sprint):
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
-    messages.success("US asignado correctamente")
+    messages.success(request,"US asignado correctamente")
     notificacion(mensaje,user,proyecto.nombre)
     return redirect('sprintbacklog', id = id_sprint)

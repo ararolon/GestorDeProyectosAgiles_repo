@@ -14,7 +14,6 @@ class Test_proyecto_views(TestCase):
         self.proyecto = Proyecto.objects.create(nombre='testProyecto', descripcion='testProyecto', scrumMaster=self.scrum_master)
         self.miembro = Usuario.objects.create(first_name='testMiembro', username='testMiembro')
 
-
     def test_crear_Proyecto(self):
         path = reverse('crearProyecto')
         response = self.client.get(path)

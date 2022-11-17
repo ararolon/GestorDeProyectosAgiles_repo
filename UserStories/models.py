@@ -8,7 +8,7 @@ from unittest.util import _MAX_LENGTH
 from wsgiref.validate import validator
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from Usuarios.models import Usuario
+from  Usuarios.models   import Usuario,Notificaciones
 from django.core.validators import MaxValueValidator, MinValueValidator
 from Sprint.models import *
 from simple_history.models import HistoricalRecords
