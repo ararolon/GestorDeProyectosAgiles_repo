@@ -91,17 +91,17 @@
                               </div>
 
                             {% endif %}
-                            
-
-                            {% if proyecto.scrumMaster == request.user  %}
-                                <div class="col-12">
-                                    <div class="d-flex flex-row-reverse">
-                                        {% if us.estado.nombre != 'Cancelado' %}
-                                            <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar<a>
-                                            <a href="#" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#exampleModal">Cancelar</a>    
-                                        {% endif %}
-                                    </div>
-                            </div>
+                            {% if proyecto.estado == 'En Curso'  %}
+                                {% if proyecto.scrumMaster == request.user  %}
+                                    <div class="col-12">
+                                        <div class="d-flex flex-row-reverse">
+                                            {% if us.estado.nombre != 'Cancelado' %}
+                                                <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar<a>
+                                                <a href="#" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#exampleModal">Cancelar</a>    
+                                            {% endif %}
+                                        </div>
+                                </div>
+                                {% endif %}
                             {% endif %}
                         </div>
                 </div>
