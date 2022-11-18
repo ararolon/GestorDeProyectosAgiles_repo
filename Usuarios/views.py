@@ -137,8 +137,9 @@ def ver_notificaciones(request,username):
   Retorna:
       JsonResponse 
   """
-
-  user =  get_object_or_404(Usuario,username=username)
+  print(username)
+  user =  Usuario.objects.get(username=username)
+  print(user)
   notificaciones = Notificaciones.objects.filter(usuario=user)
   
   data = list(notificaciones.values())

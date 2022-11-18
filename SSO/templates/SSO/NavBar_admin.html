@@ -45,13 +45,13 @@
     </div>
     
 
-    <div class="notifications" id="box">
+    <div class="notifications" style="position: absolute;z-index: 900;" id="box">
       <h2>Notificaciones</h2>
-      <div class="notifications-box"></div>
+      <div class="notifications-box" style="overflow-y:scroll;max-height:300px "></div>
       <div class="notifications-item">
           <div class="text">
-              <h4><a  id="notification-url" href="{% url 'notificaciones' request.user.username %}" hidden > Ver todas las notificaciones</a></h4>
-              <h4><a  id="notification-url" href="{% url 'lista_notis' request.user.username %}"> Ver todas las notificaciones</a></h4>
+              <h4><a  id="notification-url" href="{% url 'notificaciones' request.user %}" hidden > Ver todas las notificaciones</a></h4>
+              <h4><a  id="notification-url" href="{% url 'lista_notis' request.user %}"> Ver todas las notificaciones</a></h4>
             </div>
       </div>
   </div>

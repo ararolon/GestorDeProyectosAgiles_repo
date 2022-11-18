@@ -13,13 +13,13 @@
     <div class="icon" id="bell"> <img src="https://i.imgur.com/AC7dgLA.png" alt="">
     </div>
  
-    <div class="notifications" id="box">
+    <div class="notifications" style="position: absolute;z-index: 900;" id="box">
         <h2>Notificaciones</h2>
-        <div class="notifications-box"></div>
+        <div class="notifications-box" style="overflow-y:scroll;max-height:300px "></div>
         <div class="notifications-item">
             <div class="text">
-                <h4><a  id="notification-url" href="{% url 'notificaciones' request.user.username %}" hidden > Ver todas las notificaciones</a></h4>
-                <h4><a  id="notification-url" href="{% url 'lista_notis' request.user.username %}"> Ver todas las notificaciones</a></h4>
+                <h4><a  id="notification-url" href="{% url 'notificaciones' request.user %}" hidden > Ver todas las notificaciones</a></h4>
+                <h4><a  id="notification-url" href="{% url 'lista_notis' request.user %}"> Ver todas las notificaciones</a></h4>
               </div>
         </div>
     </div>
@@ -43,6 +43,10 @@
 .notifications h2{font-size: 14px;padding: 10px;border-bottom: 1px solid #eee;color: #999}.notifications h2 span{color: #f00}.notifications-item{display: flex;border-bottom: 1px solid #eee;padding: 6px 9px;margin-bottom: 0px;cursor: pointer}
 .notifications-item:hover{background-color: #eee}.notifications-item img{display: block;width: 50px;height: 50px;margin-right: 9px;border-radius: 50%;margin-top: 2px}.notifications-item .text h4{color: #777;font-size: 16px;margin-top: 3px}
 .notifications-item .text p{color: #aaa;font-size: 12px}
+.notification-box{
+  max-height: 300px;
+  overflow-y: scroll;
+}
 </style>
 
 <script>

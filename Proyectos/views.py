@@ -19,10 +19,7 @@ def notificacion(mensaje,usuario,proyecto):
       usuario : el usuario que recibira la notificacion 
       proyecto : el nombre del proyecto asociado a la notificacion
   """
-
-  N = Notificaciones.objects.create(usuario=usuario,mensaje=mensaje)
-  N.proyecto = proyecto
-  N.save()
+  N = Notificaciones.objects.create(usuario=usuario,mensaje=mensaje,proyecto=proyecto)
 
 
 
