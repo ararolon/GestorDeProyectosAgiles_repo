@@ -1479,7 +1479,7 @@
       "fields": {
         "nombre": "Tipo US 1",
         "descripcion": "",
-        "estados_kanban": [1, 2, 99, 100]
+        "estados_kanban": [1, 2, 100]
       }
     },
     {

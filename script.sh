@@ -53,5 +53,4 @@ pytest
 python manage.py loaddata datos.json
 
 
-
 python manage.py runserver
