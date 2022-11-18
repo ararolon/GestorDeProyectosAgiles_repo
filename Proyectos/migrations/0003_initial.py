@@ -9,7 +9,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('UserStories', '0002_initial'),
         ('permisos', '0001_initial'),
         ('Proyectos', '0002_initial'),
         ('Sprint', '0002_initial'),
