@@ -353,11 +353,6 @@
     },
     {
       "model": "UserStories.estados_kanban",
-      "pk": 99,
-      "fields": { "nombre": "Cancelado", "defecto": true }
-    },
-    {
-      "model": "UserStories.estados_kanban",
       "pk": 100,
       "fields": { "nombre": "Finalizado", "defecto": true }
     },
@@ -367,7 +362,7 @@
       "fields": {
         "nombre": "Tipo US 1",
         "descripcion": "",
-        "estados_kanban": [1, 2, 99, 100]
+        "estados_kanban": [1, 2, 100]
       }
     },
     {

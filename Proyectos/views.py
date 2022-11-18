@@ -351,8 +351,26 @@ def ver_historial(request,id):
    return render(request,'proyectos/historial.html',contexto)
 
 
+def finalizarProyecto(request, id_proyecto):
+    """
+    Donde el Scrum master puede finalizar un proyecto
+    Argumentos:request: HttpRequest
+    Return: HttpResponse
+    """
+    proyecto = get_object_or_404(Proyecto, id=id_proyecto)
+    proyecto.estado = 'Finalizado'
+    proyecto.save()
+    h = historia.objects.create(id_proyecto = proyecto.id)
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    evento = dt_string+","+str(request.user) + " finalizó " + "el proyecto "
+    h.evento = evento
+    h.save()
+    proyecto.historial.add(h)
+    proyecto.save()
+    
 
-
+    return redirect('mostrarProyecto', id_proyecto=id_proyecto)
 
 
 
