@@ -5,7 +5,7 @@ from django.forms import model_to_dict
 from django.contrib import messages
 from Proyectos.models import Proyecto
 from Sprint.models import Sprint,estadoSprint, SprintMiembros
-from UserStories.models import UserStories
+from UserStories.models import UserStories, HoraPorDia
 from Usuarios.models import Usuario,Notificaciones
 # Create your views here.
 from datetime import datetime
@@ -406,3 +406,50 @@ def asignarHistoria(request, id_sprint):
     messages.success(request,"US asignado correctamente")
     notificacion(mensaje,user,proyecto.nombre)
     return redirect('sprintbacklog', id = id_sprint)
+
+
+def burnDownChart(request,id):
+    """
+    Vista que permite ver el grafico burndownchart de un sprint
+
+    Argumentos:
+        request : HttRequest
+        id : id del sprint
+
+    Retorna:
+         HttpResponse    
+    """
+    sprint = Sprint.objects.get(id=id)
+    historias = sprint.historias.all()
+
+    duracion = sprint.duracion_sprint
+    print("duracion",duracion)
+    dias = []
+    for i in range(1,duracion+1):
+        horaXus = HoraPorDia.objects.filter(dia=i, user_story__in=historias )
+
+        total = 0
+        for hora in horaXus:
+            total = total + hora.horas
+
+        dias.append(total)
+
+    print(dias)
+    dias.reverse()
+    dias_acumulados = []
+    for i in range(0,len(dias)):
+        total = dias[i]
+        for j in range(0,i):
+            total = total + dias[j]
+        dias_acumulados.append(total)
+    dias.reverse()
+    dias_acumulados.reverse()
+
+    print(dias_acumulados)
+
+    proyecto = Proyecto.objects.get(id=sprint.id_proyecto)
+    contexto = {'sprint':sprint, 'miembros':proyecto.miembros.all(), 'id':id, 'proyecto':proyecto,
+        'dias':dias, 'dias_acumulados':dias_acumulados, 'duracion':duracion}
+    
+
+    return render(request,'Sprint/burnDownChart.html',contexto)

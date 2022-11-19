@@ -1,0 +1,126 @@
+{% extends 'SSO/base_usuarios.html' %}
+{% load auth_extras %}
+{% load crispy_forms_tags %}
+
+{% block title %} Sprint {% endblock %}
+
+{% block content %}
+<input type="hidden" id="dias_acumulados" name="dias_acumulados" value="{{ dias_acumulados }}">
+<input type="hidden" id="duracion" name="duracion" value="{{ duracion }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+    /**
+     * Sum elements of an array up to the index provided.
+     */
+    function sumArrayUpTo(arrData, index) {
+      var total = 0;
+      for (var i = 0; i <= index; i++) {
+        if (arrData.length > i) {
+          total += arrData[i];
+            }
+      }
+      return total;
+    }
+
+    function showBurnDown(elementId, burndownData, scopeChange = []) {
+
+      var speedCanvas = document.getElementById(elementId);
+      const duracion = Number(document.getElementById("duracion").value);
+
+      console.log({duracion})
+
+      Chart.defaults.global.defaultFontFamily = "Arial";
+      Chart.defaults.global.defaultFontSize = 14;
+
+      const totalHoursInSprint = burndownData[0];
+      const idealHoursPerDay = totalHoursInSprint / duracion;
+      console.log({idealHoursPerDay})
+      i = 0;
+      
+      const labels = Array.from({length: duracion}, (v, k) => k + 1).map((day) => {
+        return `Día ${day}`;
+      });
+
+      const separador = totalHoursInSprint/(duracion-1)
+
+    //   totalHoursInSprint - (idealHoursPerDay * i) + sumArrayUpTo(scopeChange, i), // 1
+      const aux = Array.from({length: duracion}, (v, k) => k).map((pos) => {
+        return pos*separador;
+      });
+      const ideal = aux.reverse()
+
+
+      var speedData = {
+        labels,
+        datasets: [
+          {
+            label: "Burndown",
+            data: burndownData,
+            fill: false,
+            borderColor: "#EE6868",
+            backgroundColor: "#EE6868",
+            lineTension: 0,
+          },
+          {
+            label: "Ideal",
+            borderColor: "#6C8893",
+            backgroundColor: "#6C8893",
+            lineTension: 0,
+            borderDash: [5, 5],
+            fill: false,
+            data: ideal
+          },
+        ]
+      };
+
+      var chartOptions = {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            boxWidth: 80,
+            fontColor: 'black'
+          }
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    min: 0,
+                    max: Math.round(burndownData[0] * 1.1)
+                }
+            }]
+        }
+      };
+
+      var lineChart = new Chart(speedCanvas, {
+        type: 'line',
+        data: speedData,
+        options: chartOptions
+      });
+
+    }
+    </script>
+
+
+    <div style="width:800px;"><canvas id="burndown43"></canvas></div>
+    <script>
+        const horas = JSON.parse(document.getElementById('dias_acumulados').value);
+        console.log(horas);
+    showBurnDown (
+      "burndown43",
+      //   1    2    3    4    5    6    7    8    9   10
+
+        horas,
+      [    0,   0,   0,   0,   0,  0,   0,   0,   0]  // scope change
+    );
+    </script>
+
+<a href="{% url 'listarSprint' sprint.id_proyecto %}">
+    <svg  width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+    </svg>
+    </br>
+    <h6>Volver</h6> 
+</a>
+
+{% endblock %}
