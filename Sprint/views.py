@@ -255,7 +255,7 @@ def finalizarSprint(request):
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
-    messages.success("El sprint ha finalizado exitosamente")
+    messages.success(request, "El sprint ha finalizado exitosamente")
     return redirect('listarSprint',sprint.id_proyecto)            
 
 
