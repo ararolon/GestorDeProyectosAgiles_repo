@@ -3,12 +3,13 @@ from re import U
 from time import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 
-from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
+from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories, HoraPorDia
 from .form import EstadosKanbanForm, ModificarUSForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto, historia
 from Sprint.models import Sprint, estadoSprint
 from datetime import datetime
+
 
 # Create your views here.
 
@@ -473,3 +474,29 @@ def cancelar_US(request,id):
         proyecto.save()
                
         return redirect('product_backlog',id = us.id_proyecto)
+
+def cargarHoras(request):
+    """
+    Vista que permite cargar las horas de un US
+    
+    Retorno
+        HttpResponse
+
+  """
+    if request.method == 'POST':
+        horas = request.POST['horas']
+        horas = int(horas)
+        id_us = request.POST['usId']
+        id_us = int(id_us)
+        us = UserStories.objects.get(id_us=id_us) 
+        # obtener el ultimo registro de horas
+        horaXus = HoraPorDia.objects.filter(user_story=us).last()
+        
+        if horaXus: 
+            siguienteDia = horaXus.dia+1 
+        else :
+            siguienteDia = 1
+        
+        HoraPorDia.objects.create(horas=horas, user_story=us, dia=siguienteDia)
+
+        return redirect('tabla_kanban',id_proyecto=us.id_proyecto)
