@@ -58,11 +58,6 @@ class Test_urls(TestCase):
         url = reverse('notificaciones',args=['user.username'])
         self.assertEqual(resolve(url).func,ver_notificaciones)
 
-
-    def test_ver_notificaciones(self):
-        url = reverse('notificaciones',args=['user.username'])
-        self.assertEqual(resolve(url).func,ver_notificaciones)
-
     def test_listar_notificaciones(self):
         url = reverse('lista_notis',args=['user.username'])
         self.assertEqual(resolve(url).func,listar_notificaciones)
