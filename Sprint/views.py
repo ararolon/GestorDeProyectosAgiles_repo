@@ -387,7 +387,7 @@ def asignarHistoria(request, id_sprint):
     """
 
     user_id = int(request.POST.get('user_id')[0])
-    id_us = int(request.POST['usId'][0])
+    id_us = int(request.POST['usId'])
     us = UserStories.objects.get(id_us=id_us)
     user = Usuario.objects.get(id=user_id)
     us.miembro_asignado = user
@@ -421,9 +421,11 @@ def burnDownChart(request,id):
     """
     sprint = Sprint.objects.get(id=id)
     historias = sprint.historias.all()
+    duracionIdeal = 0
+    for historia in historias:
+        duracionIdeal = duracionIdeal + historia.horas_estimadas
 
     duracion = sprint.duracion_sprint
-    print("duracion",duracion)
     dias = []
     for i in range(1,duracion+1):
         horaXus = HoraPorDia.objects.filter(dia=i, user_story__in=historias )
@@ -434,19 +436,14 @@ def burnDownChart(request,id):
 
         dias.append(total)
 
-    print(dias)
-    dias.reverse()
-    dias_acumulados = []
-    for i in range(0,len(dias)):
-        total = dias[i]
-        for j in range(0,i):
-            total = total + dias[j]
-        dias_acumulados.append(total)
-    dias.reverse()
-    dias_acumulados.reverse()
+    dias_acumulados = [duracionIdeal]
+    for dia in dias:
+        aux = dias_acumulados[-1]-dia
+        if aux < 0:
+            aux = 0
+        dias_acumulados.append(aux)
 
-    print(dias_acumulados)
-
+    
     proyecto = Proyecto.objects.get(id=sprint.id_proyecto)
     contexto = {'sprint':sprint, 'miembros':proyecto.miembros.all(), 'id':id, 'proyecto':proyecto,
         'dias':dias, 'dias_acumulados':dias_acumulados, 'duracion':duracion}

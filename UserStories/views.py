@@ -489,9 +489,15 @@ def cargarHoras(request):
         id_us = request.POST['usId']
         id_us = int(id_us)
         us = UserStories.objects.get(id_us=id_us) 
-        # obtener el ultimo registro de horas
         horaXus = HoraPorDia.objects.filter(user_story=us).last()
-        
+       
+        sprint = Sprint.objects.get(historias__id_us=id_us)
+        duracion_sprint = sprint.duracion_sprint
+
+        if horaXus.dia >= duracion_sprint:
+            messages.error(request,"No se puede cargar mas horas, el sprint ya no tiene dias disponibles")
+            return redirect('tabla_kanban',id_proyecto=us.id_proyecto)
+
         if horaXus: 
             siguienteDia = horaXus.dia+1 
         else :

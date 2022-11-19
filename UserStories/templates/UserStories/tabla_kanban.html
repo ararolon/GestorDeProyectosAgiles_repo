@@ -104,7 +104,7 @@
                                             {{userstory.descripcion}}
                                         </p>
                                           {% if not userstory.estado.nombre == 'Pendiente' %}
-                                            <a data-usId="{{userstory.id_us}}" data-estadoId="{{estado.id}}" href="#" class="ml-3 bg-color-danger border-0"  data-toggle="modal" data-target="#exampleModalCargarHoras">Cargar Horas</a>
+                                              <a data-usId="{{userstory.id_us}}" data-estadoId="{{estado.id}}" href="#" class="ml-3 bg-color-danger border-0"  data-toggle="modal" data-target="#exampleModalCargarHoras">Cargar Horas</a>
                                           {% endif %}
                                         <button onclick="document.getElementById('us-{{userstory.id_us}}').classList.toggle('show');" class="btn btn-secundary btn-sm" style="color: rgb(25, 59, 182)" >Cambiar estado</button>
                                         <div class="collapse" id="us-{{userstory.id_us}}">

@@ -37,18 +37,18 @@
       console.log({idealHoursPerDay})
       i = 0;
       
-      const labels = Array.from({length: duracion}, (v, k) => k + 1).map((day) => {
+      const labels = Array.from({length: duracion+1}, (v, k) => k ).map((day) => {
         return `Día ${day}`;
       });
 
-      const separador = totalHoursInSprint/(duracion-1)
+      const separador = totalHoursInSprint/(duracion)
 
     //   totalHoursInSprint - (idealHoursPerDay * i) + sumArrayUpTo(scopeChange, i), // 1
-      const aux = Array.from({length: duracion}, (v, k) => k).map((pos) => {
+      const aux = Array.from({length: duracion+1}, (v, k) => k).map((pos) => {
         return pos*separador;
       });
       const ideal = aux.reverse()
-
+      console.log({burndownData})
 
       var speedData = {
         labels,
