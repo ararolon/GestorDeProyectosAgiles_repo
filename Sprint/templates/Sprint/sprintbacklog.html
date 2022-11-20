@@ -122,7 +122,8 @@
                                         {% for h in s.history.all %}
                                             {% if h.actividad %}
                                                 {% localtime on %}
-                                                <p>{{h.history_date}} - {{h.history_user}} cambió el estado a {{h.estado}}, registró {{h.horas}} horas en actividad: {{h.actividad}}</p>
+                                                <p>{{h.history_date}} - {{h.history_user}} registró en total {{h.horas_trabajadas}} horas de trabajo, en actividad: {{h.actividad}}, en el estado {{h.estado}}</p>
+                                                <!-- <p>{{h.history_date}} - {{h.history_user}} cambió el estado a {{h.estado}}, en actividad: {{h.actividad}} con {{h.horas_trabajadas}} horas trabajadas</p> -->
                                                 {% endlocaltime %}
                                             {% endif %}
                                         {% endfor %}
