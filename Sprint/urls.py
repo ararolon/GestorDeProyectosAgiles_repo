@@ -17,6 +17,8 @@ urlpatterns = [
     path('SprintBacklog/<int:id>',views.ver_sprintbacklog,name='sprintbacklog'),
     path('QuitarUS/<str:nombre>/<int:id_sprint>',views.desasignar_us,name='desasignar'),
     path('asignarHistoria/<int:id_sprint>', views.asignarHistoria, name="asignarHistoria"),
+    path('burnDownChart/<int:id>',views.burnDownChart,name='burnDownChart'),
+
 ]
 
 

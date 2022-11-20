@@ -5,7 +5,7 @@ from django.forms import model_to_dict
 from django.contrib import messages
 from Proyectos.models import Proyecto
 from Sprint.models import Sprint,estadoSprint, SprintMiembros
-from UserStories.models import UserStories
+from UserStories.models import UserStories, HoraPorDia
 from Usuarios.models import Usuario,Notificaciones
 # Create your views here.
 from datetime import datetime
@@ -387,7 +387,7 @@ def asignarHistoria(request, id_sprint):
     """
 
     user_id = int(request.POST.get('user_id')[0])
-    id_us = int(request.POST['usId'][0])
+    id_us = int(request.POST['usId'])
     us = UserStories.objects.get(id_us=id_us)
     user = Usuario.objects.get(id=user_id)
     us.miembro_asignado = user
@@ -406,3 +406,47 @@ def asignarHistoria(request, id_sprint):
     messages.success(request,"US asignado correctamente")
     notificacion(mensaje,user,proyecto.nombre)
     return redirect('sprintbacklog', id = id_sprint)
+
+
+def burnDownChart(request,id):
+    """
+    Vista que permite ver el grafico burndownchart de un sprint
+
+    Argumentos:
+        request : HttRequest
+        id : id del sprint
+
+    Retorna:
+         HttpResponse    
+    """
+    sprint = Sprint.objects.get(id=id)
+    historias = sprint.historias.all()
+    duracionIdeal = 0
+    for historia in historias:
+        duracionIdeal = duracionIdeal + historia.horas_estimadas
+
+    duracion = sprint.duracion_sprint
+    dias = []
+    for i in range(1,duracion+1):
+        horaXus = HoraPorDia.objects.filter(dia=i, user_story__in=historias )
+
+        total = 0
+        for hora in horaXus:
+            total = total + hora.horas
+
+        dias.append(total)
+
+    dias_acumulados = [duracionIdeal]
+    for dia in dias:
+        aux = dias_acumulados[-1]-dia
+        if aux < 0:
+            aux = 0
+        dias_acumulados.append(aux)
+
+    
+    proyecto = Proyecto.objects.get(id=sprint.id_proyecto)
+    contexto = {'sprint':sprint, 'miembros':proyecto.miembros.all(), 'id':id, 'proyecto':proyecto,
+        'dias':dias, 'dias_acumulados':dias_acumulados, 'duracion':duracion}
+    
+
+    return render(request,'Sprint/burnDownChart.html',contexto)

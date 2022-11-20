@@ -86,3 +86,14 @@ class Test_userstories_views(TestCase):
         path = reverse('modificar_us', args=[self.proyecto.id,self.us.id_us]) 
         response = self.client.get(path)
         self.assertEqual(response.status_code, 200)
+
+    def test_cancelarUS(self):
+        path = reverse('cancelarUS', args=[self.us.id_us]) 
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200)
+
+    def test_cargarHoras(self):
+        path = reverse('cargarHoras') 
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200)
+    
