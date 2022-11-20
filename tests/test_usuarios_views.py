@@ -60,6 +60,14 @@ class Test_usuarios_views(TestCase):
       path = reverse('lista_notis',args=[self.usuario.username])
       response =self.client.get(path)
       self.assertEqual(response.status_code,200)
+  
+  def test_listar_notificaciones_usuarios(self):
+      path = reverse('listar_notis_user',args=[self.usuario.username])
+      response =self.client.get(path)
+      self.assertEqual(response.status_code,200)
+  
+    
+
 
 
 

@@ -162,7 +162,11 @@ def listar_notificaciones(request,username):
   notificaciones = Notificaciones.objects.filter(usuario=user).order_by('-timestamp')
   contexto = {'notificaciones':notificaciones}
 
-  return render(request,'Usuarios/notificaciones.html',contexto)
+  if request.user.groups.filter(name="administrador"):
+    return render(request,'Usuarios/notificaciones.html',contexto)
+  else:   
+    return render(request,'Usuarios/notificaciones_user.html',contexto)
+    
 
 
   
