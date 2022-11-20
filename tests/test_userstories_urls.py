@@ -48,4 +48,11 @@ class Test_urls(TestCase):
   def test_modificar_us(self):
     url = reverse('modificar_us', args=[self.proyecto.id,self.us.id_us]) 
     self.assertEqual(resolve(url).func, modificarUS,"no se pudo dirigir a el url de cambiarEstado")
-  
+
+  def test_cancelarUS(self):
+    url = reverse('cancelarUS',args=[self.us.id_us])
+    self.assertEqual(resolve(url).func,cancelar_US,"no se pudo dirigir al url de cancelarUS")
+
+  def test_cargarHora(self):
+    url = reverse('cargarHoras')
+    self.assertEqual(resolve(url).func,cargarHoras,"no se pudo dirigir al url de cargarHoras")
