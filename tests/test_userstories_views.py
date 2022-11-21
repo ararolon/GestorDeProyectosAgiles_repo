@@ -8,6 +8,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from Proyectos.models import Proyecto
 from UserStories.views import *
+from UserStories.models import *
 
 """
 Test para funciones de views.py UserStories
@@ -17,15 +18,16 @@ Test para funciones de views.py UserStories
 class Test_userstories_views(TestCase):
 
     def setUp(self):
+
         tipo = TipoUSerStory.objects.create(nombre='prueba')
         self.client = Client()
-        self.sprint = Sprint.objects.create(nombre_sprint='test',descripcion='prueba', estado_sprint = "En Curso", capacidad = 10)
-
+        self.sprint = Sprint.objects.create(nombre_sprint='test',descripcion='prueba', estado_sprint = "En Curso", capacidad = 10, duracion_sprint = 7)
+        self.estado = Estados_Kanban.objects.create(nombre = 'Cancelado')
         self.proyecto = Proyecto.objects.create(nombre='test',descripcion='prueba')
         self.proyecto.tipo_us.add(tipo)
         self.proyecto.sprint.add(self.sprint)
         self.proyecto.save()
-        
+        # self.us1 = UserStories.objects.create(nombre='prueba')
         estado_inicial = Estados_Kanban.objects.create(nombre='inicial')
         self.estado = Estados_Kanban.objects.create(nombre='prueba')
         self.us = UserStories.objects.create(id_proyecto=self.proyecto.id,nombre='prueba', estado= estado_inicial)
@@ -89,11 +91,12 @@ class Test_userstories_views(TestCase):
 
     def test_cancelarUS(self):
         path = reverse('cancelarUS', args=[self.us.id_us]) 
-        response = self.client.get(path)
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post(path, data = {'motivo_cancelacion': 'test'})
+        self.assertEqual(response.status_code, 302)
+
 
     def test_cargarHoras(self):
         path = reverse('cargarHoras') 
-        response = self.client.get(path)
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post(path, data = {'horas': 2, 'usId' : self.us.id_us} )
+        self.assertEqual(response.status_code, 302) 
     
