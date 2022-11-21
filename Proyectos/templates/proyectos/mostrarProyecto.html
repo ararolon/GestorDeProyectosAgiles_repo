@@ -52,9 +52,9 @@
                 <div class="col flex-justify-center">
                     {% if proyecto.scrumMaster == request.user %}
                     <a href="{% url 'crearSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Crear sprint</a>
-                    <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
                     <a href="{% url 'historial' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Historial de Proyecto</a>
                     {% endif %}
+                    <a href="{% url 'listarSprint' proyecto.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Visualizar Sprints</a>
                 </div>
             </div>
             <div class="row" style="margin: 10px;">

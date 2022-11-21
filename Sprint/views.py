@@ -230,7 +230,7 @@ def cancelarSprint(request):
     h.save()
     proyecto.historial.add(h)
     proyecto.save()
-    messages.success("El sprint ha sido cancelado")
+    messages.success(request,"El sprint ha sido cancelado")
     return redirect('listarSprint',sprint.id_proyecto)
 
 
