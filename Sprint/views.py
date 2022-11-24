@@ -398,7 +398,7 @@ def asignarHistoria(request, id_sprint):
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     evento = dt_string+","+str(request.user) + " asigno el user story "+str(us)+" al miembro "+str(user)+" en el "+str(sprint)
-    mensaje = str(request.user)+ "te ha asignado el US "+str(us.nombre)
+    mensaje = str(request.user)+ " te ha asignado el US :"+str(us.nombre)
     h.evento = evento
     h.save()
     proyecto.historial.add(h)
