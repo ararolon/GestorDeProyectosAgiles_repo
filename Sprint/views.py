@@ -47,7 +47,7 @@ def crearSprint (request,id):
             sprint.save()
             proyecto.sprint.add(sprint) 
             messages.success(request,"Se ha creado el sprint satisfactoriamente")
-            mensaje = str(request.user)+ "ha creado el "+str(sprint.nombre_sprint)
+            mensaje = str(request.user)+ " ha creado el "+str(sprint.nombre_sprint)
             h = historia.objects.create(id_proyecto = proyecto.id)
             now = datetime.now()
             dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
