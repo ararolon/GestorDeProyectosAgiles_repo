@@ -50,5 +50,24 @@ class Test_usuarios_views(TestCase):
       path = reverse('asignar_rol', args=[self.usuario.id])
       response = self.client.get(path)
       self.assertTemplateUsed(response,'Usuarios/asignar_rol.html')
+    
+  def test_ver_notificaciones(self):
+    path = reverse('notificaciones',args=[self.usuario.username])
+    response =self.client.get(path)
+    self.assertEqual(response.status_code,200)
+
+  def test_listar_notificaciones(self):
+      path = reverse('lista_notis',args=[self.usuario.username])
+      response =self.client.get(path)
+      self.assertEqual(response.status_code,200)
+  
+  def test_listar_notificaciones_usuarios(self):
+      path = reverse('listar_notis_user',args=[self.usuario.username])
+      response =self.client.get(path)
+      self.assertEqual(response.status_code,200)
+  
+    
+
+
 
 

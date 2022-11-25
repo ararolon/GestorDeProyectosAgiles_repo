@@ -54,5 +54,19 @@ class Test_urls(TestCase):
         url = reverse('asignar_rol', args=[self.user.id])
         self.assertEqual(resolve(url).func,asignar_rol_usuario)
 
+    def test_ver_notificaciones(self):
+        url = reverse('notificaciones',args=['user.username'])
+        self.assertEqual(resolve(url).func,ver_notificaciones)
+
+    def test_listar_notificaciones(self):
+        url = reverse('lista_notis',args=['user.username'])
+        self.assertEqual(resolve(url).func,listar_notificaciones)
+
+    def test_listar_notificaciones_usuarios(self):
+        url = reverse('listar_notis_user',args=['user.username'])
+        self.assertEqual(resolve(url).func,listar_notificaciones)
+
+   
+   
 
          

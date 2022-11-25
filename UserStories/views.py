@@ -3,12 +3,13 @@ from re import U
 from time import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 
-from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories
+from UserStories.models import Estados_Kanban, TipoUSerStory, UserStories, HoraPorDia
 from .form import EstadosKanbanForm, ModificarUSForm,TiposUSForm, UserStoryForm,ImportarTipoUSForm, ModificarTipoUSForm
 from django.contrib import messages
 from Proyectos.models import Proyecto, historia
 from Sprint.models import Sprint, estadoSprint
 from datetime import datetime
+
 
 # Create your views here.
 
@@ -35,8 +36,9 @@ def crear_estadokanban(request,id):
         form = EstadosKanbanForm(request.POST)
         if form.is_valid():
             e = form.cleaned_data['nombre']
-            h = historia.objects.create(id_proyecto = id)
-            evento = str(timezone.now)+","+str(request.user) + " creó el estado kanban " + e + " para el proyecto "
+            fecha = datetime.now()
+            h = historia.objects.create(id_proyecto = proyecto.id)
+            evento = str(fecha.day)+"/"+str(fecha.month)+"/"+str(fecha.year)+" "+str(fecha.hour)+":"+str(fecha.minute)+":"+str(fecha.second)+","+str(request.user) + " creó el estado kanban " + e + " para el proyecto "
             h.evento = evento
             h.save()
             estado = form.save()
@@ -237,7 +239,7 @@ def tablaKanban(request, id_proyecto):
     if request.method == "POST":
         id_us = int(request.POST['usId'])
         id_estado = int(request.POST['estadoId'])
-        horas = request.POST['horas']
+        # horas = request.POST['horas']
         actividad = request.POST['actividad']
 
         us = get_object_or_404(UserStories,id_us=id_us)
@@ -247,17 +249,17 @@ def tablaKanban(request, id_proyecto):
         if (not proyecto.scrumMaster == request.user and not id_estado > us.estado.id):
             messages.error(request,'Solo el scrummaster puede realizar esa operacion')
             return redirect('tabla_kanban',id_proyecto=proyecto.id)
-        if (horas == ""):
-            messages.error(request,'No puede quedar vacio el campo de horas')
-            return redirect('tabla_kanban',id_proyecto=proyecto.id)
-        # horas trabajas mayor a horas de esfuerzo
-        if (int(horas) > us.horas_estimadas):
-            messages.error(request,'No puede ingresar mas horas, horas trabajabas no puede ser mayor a horas de esfuerzo')
-            return redirect('tabla_kanban',id_proyecto=proyecto.id)
+        # if (horas == ""):
+        #     messages.error(request,'No puede quedar vacio el campo de horas')
+        #     return redirect('tabla_kanban',id_proyecto=proyecto.id)
+        # # horas trabajas mayor a horas de esfuerzo
+        # if (int(horas) > us.horas_estimadas):
+        #     messages.error(request,'No puede ingresar mas horas, horas trabajabas no puede ser mayor a horas de esfuerzo')
+        #     return redirect('tabla_kanban',id_proyecto=proyecto.id)
 
         us.estado = estado
-        us.horas = horas
-        us.horas_trabajadas += int(horas)
+        # us.horas = horas
+        # us.horas_trabajadas += int(horas)
         us.actividad = actividad
         us.responsable = request.user
         us.save()
@@ -472,3 +474,43 @@ def cancelar_US(request,id):
         proyecto.save()
                
         return redirect('product_backlog',id = us.id_proyecto)
+
+def cargarHoras(request):
+    """
+    Vista que permite cargar las horas de un US
+    
+    Retorno
+        HttpResponse
+
+  """
+    if request.method == 'POST':
+        horas = request.POST['horas']
+        horas = int(horas)
+        id_us = request.POST['usId']
+        id_us = int(id_us)
+        us = UserStories.objects.get(id_us=id_us) 
+        horaXus = HoraPorDia.objects.filter(user_story=us).last()
+       
+        sprint = Sprint.objects.get(historias__id_us=id_us)
+        duracion_sprint = sprint.duracion_sprint
+
+        if horaXus: 
+            siguienteDia = horaXus.dia+1 
+        else :
+            siguienteDia = 1
+
+        if siguienteDia > duracion_sprint:
+            messages.error(request,"No se puede cargar mas horas, el sprint ya no tiene dias disponibles")
+            return redirect('tabla_kanban',id_proyecto=us.id_proyecto)
+
+        
+        HoraPorDia.objects.create(horas=horas, user_story=us, dia=siguienteDia)
+        messages.success(request,"Se han cargado las horas correctamente")
+        horasDelSprint = HoraPorDia.objects.filter(user_story=us)
+        horasTotales = 0
+        for hora in horasDelSprint:
+            horasTotales += hora.horas
+        us.horas_trabajadas = horasTotales
+        us.save()   
+
+        return redirect('tabla_kanban',id_proyecto=us.id_proyecto)

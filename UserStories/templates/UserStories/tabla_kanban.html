@@ -1,119 +1,170 @@
 {% extends 'SSO/base_usuarios.html' %}
 {% load crispy_forms_tags %}
-{%  load static %}
+{% load static %}
 {% block title %}Nuevo Estado Kanban{% endblock %}
 {% block content %}
 
 <div class="row">
-    <h2 
-        class="col-12 col-md-10">Tabla Kanban
-    </h2>
+  <h2 class="col-12 col-md-10">Tabla Kanban
+  </h2>
 </div>
 <hr>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Registro de Actividad</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form method="POST">
-            {% csrf_token %}
-            <div class="form-group" hidden>
-              <label id="usId" for="usId" class="col-form-label">ID UserStory:</label>
-              <input type="text" readonly class="form-control" id="usId" name="usId">
-            </div>
-            <div class="form-group" hidden>
-                <label id="estadoId" for="estadoId" class="col-form-label">ID Estado:</label>
-                <input type="text" readonly value="4" class="form-control" id="estadoId" name="estadoId">
-              </div>
-            <div class="form-group">
-              <label for="horas" class="col-form-label">Horas trabajadas:</label>
-              <input type="number" class="form-control" id="horas" name="horas" required>
-            </div>
-            <div class="form-group">
-              <label for="descripcion" class="col-form-label">Actividad Realizada:</label>
-              <textarea name="actividad" class="form-control" id="descripcion"></textarea>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-          </form>
-        </div>
+<div class="modal fade" id="exampleModalCargarHoras" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cargar Horas trabajadas</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url 'cargarHoras' %}">
+          {% csrf_token %}
+          <div class="form-group" hidden>
+            <label id="usId" for="usId" class="col-form-label">ID UserStory:</label>
+            <input type="text" readonly class="form-control" id="usId" name="usId">
+          </div>
+          <div class="form-group" hidden>
+            <label id="estadoId" for="estadoId" class="col-form-label">ID Estado:</label>
+            <input type="text" readonly value="4" class="form-control" id="estadoId" name="estadoId">
+          </div>
+          <div class="form-group">
+            <label for="horas" class="col-form-label">Horas trabajadas:</label>
+            <input type="number" class="form-control" id="horas" name="horas" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registro de Actividad</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group" hidden>
+            <label id="usId" for="usId" class="col-form-label">ID UserStory:</label>
+            <input type="text" readonly class="form-control" id="usId" name="usId">
+          </div>
+          <div class="form-group" hidden>
+            <label id="estadoId" for="estadoId" class="col-form-label">ID Estado:</label>
+            <input type="text" readonly value="4" class="form-control" id="estadoId" name="estadoId">
+          </div>
+          <div class="form-group">
+            <label for="descripcion" class="col-form-label">Actividad Realizada:</label>
+            <textarea name="actividad" class="form-control" id="descripcion"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% for tipo in tipos %}
 <h3>{{tipo.nombre}}</h3>
 <div class="container-fluid pb-5" style="overflow-x: scroll;">
-    <div class="row flex-row flex-sm-nowrap py-3">
-        {% for estado in tipo.estados_kanban.all|dictsort:"id" %}
-            <div class="col-sm-6 col-md-4 col-xl-3">
-                <div class="card bg-light">
-                    <div class="card-body" style="min-height: 200px;">
-                        <h6 class="card-title text-uppercase text-truncate py-2" style="color: rgb(29, 82, 47)">{{estado}}</h6>
-                        {% for userstory in userstories %}
-                        {% if tipo == userstory.tipo and userstory.estado == estado %}
-                            <div class="items border border-light">
-                                <div class="card draggable shadow-sm" id="cd1" draggable="true" ondragstart="drag(event)">
-                                    <div class="card-body p-2">
-                                        <div class="card-title">
-                                            <h5 style="color: rgb(8, 160, 59)">
-                                                {{userstory.nombre}}
-                                            </h5>
-                                        </div>
-                                        <p>
-                                            {{userstory.descripcion}}
-                                        </p>
-                                        <button onclick="document.getElementById('us-{{userstory.id_us}}').classList.toggle('show');" class="btn btn-secundary btn-sm" style="color: rgb(25, 59, 182)" >Cambiar estado</button>
-                                        <div class="collapse" id="us-{{userstory.id_us}}">
-                                            <div class="col-10 row">
-                                                {% for estado in tipo.estados_kanban.all %} 
-                                                    {% if not userstory.estado == estado %}
-                                                        <a data-usId="{{userstory.id_us}}" data-estadoId="{{estado.id}}" href="#" class="ml-3 bg-color-danger border-0"  data-toggle="modal" data-target="#exampleModal">{{estado}}</a>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </div>
-                                        </div>   
-                                    </div>
-                                </div>
-                            </div> 
-                            {% endif %} 
-                        {% endfor %}
-                    </div>
+  <div class="row flex-row flex-sm-nowrap py-3">
+    {% for estado in tipo.estados_kanban.all|dictsort:"id" %}
+    <div class="col-sm-6 col-md-4 col-xl-3">
+      <div class="card bg-light">
+        <div class="card-body" style="min-height: 200px;">
+          <h6 class="card-title text-uppercase text-truncate py-2" style="color: rgb(29, 82, 47)">{{estado}}</h6>
+          {% for userstory in userstories %}
+          {% if tipo == userstory.tipo and userstory.estado == estado %}
+          <div class="items border border-light">
+            <div class="card draggable shadow-sm" id="cd1" draggable="true" ondragstart="drag(event)">
+              <div class="card-body p-2">
+                <div class="card-title">
+                  <h5 style="color: rgb(8, 160, 59)">
+                    {{userstory.nombre}}
+                  </h5>
                 </div>
+                <p>
+                  {{userstory.descripcion}}
+                </p>
+                {% if not userstory.estado.nombre == 'Pendiente' %}
+                <a data-usId="{{userstory.id_us}}" data-estadoId="{{estado.id}}" href="#"
+                  class="ml-3 bg-color-danger border-0" data-toggle="modal"
+                  data-target="#exampleModalCargarHoras">Cargar Horas</a>
+                {% endif %}
+                <button onclick="document.getElementById('us-{{userstory.id_us}}').classList.toggle('show');"
+                  class="btn btn-secundary btn-sm" style="color: rgb(25, 59, 182)">Cambiar estado</button>
+                <div class="collapse" id="us-{{userstory.id_us}}">
+                  <div class="col-10 row">
+                    {% for estado in tipo.estados_kanban.all %}
+                    {% if not userstory.estado == estado %}
+                    <a data-usId="{{userstory.id_us}}" data-estadoId="{{estado.id}}" href="#"
+                      class="ml-3 bg-color-danger border-0" data-toggle="modal"
+                      data-target="#exampleModal">{{estado}}</a>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
             </div>
-        {% endfor %}
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
     </div>
+    {% endfor %}
+  </div>
 </div>
 {% endfor %}
 <script>
-$('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
+  $('#exampleModalCargarHoras').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) 
     console.log(button)
-    var usId = button[0].dataset.usid // Extract info from data-* attributes
+    var usId = button[0].dataset.usid 
     var estadoId = button[0].dataset.estadoid
-    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  console.log(usId)
-  modal.find('.modal-body input#usId').val(usId)
-  modal.find('.modal-body input#estadoId').val(estadoId)
-    
-})
+    var modal = $(this)
+    console.log(usId)
+    modal.find('.modal-body input#usId').val(usId)
+    modal.find('.modal-body input#estadoId').val(estadoId)
+
+  })
+</script>
+
+<script>
+  $('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) 
+    console.log(button)
+    var usId = button[0].dataset.usid 
+    var estadoId = button[0].dataset.estadoid
+    var modal = $(this)
+    console.log(usId)
+    modal.find('.modal-body input#usId').val(usId)
+    modal.find('.modal-body input#estadoId').val(estadoId)
+
+  })
 </script>
 
 <a href="{% url 'mostrarProyecto' proyectoActual %}">
-  <svg  width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+  <svg width="30" height="30" fill="currentColor" class="bi bi-arrow-left-square" viewBox="0 0 16 16">
+    <path fill-rule="evenodd"
+      d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
   </svg>
   </br>
-  <h6>Volver</h6> 
+  <h6>Volver</h6>
 </a>
 
 {% endblock %}

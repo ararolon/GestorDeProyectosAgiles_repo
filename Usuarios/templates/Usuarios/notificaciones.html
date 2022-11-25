@@ -1,0 +1,23 @@
+{% extends 'SSO/base_admin.html' %}
+
+{% block title %} Notificaciones {% endblock %}
+
+{% block content %}
+
+<div >
+    <div class="row" >
+        <h3 style="margin-left:100px" > Notificaciones de {{request.user}}</h3>
+
+    </div>
+    <hr>
+
+   {% for n in notificaciones %}
+        <div class="notifications-item" style="margin-left: 100px">
+            <div class="text">
+            <h4>{{n.proyecto}}  <p>{{n.timestamp}}</p></h4>
+            <p>{{n.mensaje}}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

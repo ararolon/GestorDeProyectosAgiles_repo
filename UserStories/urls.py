@@ -21,4 +21,6 @@ urlpatterns = [
     path('eliminarTiposUS/<int:id>/<int:id_tipo>/',views.eliminar_tipoUS,name='eliminar_tipoUS'),
     path('modificarUS/<int:id_proyecto>/<int:id>/',views.modificarUS,name='modificar_us'),
     path('cancelarUS/<int:id>/',views.cancelar_US,name='cancelarUS'),
+    path('cargarHoras/',views.cargarHoras,name='cargarHoras'),
+
 ]

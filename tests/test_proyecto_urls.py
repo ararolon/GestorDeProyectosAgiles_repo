@@ -13,6 +13,7 @@ from Proyectos.views import iniciarProyecto
 from Proyectos.views import cancelarProyecto
 from Usuarios.models import Usuario
 from Proyectos.views import mostrarProyectoAdmin
+from Proyectos.views import finalizarProyecto
 
 
 
@@ -68,3 +69,9 @@ class Test_proyecto_urls(TestCase):
     def test_visualizar_historial(self):
         url = reverse('historial', args=[self.proyecto.id])
         self.assertEqual(resolve(url).func,ver_historial)
+
+    
+    def test_finalizarProyecto(self):
+        url = reverse('finalizarProyecto', args=[self.proyecto.id])
+        self.assertEqual(resolve(url).func, finalizarProyecto)    
+    

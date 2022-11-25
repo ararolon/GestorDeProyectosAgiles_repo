@@ -58,10 +58,11 @@
                 <div class="card" style="margin: 10px">
                     <div class="card-header bg-color-primary">
                         <div class="row">
-                            <div class="col-auto mr-auto">
-                                 {{us.nombre}}
-                                 <button type="button" class="btn btn-outline-success btn-sm " style="position: absolute;right: -770px;">{{us.estado}}</button>
-                                
+                            <div class="col-auto mr-auto"> 
+                                {{us.nombre}}
+                            </div>
+                            <div class="col-auto mr-0">
+                                <h6 class="card-text " style="color: rgb(93, 147, 111)">{{us.estado}}</h6>
                             </div>
                         </div>
                     </div>
@@ -91,17 +92,17 @@
                               </div>
 
                             {% endif %}
-                            
-
-                            {% if proyecto.scrumMaster == request.user  %}
-                                <div class="col-12">
-                                    <div class="d-flex flex-row-reverse">
-                                        {% if us.estado.nombre != 'Cancelado' %}
-                                            <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar<a>
-                                            <a href="#" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#exampleModal">Cancelar</a>    
-                                        {% endif %}
-                                    </div>
-                            </div>
+                            {% if proyecto.estado == 'En Curso'  %}
+                                {% if proyecto.scrumMaster == request.user  %}
+                                    <div class="col-12">
+                                        <div class="d-flex flex-row-reverse">
+                                            {% if us.estado.nombre != 'Cancelado' %}
+                                                <a href="{% url 'modificar_us' proyecto.id us.id_us  %}" class="btn btn-outline-primary m-2">Modificar<a>
+                                                <a href="#" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#exampleModal">Cancelar</a>    
+                                            {% endif %}
+                                        </div>
+                                </div>
+                                {% endif %}
                             {% endif %}
                         </div>
                 </div>

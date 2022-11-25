@@ -1,0 +1,22 @@
+{% extends 'SSO/base_usuarios.html' %}
+
+{% block title %} Notificaciones {% endblock %}
+
+{% block content %}
+
+<div>
+    <div class="row" >
+        <h3 class = "col-12 col-md-10" > Notificaciones de {{request.user}}</h3>
+    </div>
+    <hr>
+
+   {% for n in notificaciones %}
+        <div class="notifications-item">
+            <div class="text">
+            <h4>{{n.proyecto}}  <p>{{n.timestamp}}</p></h4>
+            <p>{{n.mensaje}}</p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

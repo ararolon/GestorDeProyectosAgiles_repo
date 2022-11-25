@@ -52,9 +52,13 @@
         <hr>
     </br>
         <div class="col-10 mx-auto">
-            {% if sprint.estado_sprint == 'En Planificacion' %}
-            <a href="{% url 'indexasignar' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
-            {% endif %}
+            {% if proyecto.scrumMaster == request.user%}
+                {% if proyecto.estado == 'En Planificacion' or proyecto.estado == 'En Curso' %}
+                    {% if sprint.estado_sprint == 'En Planificacion' %}
+                        <a href="{% url 'indexasignar' sprint.id %}" class="btn btn-primary ml-3 bg-color-danger border-0">Asignar US al Sprint Backlog</a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}    
         </div>
 
 
@@ -67,11 +71,19 @@
                                  {{s.nombre}}
                             </div>
                             <div class="col-auto mr-0">
-                                {% if sprint.estado_sprint == 'En Planificacion' or sprint.estado_sprint == 'En Curso'%}
-                                    <button type="button" class="btn btn-success btn-sm">{{s.estado}}</button>
-                                    <a class="btn btn-primary ml-3 btn-sm" style="color: rgb(243, 247, 245)" data-toggle="modal" data-target="#exampleModal" data-usId="{{s.id_us}}">Asignar </a>
-                                    <a class="btn btn-primary ml-3 btn-sm" style="color: rgb(243, 247, 245)" data-toggle="modal" data-target="#exampleModal" data-usId="{{s.id_us}}">Reasignar </a>
+                                {% if proyecto.scrumMaster == request.user%}
+                                    {% if proyecto.estado == 'En Planificacion' or proyecto.estado == 'En Curso' %}
+                                        {% if sprint.estado_sprint == 'En Planificacion' %}
+                                            <a class="btn btn-primary ml-3 btn-sm" style="color: rgb(243, 247, 245)" data-toggle="modal" data-target="#exampleModal" data-usId="{{s.id_us}}">Asignar </a>
+                                        {% endif %}
+                                        {% if sprint.estado_sprint == 'En Curso' %}            
+                                            <a class="btn btn-primary ml-3 btn-sm" style="color: rgb(243, 247, 245)" data-toggle="modal" data-target="#exampleModal" data-usId="{{s.id_us}}">Reasignar </a>
+                                        {% endif %}    
+                                    {% endif %}
                                 {% endif %}
+                            </div>
+                            <div class="col-auto pl-0 mt-1">
+                                <h6 class="card-text " style="color: rgb(93, 147, 111)">{{s.estado}}</h6>
                             </div>
                         </div>
                     </div>
@@ -104,20 +116,24 @@
                         {% endif %}
                         <div class="col-12">
                             <br>
-                            <a class="btn btn-primary" data-toggle="collapse" style="color: rgb(240, 240, 247);"
-                            onclick="document.getElementById('t-{{s.pk}}').classList.toggle('show');"
-                            role="button" aria-expanded="false" aria-controls="t-{{s.pk}}">Ver Historial</a>
-                            <div class="collapse" id="t-{{s.pk}}">
-                                <div class="col-11 row">
-                                    {% for h in s.history.all %}
-                                        {% if h.actividad %}
-                                            {% localtime on %}
-                                            <p>{{h.history_date}} - {{h.history_user}} cambió el estado a {{h.estado}}, registró {{h.horas}} horas en actividad: {{h.actividad}}</p>
-                                            {% endlocaltime %}
-                                        {% endif %}
-                                    {% endfor %}
+                            {% if sprint.estado_sprint == 'En Curso' or sprint.estado_sprint == 'Finalizado' %}
+                                <a class="btn btn-primary" data-toggle="collapse" style="color: rgb(240, 240, 247);"
+                                onclick="document.getElementById('t-{{s.pk}}').classList.toggle('show');"
+                                role="button" aria-expanded="false" aria-controls="t-{{s.pk}}">Ver Historial</a>
+                                <div class="collapse" id="t-{{s.pk}}">
+                                    <br>
+                                    <div class="col-11 row">
+                                        {% for h in s.history.all %}
+                                            {% if h.actividad %}
+                                                {% localtime on %}
+                                                <p>{{h.history_date}} - {{h.history_user}} registró en total {{h.horas_trabajadas}} horas de trabajo, en actividad: {{h.actividad}}, en el estado {{h.estado}}</p>
+                                                <!-- <p>{{h.history_date}} - {{h.history_user}} cambió el estado a {{h.estado}}, en actividad: {{h.actividad}} con {{h.horas_trabajadas}} horas trabajadas</p> -->
+                                                {% endlocaltime %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

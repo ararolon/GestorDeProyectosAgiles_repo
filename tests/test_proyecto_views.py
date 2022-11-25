@@ -14,7 +14,6 @@ class Test_proyecto_views(TestCase):
         self.proyecto = Proyecto.objects.create(nombre='testProyecto', descripcion='testProyecto', scrumMaster=self.scrum_master)
         self.miembro = Usuario.objects.create(first_name='testMiembro', username='testMiembro')
 
-
     def test_crear_Proyecto(self):
         path = reverse('crearProyecto')
         response = self.client.get(path)
@@ -82,3 +81,10 @@ class Test_proyecto_views(TestCase):
         path = reverse('historial', args=[self.proyecto.id])
         response = self.client.get(path)
         self.assertEqual(response.status_code,200)
+
+    def test_finalizarProyecto(self):
+        path = reverse('finalizarProyecto', args=[self.proyecto.id])
+        # pass motivo as a post data
+        response = self.client.post(path)
+        self.assertEqual(response.status_code, 302)
+        # 302 found porque se redirige a la página de mostrarProyecto

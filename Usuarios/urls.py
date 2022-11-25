@@ -11,5 +11,7 @@ urlpatterns = [
     path('listar_usuarios/',views.listar_usuarios,name='lista_users'),
     path('dar_acceso/<int:id>',views.crear_usuario,name='dar_acceso'),
     path('asignarRol/<int:id>',views.asignar_rol_usuario,name='asignar_rol'),
-    #path('desasignarRol/<int:id>',view.desasignar_rol_usuario,name='desasignar_rol'),
+    path('notificaciones/<str:username>',views.ver_notificaciones,name='notificaciones'),
+    path('verNotificaciones/<str:username>',views.listar_notificaciones,name='lista_notis'),
+    path('verNotificacionUser/<str:username>',views.listar_notificaciones,name='listar_notis_user')
 ] 

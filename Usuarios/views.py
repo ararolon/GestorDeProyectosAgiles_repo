@@ -3,10 +3,11 @@ from sre_constants import GROUPREF_EXISTS
 from tokenize import group
 from unicodedata import name
 from django.shortcuts import render,redirect,get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User,Group, Permission
 from Usuarios.forms import AsignarRolForm
-from Usuarios.models import Usuario
+from Usuarios.models import Usuario,Notificaciones
 from django.contrib import messages
 """
 Vistas exclusivas del administrador del sistema sobre los usuarios
@@ -42,12 +43,16 @@ def eliminar_usuario(request,id):
 
   """
     
-  usuario = get_object_or_404(User,pk=id)
-
+  usuario = get_object_or_404(Usuario,pk=id)
+  
   if request.method =="POST":
+    if usuario.miembro_en_uso() == False :
       usuario.delete()
       messages.success(request,"El usuario ha sido eliminado")
       return redirect('index_eliminar')
+    else:
+        messages.error(request,"El usuario no puede eliminarse , es parte de un proyecto en el sistema")
+        return redirect('index_eliminar')
   else:
       return render(request,'Usuarios/eliminar.html',{'usuario':usuario})    
 
@@ -120,5 +125,50 @@ def asignar_rol_usuario(request,id):
   return render(request,'Usuarios/asignar_rol.html',contexto)
 
 
+def ver_notificaciones(request,username):
+  """
+   Vista que permite ver obtener todas las notificaciones de un usuario
+   y mostrar en la barra de navegacion 
+  
+  Argumentos:
+    request : HttpRequest object
+    username : El username del usuario con el cual se filtraran las notificaciones
+  
+  Retorna:
+      JsonResponse 
+  """
+  print(username)
+  user =  Usuario.objects.get(username=username)
+  print(user)
+  notificaciones = Notificaciones.objects.filter(usuario=user)
+  
+  data = list(notificaciones.values())
+  return JsonResponse(data, safe=False)
 
+
+def listar_notificaciones(request,username):
+  """
+   Vista que permite ver todas las notificaciones de un usuario 
+
+   Argumento:
+        request : HttpRequest object
+        username : El username del usuario con el cual se filtraran las notificaciones
+    
+    Return
+        HttpResponse
+  """
+
+  user =  get_object_or_404(Usuario,username=username)
+  notificaciones = Notificaciones.objects.filter(usuario=user).order_by('-timestamp')
+  contexto = {'notificaciones':notificaciones}
+
+  if request.user.groups.filter(name="administrador"):
+    return render(request,'Usuarios/notificaciones.html',contexto)
+  else:   
+    return render(request,'Usuarios/notificaciones_user.html',contexto)
+    
+
+
+  
+   
 

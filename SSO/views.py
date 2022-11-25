@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.contrib import messages
 from permisos.models import RolesdeSistema 
 from UserStories.models import Estados_Kanban
+from Usuarios.models import Notificaciones,Usuario
 
 from . import decoradores
 
@@ -64,37 +65,51 @@ def configurar_sso(request):
 
     if not RolesdeSistema.objects.filter(nombre='Scrum Master').exists():
         rol = RolesdeSistema.objects.create(nombre='Scrum Master', defecto=True)
+        grupo = Group.objects.create(name = 'Scrum Master')
+        grupo.save()
         rol.permisos.clear()
         lista_de_permisos = [
             '_acceder_al_sistema',
-            '_crear_roles',
-            '_asignar_roles',
-            '_visualizar_roles',
-            '_eliminar_roles',
-            '_crear_proyecto',
-            '_editar_proyecto',
-            '_visualizar_proyecto',
-            '_cancelar_proyecto',
-            '_eliminar_miembros',
-            '_visualizar_historial_proyecto',
-            '_modificar_fecha',
-            '_modificar_estado_proyecto',
             '_crear_sprint',
+            '_crear_us',
+            '_crear_tipos_us',
+            '_iniciar_proyecto',
+            '_iniciar_sprint',
+            '_asignar_miembro_us',
+            '_asignar_roles',
+            '_asignar_us',
+            '_asignar_miembro_sprint',
+            '_asignar_miembro_proyecto',
+            '_reasignar_miembro_us',
+            '_eliminar_tipoUs'
+            '_eliminar_us_sprint',
+            '_cancelar_proyecto',
+            '_cancelar_US',
+            '_cancelar_sprint',
+            '_finalizar_sprint',
+            '_finalizar_proyecto',
+            '_modificar_estado_proyecto',
             '_modificar_sprint',
             '_modificar_estado_sprint',
-            '_crear_us',
             '_modificar_us',
             '_modificar_estado_us',
-            '_cancelar_us',
-            '_consultar_historial_us',
             '_modificar_backlog',
             '_modificar_sprint_backlog',
-            '_crear_tipos_us',
             '_modificar_tipos_us',
+            '_importar_tipos_us',
+            '_importar_roles',
+            '_cargarHoras_us',
+            '_visualizar_historial_us',
+            '_visualizar_sprint',
+            '_visualizar_Product_Backlog',
+            '_visualizar_BurnDown_Chart',
+            '_visualizar_historial_proyecto ',
             '_visualizar_kanban',
-            '_iniciar_proyecto',
-            '_asignar_us'
-        ]
+            '_visualizar_sprint_backlog',
+            '_visualizar_proyecto',
+            '_visualizar_proyecto_asigando',
+            '_visualizar_roles',
+            ]
         rol.asignar_permisos(lista_de_permisos)
     
     #se crean los estados Kanban por defecto en el sistema
@@ -150,6 +165,8 @@ def home(request):
     :return: HttpRedirect
     
     """
+
+    
     #Pregunta si es el administrador del sistema o si es un usuario comun. 
     #Redirecciona a diferentes interfaces
     if request.user.groups.filter(name='administrador'):
@@ -157,6 +174,11 @@ def home(request):
     elif request.user.groups.filter(name='usuarios'):
         return render(request,'SSO/home_usuarios.html',context=None)
     else:   #los usuarios en el grupo 'sin acceso'
+        if request.method == 'POST':
+            user = User.objects.get(groups__name__in=['administrador'])
+            mensaje = str(request.user)+" ha solicitado acceso al sistema "
+            notificacion = Notificaciones.objects.create(proyecto='sistema',usuario=user,mensaje=mensaje)
+            return redirect('login')
         return render(request,'SSO/sinpermiso.html',context=None)
 
 @login_required(login_url='login')

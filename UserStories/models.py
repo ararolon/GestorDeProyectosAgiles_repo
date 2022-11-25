@@ -8,7 +8,7 @@ from unittest.util import _MAX_LENGTH
 from wsgiref.validate import validator
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from Usuarios.models import Usuario
+from  Usuarios.models   import Usuario,Notificaciones
 from django.core.validators import MaxValueValidator, MinValueValidator
 from Sprint.models import *
 from simple_history.models import HistoricalRecords
@@ -65,6 +65,21 @@ class TipoUSerStory(models.Model):
    
     return [e for e in self.estados_kanban.all()]
 
+class HoraPorDia(models.Model):
+    """
+    Modelo que representa las horas que se le asignan a un user story por dia
+    """
+    horas = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(24)])
+    dia = models.IntegerField()
+    user_story = models.ForeignKey('UserStories',on_delete=models.CASCADE,related_name='horas_por_dia')
+
+
+    class Meta:
+        verbose_name = 'HoraPorDia'
+        verbose_name_plural = 'HorasPorDia'
+
+    def __str__(self):
+        return f'{self.horas} horas el dia {self.dia}'
 
 
 class UserStories(models.Model):
